@@ -1,0 +1,17 @@
+from random import random
+
+from .granier import Granier
+from .settings import hosts
+
+
+class GranierRandom(Granier):
+    def __init__(self, *args, **kwargs):
+        super(GranierRandom, self).__init__(*args, **kwargs)
+        self.value = [2 * random() - 1 for s in self.value]
+
+    def process(self):
+        return [min(1, max(-1, s + (random() - 0.5) / 100)) for s in self.value]
+
+
+if __name__ == '__main__':
+    GranierRandom(host=hosts.ame).loop()
