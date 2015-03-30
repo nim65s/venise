@@ -13,6 +13,3 @@ class DefaultTrajectoire(Trajectoire):
                 'w': median(sondes),
                 't': var(sondes),
                 }
-
-if __name__ == '__main__':
-    DefaultTrajectoire().loop()

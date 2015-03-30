@@ -9,6 +9,8 @@ class Entree(object):
     def __init__(self, nom, host=None, period=0, mini=-1, maxi=1, n_values=1):
         self.nom, self.host, self.period = nom, current_host if host is None else host, period
         self.mini, self.maxi, self.n_values, self.value = mini, maxi, n_values, [0] * n_values
+        self.data = {}
+
         self.context = Context()
         self.push = self.context.socket(PUSH)
         self.push.connect("tcp://%s:%i" % (ENTREES_HOST, ENTREES_PORT))
@@ -18,7 +20,7 @@ class Entree(object):
 
     def loop(self):
         while self.period:
-            self.send(self.check_value(self.process()))
+            self.send(self.check_value(self.process(**self.data)))
             sleep(self.period)
 
     def check_value(self, value):

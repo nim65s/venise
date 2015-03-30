@@ -12,17 +12,19 @@ RAYON_AGV = 1180
 POS_ROUES = [-pi / 4, pi - 4, pi]
 
 # Constantes Tourelles
+VIT_MOY_MAX = 16.5  # mm / s
 VIT_LIN_MAX = 16.5  # mm / s
 ACC_LIN_MAX = 200   # mm / s²
 VIT_ANG_MAX = 20 * pi / 180  # rad / s
 MAX_TOURS = 280
 
 # δt
-PERIODE = 2
+PERIODE = 0.1
 
 # TCP AGV
-AGV_HOST = ['140.93.8.97']
-AGV_PORT = 80
+# TODO update var names
+AGV_HOST = ['', '127.0.0.1', '192.168.37.48', '192.168.37.49', '192.168.37.50']
+AGV_PORT = 8001
 
 ENTREES_HOST = 'localhost'
 ENTREES_PORT = 1337

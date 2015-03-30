@@ -1,5 +1,5 @@
 from .settings import hosts
-from .sortie_print import SortiePrint as default
+from .sortie_ap import SortieAGVPrint as default
 
 if __name__ == '__main__':
-    default(host=hosts.ame).loop()
+    default(host=hosts.yuki).loop()
