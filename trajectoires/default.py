@@ -1,6 +1,5 @@
 from numpy import mean, median, var
 
-from .settings import hosts
 from .trajectoire import Trajectoire
 
 

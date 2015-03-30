@@ -1,4 +1,4 @@
-from math import atan2, copysign, cos, hypot, pi, sin
+from math import atan2, copysign, cos, hypot, sin
 from time import sleep
 
 from zmq import Context, NOBLOCK, PUB, PULL
@@ -46,7 +46,7 @@ class Trajectoire(object):
     def update(self):
         for host in hosts:
             self.data[host].update(**self.process_speed(host))
-            #self.data[host].update(**self.process_pos(host))
+            # self.data[host].update(**self.process_pos(host))
             self.data[host].update(**self.process_tourelles(host))
 
     def process_speed(self, host):

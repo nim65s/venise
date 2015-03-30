@@ -7,7 +7,7 @@ from .settings import hosts
 class GranierRandom(Granier):
     def __init__(self, *args, **kwargs):
         super(GranierRandom, self).__init__(*args, **kwargs)
-        #self.value = [2 * random() - 1 for s in self.value]
+        # self.value = [2 * random() - 1 for s in self.value]
         self.value = [0 for _ in self.value]
 
     def process(self):

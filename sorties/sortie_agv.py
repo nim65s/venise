@@ -21,3 +21,7 @@ class SortieAGV(Sortie):
 
     def send_agv(self):
         return u'setSpeedAndPosition({t1}, {v1}, {t2}, {v2}, {t3}, {v3})'.format(**self.state)
+
+
+if __name__ == '__main__':
+    SortieAGV(host=hosts.ame).loop()
