@@ -5,8 +5,10 @@ from .trajectoire import Trajectoire
 
 
 class DefaultTrajectoire(Trajectoire):
-    def process(self, host):
-        sondes = self.data[host]['granier'] if 'granier' in self.data[host] else [0]
+    def process_speed(self, host):
+        if 'granier' not in self.data[host]:
+            return {}
+        sondes = self.data[host]['granier']
         return {
                 'v': mean(sondes),
                 'w': median(sondes),
