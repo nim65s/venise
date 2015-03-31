@@ -9,7 +9,7 @@ MAX_Y = 12000
 
 # Constantes AGV
 RAYON_AGV = 1180
-POS_ROUES = [-pi / 4, pi - 4, pi]
+POS_ROUES = [-pi / 4, pi / 4, pi]
 
 # Constantes Tourelles
 VIT_MOY_MAX = 16.5  # mm / s
@@ -50,4 +50,4 @@ hosts = IntEnum('Hôte', 'cerf moro ame yuki')
 try:
     current_host = hosts[gethostname().split('.')[0].lower()]
 except KeyError:
-    current_host = hosts.yuki
+    current_host = hosts.ame
