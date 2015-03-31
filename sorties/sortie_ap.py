@@ -1,8 +1,9 @@
+import sys
 from pprint import pprint
 from socket import socket, timeout
 from time import sleep
 
-from .settings import AGV_HOST, AGV_PORT
+from .settings import AGV_HOST, AGV_PORT, hosts
 from .sortie import Sortie
 
 
@@ -55,4 +56,7 @@ class SortieAGVPrint(Sortie):
         return bytes(template.format(**self.state).encode('ascii'))
 
 if __name__ == '__main__':
-    SortieAGVPrint().loop()
+    if len(sys.argv) == 2:
+        SortieAGVPrint(host=hosts[sys.argv[1]]).loop()
+    else:
+        SortieAGVPrint().loop()

@@ -52,7 +52,7 @@ class Trajectoire(object):
         for host in hosts:
             self.data[host].update(t1=0, v1=VIT_MOY_MAX, t2=0, v2=VIT_MOY_MAX, t3=0, v3=VIT_MOY_MAX)
         self.pub()
-        sleep(3)
+        sleep(6)
         for host in hosts:
             self.data[host].update(t1=0, v1=0, t2=0, v2=0, t3=0, v3=0)
         self.pub()

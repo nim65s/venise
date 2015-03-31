@@ -3,12 +3,12 @@ from math import copysign, pi
 from random import random
 
 from .entree import Entree
-from .settings import current_host
+from .settings import current_host, hosts
 
 
 class EntreeRandomAGV(Entree):
-    def __init__(self, nom='manuelle', host=current_host, period=0.1):
-        super(EntreeRandomAGV, self).__init__(nom=nom, host=host, period=period)
+    def __init__(self, nom='manuelle', host=current_host):
+        super(EntreeRandomAGV, self).__init__(nom=nom, host=host)
         [v, w, t, vc, wc, tc] = [float(sys.argv[i + 1]) for i in range(6)] if len(sys.argv) == 7 else [0] * 6
         self.data = {'v': v, 'w': w, 't': t, 'vc': vc, 'wc': wc, 'tc': tc}
         self.cmpt = -1
@@ -23,6 +23,8 @@ class EntreeRandomAGV(Entree):
         self.cmpt = (self.cmpt + 1) % 1000
         if self.cmpt == 0:
             vc = random() * 2 - 1
+            while abs(vc) < 0.4:
+                vc = random() * 2 - 1
         if self.cmpt == 333:
             wc = random() * 2 - 1
         if self.cmpt == 666:
@@ -44,4 +46,7 @@ class EntreeRandomAGV(Entree):
         return self.data
 
 if __name__ == '__main__':
-    EntreeRandomAGV().loop()
+    if len(sys.argv) == 2:
+        EntreeRandomAGV(host=hosts[sys.argv[1]]).loop()
+    else:
+        EntreeRandomAGV().loop()
