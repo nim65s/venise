@@ -1,4 +1,5 @@
 import sys
+from math import pi
 
 from .entree import Entree
 from .settings import current_host
@@ -38,7 +39,7 @@ class EntreeTourelles(Entree):
         if 'r' in r: t3 = 0
         if 'c' in r: stop = False
         if ',' in r: stop = True
-        self.data = {'v1': v1, 'v2': v2, 'v3': v3, 't1': t1, 't2': t2, 't3': t3, 'stop': stop}
+        self.data = {'v1': v1, 'v2': v2, 'v3': v3, 't1': t1 % (2 * pi), 't2': t2 % (2 * pi), 't3': t3 % (2 * pi), 'stop': stop}
         print(self.data)
         return self.data
 

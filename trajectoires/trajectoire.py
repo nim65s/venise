@@ -41,7 +41,7 @@ class Trajectoire(object):
         try:
             while self.period:
                 self.pull()
-                self.update()
+                #self.update()
                 self.pub()
                 sleep(self.period)
         except KeyboardInterrupt:
