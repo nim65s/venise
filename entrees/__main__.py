@@ -1,6 +1,5 @@
 #from .granier_random import GranierRandom as default
-from .manuelle import EntreeManuelle as default
-from .settings import hosts
+from .tourelles import EntreeTourelles as default
 
 if __name__ == '__main__':
-    default(host=hosts.yuki).loop()
+    default().loop()

@@ -50,4 +50,4 @@ hosts = IntEnum('Hôte', 'cerf moro ame yuki')
 try:
     current_host = hosts[gethostname().split('.')[0].lower()]
 except KeyError:
-    current_host = hosts.cerf
+    current_host = hosts.yuki

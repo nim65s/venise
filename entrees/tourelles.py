@@ -4,9 +4,9 @@ from .entree import Entree
 from .settings import current_host
 
 
-class EntreeManuelle(Entree):
+class EntreeTourelles(Entree):
     def __init__(self, nom='manuelle', host=current_host, period=0.1):
-        super(EntreeManuelle, self).__init__(nom=nom, host=host, period=period)
+        super(EntreeTourelles, self).__init__(nom=nom, host=host, period=period)
         [v1, v2, v3, t1, t2, t3] = [float(sys.argv[i + 1]) for i in range(6)] if len(sys.argv) == 7 else [0] * 6
         self.data = {'v1': v1, 'v2': v2, 'v3': v3, 't1': t1, 't2': t2, 't3': t3, 'stop': False}
 
@@ -41,3 +41,6 @@ class EntreeManuelle(Entree):
         self.data = {'v1': v1, 'v2': v2, 'v3': v3, 't1': t1, 't2': t2, 't3': t3, 'stop': stop}
         print(self.data)
         return self.data
+
+if __name__ == '__main__':
+    EntreeTourelles().loop()

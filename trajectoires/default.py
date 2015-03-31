@@ -3,7 +3,7 @@ from numpy import mean, median, var
 from .trajectoire import Trajectoire
 
 
-class DefaultTrajectoire(Trajectoire):
+class TrajectoireDefault(Trajectoire):
     def process_speed(self, host):
         if 'granier' not in self.data[host]:
             return {}
