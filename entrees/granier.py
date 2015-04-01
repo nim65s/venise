@@ -1,6 +1,10 @@
-from .entree import current_host, Entree
+from argparse import ArgumentParser
+
+from .sonde import Sonde, sonde_parser
 
 
-class Granier(Entree):
-    def __init__(self, nom='granier', host=current_host, period=10, n_values=3):
-        super(Granier, self).__init__(nom=nom, host=host, period=period, n_values=n_values)
+class Granier(Sonde):
+    pass
+
+granier_parser = ArgumentParser(parents=[sonde_parser], add_help=False)
+granier_parser.set_defaults(nom='granier', period=10, n_values=3, maxi=5, mini=0)

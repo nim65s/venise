@@ -1,36 +1,23 @@
+from argparse import ArgumentParser
 from time import sleep
 
-from zmq import Context, PUSH
+from .pusher import Pusher, pusher_parser
+from .settings import PERIODE
 
-from .settings import current_host, ENTREES_HOST, ENTREES_PORT
 
-
-class Entree(object):
-    def __init__(self, nom, host=current_host, period=0.1, mini=-1, maxi=1, n_values=1):
-        self.nom, self.host, self.period = nom, host, period
-        self.mini, self.maxi, self.n_values, self.value = mini, maxi, n_values, [0] * n_values
+class Entree(Pusher):
+    def __init__(self, period, *args, **kwargs):
+        super(Entree, self).__init__(*args, **kwargs)
+        self.period = period
         self.data = {}
-
-        self.context = Context()
-        self.push = self.context.socket(PUSH)
-        self.push.connect("tcp://%s:%i" % (ENTREES_HOST, ENTREES_PORT))
-
-    def send(self, value):
-        self.push.send_json([self.host, {self.nom: value}])
 
     def loop(self):
         while self.period:
-            self.send(self.check_value(self.process(**self.data)))
+            self.send(self.process(**self.data))
             sleep(self.period)
-
-    def check_value(self, value):
-        if len(value) != self.n_values:
-            raise ValueError('%s sur %s: len(%r) != %i' % (self.nom, self.host.name, value, self.n_values))
-        for i, v in enumerate(value):
-            if not self.mini <= v <= self.maxi:
-                raise ValueError('%s.%i sur %s: %f pas entre %f et %f' % (self.nom, i, self.host.name, v, self.mini, self.maxi))
-        self.value = value
-        return value
 
     def process(self):
         raise NotImplementedError()
+
+entree_parser = ArgumentParser(parents=[pusher_parser], add_help=False)
+entree_parser.add_argument('-T', '--period', type=float, default=PERIODE, help="période d’envoie des données à l’hôte principal")

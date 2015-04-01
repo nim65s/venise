@@ -1,9 +1,8 @@
 import sys
 from pprint import pprint
 from socket import socket, timeout
-from time import sleep
 
-from .settings import AGV_HOST, AGV_PORT, hosts
+from .settings import HOST_AGV, hosts, PORT_AGV
 from .sortie import Sortie
 
 
@@ -19,8 +18,8 @@ class SortieAGVPrint(Sortie):
                 self.socket.close()
                 self.socket = socket()
                 self.socket.settimeout(2)
-                print('connecting... %s:%i' % (AGV_HOST[self.host], AGV_PORT))
-                self.socket.connect((AGV_HOST[self.host], AGV_PORT))
+                print('connecting... %s:%i' % (HOST_AGV[self.host], PORT_AGV))
+                self.socket.connect((HOST_AGV[self.host], PORT_AGV))
                 print('connected')
                 break
             except timeout:
@@ -38,7 +37,7 @@ class SortieAGVPrint(Sortie):
             if ret.startswith('+'):  # Les erreurs commencent par un +
                 code = int(ret[1:].split(',')[0])
                 print(ret)
-                if code == 4:  # TODO: c’est quoi déjà ?
+                if code == 4:  # Post-démarrage ou arrêt d’urgence
                     print('Appuie sur le bouton vert !')
                 elif code == 5:  # Velocity too high
                     pass

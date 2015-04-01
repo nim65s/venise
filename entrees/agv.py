@@ -1,20 +1,14 @@
-import sys
+from argparse import ArgumentParser
 from math import pi
 
-from .entree import Entree
+from .entree import Entree, entree_parser
 
 
 class EntreeAGV(Entree):
-    def __init__(self, nom='manuelle AGV'):
-        super(EntreeAGV, self).__init__(nom=nom)
-        [v, w, t] = [float(sys.argv[i + 1]) for i in range(3)] if len(sys.argv) == 4 else [0] * 3
+    def __init__(self, v, w, t, *args, **kwargs):
+        super(EntreeAGV, self).__init__(*args, **kwargs)
         self.data = {'v': v, 'w': w, 't': t, 'stop': False}
-
-    def send(self, value):
-        self.push.send_json([self.host, value])
-
-    def check_value(self, value):
-        return value
+        print(self.__dict__)
 
     def process(self, v, w, t, stop, **kwargs):
         r = input('→ ')
@@ -33,5 +27,10 @@ class EntreeAGV(Entree):
         print(self.data)
         return self.data
 
+entree_agv_parser = ArgumentParser(parents=[entree_parser])
+entree_agv_parser.add_argument('-v', type=float, default=0, help="vitesse linéaire")
+entree_agv_parser.add_argument('-w', type=float, default=0, help="vitesse angulaire")
+entree_agv_parser.add_argument('-t', type=float, default=0, help="direction")
+
 if __name__ == '__main__':
-    EntreeAGV().loop()
+    EntreeAGV(**vars(entree_agv_parser.parse_args())).loop()

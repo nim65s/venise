@@ -1,5 +1,5 @@
-#from .granier_random import GranierRandom as default
-from .tourelles import EntreeTourelles as default
+from .agv import entree_agv_parser as parser
+from .agv import EntreeAGV as entree
 
 if __name__ == '__main__':
-    default().loop()
+    entree(**vars(parser.parse_args())).loop()

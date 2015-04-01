@@ -1,13 +1,13 @@
 from random import random
 
-from .granier import Granier
+from .granier import Granier, granier_parser
 
 
 class GranierRandom(Granier):
-    def __init__(self, *args, **kwargs):
-        super(GranierRandom, self).__init__(*args, **kwargs)
-        # self.value = [2 * random() - 1 for s in self.value]
-        self.value = [0 for _ in self.value]
+    def process(self, value):
+        print(value)
+        return [min(self.maxi, max(self.mini, v + (random() - 0.5) / 10)) for v in value]
 
-    def process(self):
-        return [min(1, max(-1, s + (random() - 0.5) / 1000)) for s in self.value]
+
+if __name__ == '__main__':
+    GranierRandom(**vars(granier_parser.parse_args())).loop()
