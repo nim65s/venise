@@ -1,15 +1,15 @@
 from numpy import mean, median, var
 
-from .trajectoire import Trajectoire
+from .trajectoire import Trajectoire, trajectoire_parser
 
 
 class TrajectoireDefault(Trajectoire):
-    def process_speed(self, host):
-        if 'granier' not in self.data[host]:
-            return {}
-        sondes = self.data[host]['granier']
+    def process_speed(self, granier, **kwargs):
         return {
-                'v': mean(sondes),
-                'w': median(sondes),
-                't': var(sondes),
+                'v': mean(granier),
+                'w': median(granier),
+                't': var(granier),
                 }
+
+if __name__ == '__main__':
+    TrajectoireDefault(**vars(trajectoire_parser.parse_args())).loop()
