@@ -1,4 +1,4 @@
-from .manuel import TrajectoireManuelle as default
+from .manuel import TrajectoireManuelle as Trajectoire
 
 if __name__ == '__main__':
-    default().loop()
+    Trajectoire().loop()

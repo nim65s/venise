@@ -1,6 +1,5 @@
-from math import atan2, copysign, cos, hypot, pi, sin
-from pprint import pprint
-from time import sleep, time
+from math import atan2, cos, hypot, pi, sin
+from time import sleep
 
 from zmq import Context, NOBLOCK, PUB, PULL
 from zmq.error import Again
