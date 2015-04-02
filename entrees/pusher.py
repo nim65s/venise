@@ -10,11 +10,11 @@ class Pusher(object):
         self.host = Hote[host]
         self.context = Context()
         self.push = self.context.socket(PUSH)
-        self.push.connect("tcp://%s:%i" % (MAIN_HOST.value, PORT_ENTREES))
+        self.push.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_ENTREES))
 
     def send(self, data):
         self.push.send_json([self.host, data])
 
 
 pusher_parser = ArgumentParser(add_help=False)
-pusher_parser.add_argument('-H', '--host', help="hôte source", default=CURRENT_HOST.name)
+pusher_parser.add_argument('-H', '--host', help="hôte source", default=CURRENT_HOST.name, choices=[h.name for h in Hote])

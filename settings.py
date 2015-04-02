@@ -41,5 +41,4 @@ try:
     CURRENT_HOST = Hote[gethostname().split('.')[0].lower()]
 except KeyError:
     CURRENT_HOST = Hote.jiro
-Hote
 MAIN_HOST = Hote.jiro
