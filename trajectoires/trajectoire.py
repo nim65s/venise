@@ -8,7 +8,7 @@ from .settings import Hote, PERIODE, POS_ROUES, VIT_MOY_MAX
 
 class Trajectoire(PullerPublisher):
     def __init__(self, period, *args, **kwargs):
-        super(Trajectoire, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.period = period
         self.data = {h: {
             'stop': False,

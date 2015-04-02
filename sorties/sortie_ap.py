@@ -8,7 +8,7 @@ from .sortie import Sortie
 
 class SortieAGVPrint(Sortie):
     def __init__(self, *args, **kwargs):
-        super(SortieAGVPrint, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.socket = socket()
         self.connect()
 

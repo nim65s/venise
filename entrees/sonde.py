@@ -6,7 +6,7 @@ from .entree import Entree, entree_parser
 
 class Sonde(Entree):
     def __init__(self, nom, mini, maxi, n_values, *args, **kwargs):
-        super(Sonde, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.nom, self.mini, self.maxi, self.n_values = nom, mini, maxi, n_values
         self.data[nom] = [(maxi + mini) / 2] * n_values
 
@@ -24,7 +24,7 @@ class Sonde(Entree):
         self.data[self.nom] = value
         return self.data
 
-sonde_parser = ArgumentParser(parents=[entree_parser], add_help=False)
+sonde_parser = ArgumentParser(parents=[entree_parser])
 sonde_parser.add_argument('-n', '--nom', choices=['granier', 'sick', 'luminosite'])
 sonde_parser.add_argument('-m', '--mini', type=float, default=-1)
 sonde_parser.add_argument('-M', '--maxi', type=float, default=1)

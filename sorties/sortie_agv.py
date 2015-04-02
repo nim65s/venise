@@ -6,7 +6,7 @@ from .sortie import Sortie
 
 class SortieAGV(Sortie):
     def __init__(self, *args, **kwargs):
-        super(SortieAGV, self).__init__()
+        super().__init__()
         self.socket = socket.socket()
         print('connecting...')
         self.socket.connect((AGV_HOST, AGV_PORT))
@@ -16,7 +16,7 @@ class SortieAGV(Sortie):
         self.socket.sendall(self.send_agv())
         ret = self.socket.recv(1024)
         if ret.startswith('+'):  # Les erreurs commencent par un +
-            print ret
+            print(ret)
             raise RuntimeError(ret)
 
     def send_agv(self):

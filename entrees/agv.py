@@ -6,7 +6,7 @@ from .entree import Entree, entree_parser
 
 class EntreeAGV(Entree):
     def __init__(self, v, w, t, *args, **kwargs):
-        super(EntreeAGV, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.data = {'v': v, 'w': w, 't': t, 'stop': False}
         print(self.__dict__)
 

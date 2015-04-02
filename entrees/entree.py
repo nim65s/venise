@@ -7,7 +7,7 @@ from .settings import PERIODE
 
 class Entree(Pusher):
     def __init__(self, period, *args, **kwargs):
-        super(Entree, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.period = period
         self.data = {}
 
@@ -19,5 +19,5 @@ class Entree(Pusher):
     def process(self):
         raise NotImplementedError()
 
-entree_parser = ArgumentParser(parents=[pusher_parser], add_help=False)
+entree_parser = ArgumentParser(parents=[pusher_parser])
 entree_parser.add_argument('-T', '--period', type=float, default=PERIODE, help="période d’envoie des données à l’hôte principal")

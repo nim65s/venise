@@ -1,20 +1,13 @@
-import sys
+from argparse import ArgumentParser
 from math import pi
 
-from .entree import Entree
+from .entree import Entree, entree_parser
 
 
 class EntreeTourelles(Entree):
-    def __init__(self, nom='manuelle tourelles'):
-        super(EntreeTourelles, self).__init__(nom=nom)
-        [v1, v2, v3, t1, t2, t3] = [float(sys.argv[i + 1]) for i in range(6)] if len(sys.argv) == 7 else [0] * 6
+    def __init__(self, v1, v2, v3, t1, t2, t3, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.data = {'v1': v1, 'v2': v2, 'v3': v3, 't1': t1, 't2': t2, 't3': t3, 'stop': False}
-
-    def send(self, value):
-        self.push.send_json([self.host, value])
-
-    def check_value(self, value):
-        return value
 
     def process(self, v1, v2, v3, t1, t2, t3, stop, **kwargs):
         r = input('> ')
@@ -42,5 +35,13 @@ class EntreeTourelles(Entree):
         print(self.data)
         return self.data
 
+entree_tourelles_parser = ArgumentParser(parents=[entree_parser])
+entree_tourelles_parser.add_argument('-v1', type=float, default=0, help="tourelle 1: vitesse linéaire")
+entree_tourelles_parser.add_argument('-v2', type=float, default=0, help="tourelle 2: vitesse linéaire")
+entree_tourelles_parser.add_argument('-v3', type=float, default=0, help="tourelle 3: vitesse linéaire")
+entree_tourelles_parser.add_argument('-t1', type=float, default=0, help="tourelle 1: orientation")
+entree_tourelles_parser.add_argument('-t2', type=float, default=0, help="tourelle 2: orientation")
+entree_tourelles_parser.add_argument('-t3', type=float, default=0, help="tourelle 3: orientation")
+
 if __name__ == '__main__':
-    EntreeTourelles().loop()
+    EntreeTourelles(**vars(entree_tourelles_parser.parse_args())).loop()

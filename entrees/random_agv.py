@@ -1,23 +1,15 @@
-import sys
+from argparse import ArgumentParser
 from math import copysign, pi
 from random import random
 
-from .entree import Entree
-from .settings import current_host, hosts
+from .agv import entree_agv_parser, EntreeAGV
 
 
-class EntreeRandomAGV(Entree):
-    def __init__(self, nom='manuelle', host=current_host):
-        super(EntreeRandomAGV, self).__init__(nom=nom, host=host)
-        [v, w, t, vc, wc, tc] = [float(sys.argv[i + 1]) for i in range(6)] if len(sys.argv) == 7 else [0] * 6
+class EntreeAGVRandom(EntreeAGV):
+    def __init__(self, vc, wc, tc, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.data = {'v': v, 'w': w, 't': t, 'vc': vc, 'wc': wc, 'tc': tc}
         self.cmpt = -1
-
-    def send(self, value):
-        self.push.send_json([self.host, value])
-
-    def check_value(self, value):
-        return value
 
     def process(self, v, w, t, vc, wc, tc, **kwargs):
         self.cmpt = (self.cmpt + 1) % 1000
@@ -45,8 +37,10 @@ class EntreeRandomAGV(Entree):
         print(self.data)
         return self.data
 
+entree_agv_random_parser = ArgumentParser(parents=[entree_agv_parser])
+entree_agv_parser.add_argument('-vc', type=float, default=0, help="consigne initiale en vitesse linéaire")
+entree_agv_parser.add_argument('-wc', type=float, default=0, help="consigne initiale en vitesse angulaire")
+entree_agv_parser.add_argument('-tc', type=float, default=0, help="consigne initiale en direction")
+
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        EntreeRandomAGV(host=hosts[sys.argv[1]]).loop()
-    else:
-        EntreeRandomAGV().loop()
+    EntreeAGVRandom(**vars(entree_agv_random_parser.parse_args())).loop()
