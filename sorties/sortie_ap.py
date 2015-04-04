@@ -1,9 +1,8 @@
 from pprint import pprint
 from socket import socket, timeout
 
-from .settings import HOST_AGV, hosts, PORT_AGV
+from .settings import HOST_AGV, PORT_AGV
 from .sortie import Sortie, sortie_parser
-from .subscriber import subscriber_parser
 
 
 class SortieAGVPrint(Sortie):
@@ -55,4 +54,4 @@ class SortieAGVPrint(Sortie):
         return bytes(template.format(**self.state).encode('ascii'))
 
 if __name__ == '__main__':
-    SortieAGVPrint(**vars(subscriber_parser.parse_args())).loop()
+    SortieAGVPrint(**vars(sortie_parser.parse_args())).loop()

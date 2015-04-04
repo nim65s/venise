@@ -6,7 +6,7 @@ from .agv import entree_agv_parser, EntreeAGV
 
 
 class EntreeAGVRandom(EntreeAGV):
-    def __init__(self, vc, wc, tc, *args, **kwargs):
+    def __init__(self, vc, wc, tc, v, w, t, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.data = {'v': v, 'w': w, 't': t, 'vc': vc, 'wc': wc, 'tc': tc}
         self.cmpt = -1
