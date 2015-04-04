@@ -12,8 +12,12 @@ class Sonde(Entree):
 
     def loop(self):
         while self.period:
-            self.send(self.check_value(self.process(self.data[self.nom])))
-            sleep(self.period)
+            try:
+                self.send(self.check_value(self.process(self.data[self.nom])))
+                sleep(self.period)
+            except KeyboardInterrupt:
+                print()
+                break
 
     def check_value(self, value):
         if len(value) != self.n_values:
@@ -24,7 +28,7 @@ class Sonde(Entree):
         self.data[self.nom] = value
         return self.data
 
-sonde_parser = ArgumentParser(parents=[entree_parser])
+sonde_parser = ArgumentParser(parents=[entree_parser], conflict_handler='resolve')
 sonde_parser.add_argument('-n', '--nom', choices=['granier', 'sick', 'luminosite'])
 sonde_parser.add_argument('-m', '--mini', type=float, default=-1)
 sonde_parser.add_argument('-M', '--maxi', type=float, default=1)

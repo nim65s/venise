@@ -37,7 +37,7 @@ class EntreeAGVRandom(EntreeAGV):
         print(self.data)
         return self.data
 
-entree_agv_random_parser = ArgumentParser(parents=[entree_agv_parser])
+entree_agv_random_parser = ArgumentParser(parents=[entree_agv_parser], conflict_handler='resolve')
 entree_agv_parser.add_argument('-vc', type=float, default=0, help="consigne initiale en vitesse linéaire")
 entree_agv_parser.add_argument('-wc', type=float, default=0, help="consigne initiale en vitesse angulaire")
 entree_agv_parser.add_argument('-tc', type=float, default=0, help="consigne initiale en direction")

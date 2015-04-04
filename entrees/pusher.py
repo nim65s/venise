@@ -16,5 +16,5 @@ class Pusher(object):
         self.push.send_json([self.host, data])
 
 
-pusher_parser = ArgumentParser(add_help=False, conflict_handler='resolve')
+pusher_parser = ArgumentParser(conflict_handler='resolve')
 pusher_parser.add_argument('-H', '--host', help="hôte source", default=CURRENT_HOST.name, choices=[h.name for h in Hote])
