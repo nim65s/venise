@@ -1,7 +1,7 @@
 from zmq import Context, NOBLOCK, PUB, PULL
 from zmq.error import Again
 
-from .settings import Hote, PORT_ENTREES, PORT_SORTIES
+from ..settings import Hote, PORT_ENTREES, PORT_SORTIES
 
 
 class PullerPublisher(object):

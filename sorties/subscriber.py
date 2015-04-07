@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from zmq import Context, SUB, SUBSCRIBE
 
-from .settings import CURRENT_HOST, Hote, MAIN_HOST, PORT_SORTIES
+from ..settings import CURRENT_HOST, Hote, MAIN_HOST, PORT_SORTIES
 
 
 class Subscriber(object):

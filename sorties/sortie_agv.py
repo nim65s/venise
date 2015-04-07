@@ -1,6 +1,6 @@
 from socket import socket, timeout
 
-from .settings import HOST_AGV, PORT_AGV
+from ..settings import HOST_AGV, PORT_AGV
 from .sortie import Sortie
 from .subscriber import subscriber_parser
 

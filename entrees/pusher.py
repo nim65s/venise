@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from zmq import Context, PUSH
 
-from .settings import CURRENT_HOST, Hote, MAIN_HOST, PORT_ENTREES
+from ..settings import CURRENT_HOST, Hote, MAIN_HOST, PORT_ENTREES
 
 
 class Pusher(object):

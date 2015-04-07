@@ -1,8 +1,8 @@
 from argparse import ArgumentParser
 from time import sleep
 
+from ..settings import PERIODE
 from .pusher import Pusher, pusher_parser
-from .settings import PERIODE
 
 
 class Entree(Pusher):
