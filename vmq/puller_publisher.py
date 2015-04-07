@@ -14,12 +14,13 @@ class PullerPublisher(object):
         self.puller = self.context.socket(PULL)
         self.puller.bind("tcp://*:%i" % PORT_ENTREES)
 
+        self.data = {i: {} for i in Hote}
+
     def pull(self):
-        ret = {i: {} for i in Hote}
         while True:
             try:
                 num, datas = self.puller.recv_json(NOBLOCK)
-                ret[num].update(**datas)
+                self.data[num].update(**datas)
             except Again:
                 break
 
