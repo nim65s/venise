@@ -1,12 +1,12 @@
 from pprint import pprint
 
+from ..vmq.subscriber import subscriber_parser
 from .sortie import Sortie
-from .subscriber import subscriber_parser
 
 
 class SortiePrint(Sortie):
-    def process(self):
-        pprint(self.state)
+    def process(self, **kwargs):
+        pprint(self.data)
 
 if __name__ == '__main__':
     SortiePrint(**vars(subscriber_parser.parse_args())).loop()

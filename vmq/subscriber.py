@@ -17,8 +17,8 @@ class Subscriber(object):
     def sub(self):
         data = self.subscriber.recv_json()
         if self.hote > 0:
-            data = data[self.hote]
+            data = data[str(self.hote.value)]
         self.data.update(**data)
 
 subscriber_parser = ArgumentParser(conflict_handler='resolve')
-subscriber_parser.add_argument('-H', '--host', help="hôte source", default=CURRENT_HOST.name, choices=[h.name for h in Hote])
+subscriber_parser.add_argument('-H', '--hote', help="hôte source", default=CURRENT_HOST.name, choices=[h.name for h in Hote])

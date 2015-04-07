@@ -1,4 +1,4 @@
-from .subscriber import Subscriber
+from ..vmq.subscriber import Subscriber
 
 
 class Sortie(Subscriber):
@@ -11,5 +11,5 @@ class Sortie(Subscriber):
                 print()
                 break
 
-    def process(self):
+    def process(self, **kwargs):
         raise NotImplementedError()

@@ -1,8 +1,8 @@
 from socket import socket, timeout
 
 from ..settings import HOST_AGV, PORT_AGV
+from ..vmq.subscriber import subscriber_parser
 from .sortie import Sortie
-from .subscriber import subscriber_parser
 
 
 class SortieAGV(Sortie):
@@ -28,7 +28,7 @@ class SortieAGV(Sortie):
             except BrokenPipeError:
                 print('Broken pipe…')
 
-    def process(self):
+    def process(self, **kwargs):
         try:
             self.socket.sendall(self.send_agv())
             ret = self.socket.recv(1024).decode('ascii')

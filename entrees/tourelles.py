@@ -7,7 +7,7 @@ from .entree import Entree, entree_parser
 class EntreeTourelles(Entree):
     def __init__(self, v1, v2, v3, t1, t2, t3, stop, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data = {'v1': v1, 'v2': v2, 'v3': v3, 't1': t1 % (2 * pi), 't2': t2 % (2 * pi), 't3': t3 % (2 * pi), 'stop': stop}
+        self.data.update(v1=v1, v2=v2, v3=v3, t1=t1 % (2 * pi), t2=t2 % (2 * pi), t3=t3 % (2 * pi), stop=stop)
         print(self.data)
 
     def process(self, v1, v2, v3, t1, t2, t3, stop, **kwargs):
@@ -32,7 +32,7 @@ class EntreeTourelles(Entree):
         if 'r' in r: t3 = 0
         if 'c' in r: stop = False
         if ',' in r: stop = True
-        self.data = {'v1': v1, 'v2': v2, 'v3': v3, 't1': t1 % (2 * pi), 't2': t2 % (2 * pi), 't3': t3 % (2 * pi), 'stop': stop}
+        self.data.update(v1=v1, v2=v2, v3=v3, t1=t1 % (2 * pi), t2=t2 % (2 * pi), t3=t3 % (2 * pi), stop=stop)
         print(self.data)
         return self.data
 

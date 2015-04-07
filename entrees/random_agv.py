@@ -6,9 +6,9 @@ from .agv import entree_agv_parser, EntreeAGV
 
 
 class EntreeAGVRandom(EntreeAGV):
-    def __init__(self, vc, wc, tc, v, w, t, *args, **kwargs):
+    def __init__(self, vc, wc, tc, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data = {'v': v, 'w': w, 't': t, 'vc': vc, 'wc': wc, 'tc': tc}
+        self.data.update(vc=vc, wc=wc, tc=tc)
         self.cmpt = -1
 
     def process(self, v, w, t, vc, wc, tc, **kwargs):
@@ -33,14 +33,14 @@ class EntreeAGVRandom(EntreeAGV):
             t += copysign(0.001, tc - t)
         else:
             t = tc
-        self.data = {'v': v, 'w': w, 't': t, 'vc': vc, 'wc': wc, 'tc': tc}
+        self.data.update(vc=vc, wc=wc, tc=tc, v=v, w=w, t=t)
         print(self.data)
         return self.data
 
 entree_agv_random_parser = ArgumentParser(parents=[entree_agv_parser], conflict_handler='resolve')
-entree_agv_parser.add_argument('-vc', type=float, default=0, help="consigne initiale en vitesse linéaire")
-entree_agv_parser.add_argument('-wc', type=float, default=0, help="consigne initiale en vitesse angulaire")
-entree_agv_parser.add_argument('-tc', type=float, default=0, help="consigne initiale en direction")
+entree_agv_random_parser.add_argument('-vc', type=float, default=0, help="consigne initiale en vitesse linéaire")
+entree_agv_random_parser.add_argument('-wc', type=float, default=0, help="consigne initiale en vitesse angulaire")
+entree_agv_random_parser.add_argument('-tc', type=float, default=0, help="consigne initiale en direction")
 
 if __name__ == '__main__':
     EntreeAGVRandom(**vars(entree_agv_random_parser.parse_args())).loop()
