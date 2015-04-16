@@ -19,6 +19,7 @@ class GranierSerie(Granier):
             print('fail:', l)
             return {}
         ret = [float(l[2 + s]) for s in range(3)]
+        print(ret)
         return ret
 
     def end(self):

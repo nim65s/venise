@@ -1,3 +1,4 @@
+from pprint import pprint
 from argparse import ArgumentParser
 from math import atan2, cos, hypot, pi, sin
 from time import sleep
@@ -25,6 +26,7 @@ class Trajectoire(PullerPublisher):
                 self.pull()
                 self.update()
                 self.pub()
+                pprint(self.data)
                 sleep(self.period)
         except KeyboardInterrupt:
             self.stop()

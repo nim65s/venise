@@ -17,8 +17,8 @@ class SortieAGV(Sortie):
                 self.socket.close()
                 self.socket = socket()
                 self.socket.settimeout(2)
-                print('connecting... %s:%i' % (HOST_AGV[self.host], PORT_AGV))
-                self.socket.connect((HOST_AGV[self.host], PORT_AGV))
+                print('connecting... %s:%i' % (HOST_AGV[self.hote], PORT_AGV))
+                self.socket.connect((HOST_AGV[self.hote], PORT_AGV))
                 print('connected')
                 break
             except timeout:
@@ -47,10 +47,10 @@ class SortieAGV(Sortie):
             self.connect()
 
     def send_agv(self):
-        if self.state['stop']:
+        if self.data['stop']:
             return b'stop()'
-        template = 'setSpeedAndPosition({v1}, {t1}, {v2}, {t2}, {v3}, {t3})'
-        return bytes(template.format(**self.state).encode('ascii'))
+        ret = 'setSpeedAndPosition({v1}, {t1}, {v2}, {t2}, {v3}, {t3})'.format(**self.data)
+        return bytes(ret.encode('ascii'))
 
 if __name__ == '__main__':
     SortieAGV(**vars(subscriber_parser.parse_args())).loop()

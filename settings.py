@@ -19,7 +19,7 @@ PERIODE = 0.1
 
 # TCP AGV
 # TODO update var names
-HOST_AGV = ['localhost', 'localhost', '192.168.37.48', '192.168.37.49', '192.168.37.50']
+HOST_AGV = ['localhost', 'localhost', '192.168.10.10', '192.168.10.11', '192.168.10.12']
 PORT_AGV = 8001
 PORT_ENTREES = 1337
 PORT_SORTIES = 1338
@@ -36,9 +36,9 @@ N_SONDES = 3  # par arbre
 ANGLES = [[9, 5], [942, 1], [986, 312], [542, 396], [18, 250]]
 MURS = [[a, ANGLES[i + 1] if i + 1 < len(ANGLES) else ANGLES[0]] for i, a in enumerate(ANGLES)]
 
-Hote = IntEnum('Hôte', 'jiro moro ame yuki')
+Hote = IntEnum('Hôte', 'cerf moro ame yuki')
 try:
     CURRENT_HOST = Hote[gethostname().split('.')[0].lower()]
 except KeyError:
-    CURRENT_HOST = Hote.jiro
-MAIN_HOST = Hote.jiro
+    CURRENT_HOST = Hote.cerf
+MAIN_HOST = Hote.cerf
