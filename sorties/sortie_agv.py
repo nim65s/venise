@@ -34,8 +34,9 @@ class SortieAGV(Sortie):
             ret = self.socket.recv(1024).decode('ascii')
             if ret.startswith('+'):  # Les erreurs commencent par un +
                 code = int(ret[1:].split(',')[0])
-                print(ret)
-                if code == 4:  # Post-démarrage ou arrêt d’urgence
+                if code == 3:  # Joystick connecté
+                    print('Déconnecte le joystick !')
+                elif code == 4:  # Post-démarrage ou arrêt d’urgence
                     print('Appuie sur le bouton vert !')
                 elif code == 5:  # Velocity too high
                     pass

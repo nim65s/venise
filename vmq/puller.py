@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from zmq import NOBLOCK, PULL
 from zmq.error import Again
 
@@ -19,9 +17,6 @@ class Puller(VMQ):
             try:
                 num, data = self.puller.recv_json(NOBLOCK)
                 self.data[num].update(**data)
-                if self.verbosite > 1:
-                    pprint(data)
-                elif self.verbosite > 0:
-                    print(data)
+                self.print(data)
             except Again:
                 break

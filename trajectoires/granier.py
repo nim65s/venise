@@ -1,5 +1,6 @@
-from .trajectoire import Trajectoire, trajectoire_parser
 from math import copysign, pi
+
+from .trajectoire import Trajectoire, trajectoire_parser
 
 
 class TrajectoireGranier(Trajectoire):
@@ -20,7 +21,6 @@ class TrajectoireGranier(Trajectoire):
         self.m[1] = 2 * self.m[1] - 1
         self.m[2] = 2 * self.m[2] * pi
 
-
         return {
                 'v': v + copysign(0.01, self.m[0] - v) if abs(v - self.m[0]) > 0.01 else v,
                 'w': w + copysign(0.01, self.m[1] - w) if abs(w - self.m[1]) > 0.01 else w,
@@ -31,4 +31,4 @@ class TrajectoireGranier(Trajectoire):
                 }
 
 if __name__ == '__main__':
-    TrajectoireGranier(**vars(trajectoire_parser.parse_args())).loop()
+    TrajectoireGranier(**vars(trajectoire_parser.parse_args())).run()

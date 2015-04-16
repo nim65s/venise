@@ -1,4 +1,3 @@
-from pprint import pprint
 from argparse import ArgumentParser
 from math import atan2, cos, hypot, pi, sin
 from time import sleep
@@ -11,6 +10,14 @@ class Trajectoire(Puller, Publisher):
     def __init__(self, period, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.period = period
+        self.data = {h: {
+            'stop': False,
+            'hote': h,
+            'x': 0, 'y': 0, 'a': 0,  # Position
+            'v': 0, 'w': 0, 't': 0,  # Vitesse
+            't1': 0, 'v1': 0, 't2': 0, 'v2': 0, 't3': 0, 'v3': 0,  # Tourelles
+            'granier': [], 'sick': [], 'luminosite': [],  # Sondes
+            } for h in self.hotes}
 
     def loop(self):
         self.pull()

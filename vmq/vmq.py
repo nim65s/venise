@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from pprint import pprint
 
 from zmq import Context
 
@@ -8,15 +9,9 @@ from ..settings import CURRENT_HOST, Hote
 class VMQ(object):
     def __init__(self, hote, verbosite, *args, **kwargs):
         self.hote, self.verbosite = Hote[hote], verbosite
+        self.hotes = [self.hote] if self.hote > 0 else Hote
         self.context = Context()
-        self.data = {h: {
-            'stop': False,
-            'hote': h,
-            'x': 0, 'y': 0, 'a': 0,  # Position
-            'v': 0, 'w': 0, 't': 0,  # Vitesse
-            't1': 0, 'v1': 0, 't2': 0, 'v2': 0, 't3': 0, 'v3': 0,  # Tourelles
-            'granier': [], 'sick': [], 'luminosite': [],  # Sondes
-            } for h in Hote}
+        self.data = {h: {} for h in self.hotes}
 
     def run(self):
         while True:
@@ -30,11 +25,13 @@ class VMQ(object):
     def end(self):
         print('terminating…')
 
-    def print(self, data):
-        #if self.verbosite > 1:
-            #pprint(data)
-        #elif self.verbosite > 0:
-            #print(data)
+    def print(self, data=None):
+        if data is None:
+            data = self.data
+        if self.verbosite > 1:
+            pprint(data)
+        elif self.verbosite > 0:
+            print(data)
         pass
 
 vmq_parser = ArgumentParser(conflict_handler='resolve')
