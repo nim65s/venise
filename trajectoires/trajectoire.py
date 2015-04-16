@@ -4,34 +4,21 @@ from math import atan2, cos, hypot, pi, sin
 from time import sleep
 
 from ..settings import Hote, PERIODE, POS_ROUES, VIT_MOY_MAX
-from ..vmq.puller_publisher import PullerPublisher
+from ..vmq import Publisher, Puller, vmq_parser
 
 
-class Trajectoire(PullerPublisher):
+class Trajectoire(Puller, Publisher):
     def __init__(self, period, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.period = period
-        self.data = {h: {
-            'stop': False,
-            'hote': h,
-            'x': 0, 'y': 0, 'a': 0,  # Position
-            'v': 0, 'w': 0, 't': 0,  # Vitesse
-            't1': 0, 'v1': 0, 't2': 0, 'v2': 0, 't3': 0, 'v3': 0,  # Tourelles
-            'granier': [], 'sick': [], 'luminosite': [],  # Sondes
-            } for h in Hote}
 
     def loop(self):
-        try:
-            while self.period:
-                self.pull()
-                self.update()
-                self.pub()
-                pprint(self.data)
-                sleep(self.period)
-        except KeyboardInterrupt:
-            self.stop()
+        self.pull()
+        self.update()
+        self.pub()
+        sleep(self.period)
 
-    def stop(self, hotes=Hote):
+    def end(self, hotes=Hote):
         if isinstance(hotes, Hote):
             hotes = [hotes]
         print('stopping %s…' % ', '.join([h.name for h in hotes]))
@@ -47,6 +34,7 @@ class Trajectoire(PullerPublisher):
             self.data[hote].update(stop=True)
         self.pub()
         print('stopped.')
+        super().end()
 
     def update(self):
         for hote in Hote:
@@ -66,5 +54,5 @@ class Trajectoire(PullerPublisher):
         return {'t1': t1, 'v1': v1, 't2': t2, 'v2': v2, 't3': t3, 'v3': v3}
 
 
-trajectoire_parser = ArgumentParser()
+trajectoire_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
 trajectoire_parser.add_argument('-T', '--period', type=float, default=PERIODE, help="période d’envoie des données aux sorties")

@@ -9,4 +9,4 @@ class SortiePrint(Sortie):
         pprint(self.data)
 
 if __name__ == '__main__':
-    SortiePrint(**vars(subscriber_parser.parse_args())).loop()
+    SortiePrint(**vars(subscriber_parser.parse_args())).run()

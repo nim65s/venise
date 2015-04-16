@@ -1,24 +1,23 @@
-from argparse import ArgumentParser
+from pprint import pprint
 
-from zmq import Context, SUB, SUBSCRIBE
+from zmq import SUB, SUBSCRIBE
 
-from ..settings import CURRENT_HOST, Hote, MAIN_HOST, PORT_SORTIES
+from ..settings import MAIN_HOST, PORT_SORTIES
+from .vmq import VMQ
 
 
-class Subscriber(object):
-    def __init__(self, hote, *args, **kwargs):
-        self.context = Context()
+class Subscriber(VMQ):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         self.subscriber = self.context.socket(SUB)
-        self.subscriber.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_SORTIES))
+        url = "tcp://%s:%i" % (MAIN_HOST.name, PORT_SORTIES)
+        #print(url)
+        self.subscriber.connect(url)
         self.subscriber.setsockopt_string(SUBSCRIBE, u'')  # TODO: les sorties devraient pouvoir override ça
-        self.hote = Hote[hote]
-        self.data = {}
 
     def sub(self):
         data = self.subscriber.recv_json()
         if self.hote > 0:
             data = data[str(self.hote.value)]
         self.data.update(**data)
-
-subscriber_parser = ArgumentParser(conflict_handler='resolve')
-subscriber_parser.add_argument('-H', '--hote', help="hôte source", default=CURRENT_HOST.name, choices=[h.name for h in Hote])

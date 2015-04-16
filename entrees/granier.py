@@ -7,4 +7,4 @@ class Granier(Sonde):
     pass
 
 granier_parser = ArgumentParser(parents=[sonde_parser], conflict_handler='resolve')
-granier_parser.set_defaults(nom='granier', period=10, n_values=3, maxi=5, mini=0)
+granier_parser.set_defaults(nom='granier', period=30, n_values=3, maxi=5, mini=0)

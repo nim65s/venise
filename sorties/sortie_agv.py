@@ -1,7 +1,7 @@
 from socket import socket, timeout
 
 from ..settings import HOST_AGV, PORT_AGV
-from ..vmq.subscriber import subscriber_parser
+from ..vmq import vmq_parser
 from .sortie import Sortie
 
 
@@ -47,10 +47,10 @@ class SortieAGV(Sortie):
             self.connect()
 
     def send_agv(self):
-        if self.data['stop']:
+        if self.data[self.hote]['stop']:
             return b'stop()'
-        ret = 'setSpeedAndPosition({v1}, {t1}, {v2}, {t2}, {v3}, {t3})'.format(**self.data)
-        return bytes(ret.encode('ascii'))
+        template = 'setSpeedAndPosition({v1}, {t1}, {v2}, {t2}, {v3}, {t3})'
+        return bytes(template.format(**self.data[self.hote]).encode('ascii'))
 
 if __name__ == '__main__':
-    SortieAGV(**vars(subscriber_parser.parse_args())).loop()
+    SortieAGV(**vars(vmq_parser.parse_args())).run()

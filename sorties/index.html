@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>V²</title>
+        <style>
+            circle, .hva { stroke: green; stroke-width: {{ STROKE_WIDTH }}; fill-opacity: 0; }
+            svg { width: {{ MAX_X }}px; height: {{ MAX_Y }}px; border: 1px solid black; }
+            body { font-family: monospace; }
+            .container, .container table tr th { text-align: center; }
+            .mur { fill: white; stroke: red; stroke-width: 2; }
+            .visiteurs { stroke: blue; }
+        </style>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <svg>
+                <polygon points="{% for a in ANGLES %}{{a|join(',')}} {% endfor %}" class="mur" />
+                {% for a in ARBRES %}
+                    <circle id="arbre{{ loop.index0 }}" r="{{ R_ARBRES }}" cx="{{ a.x }}" cy="{{ a.y }}"/>
+                    <line class="hva" id="varbre{{ loop.index0 }}"  x1="{{ a.x }}" y1="{{ a.y + R_ARBRES }}" x2="{{ a.x }}" y2="{{ a.y - R_ARBRES }}" transform="rotate({{ a.t }} {{ a.x }} {{ a.y }})"/>
+                    <line class="hva" id="harbre{{ loop.index0 }}"  x1="{{ a.x + R_ARBRES }}" y1="{{ a.y }}" x2="{{ a.x - R_ARBRES }}" y2="{{ a.y }}" transform="rotate({{ a.t }} {{ a.x }} {{ a.y }})"/>
+                {% endfor %}
+            </svg>
+
+            {#
+            <table class="table table-hover table-arbres">
+                <tr><th>Arbre</th><th>x</th><th>y</th><th>θ</th><th>x̊</th><th>ẙ</th><th>ω</th></tr>
+                {% for arbre in range(ARBRES|length) %}
+                    <tr id='t{{ arbre }}'>
+                        <th>{{ arbre }}</th><td class="x"></td><td class="y"></td><td class="t"></td>
+                        {% for var in ['u', 'v', 'w'] %}
+                            <td>
+                                <!--<button onclick="$.post('/pub', {data: [{{ arbre }}, '{{ var }}', '+']})" type="button" class="btn btn-xs"><span class="glyphicon glyphicon-plus"></span></button>-->
+                                <span class="{{ var }}"></span>
+                                <!--<button onclick="$.post('/pub', {data: [{{ arbre }}, '{{ var }}', '-']})" type="button" class="btn btn-xs"><span class="glyphicon glyphicon-minus"></span></button>-->
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+            #}
+
+            <table class="table table-hover table-sondes">
+                <tr><th>Arbre</th><th>Sonde n°1</th><th>Sonde n°2</th><th>Sonde n°3</th><th>Sonde n°4</th></tr>
+                {% for arbre in range(ARBRES|length) %}
+                    <tr id='s{{ arbre }}'><th>{{ arbre }}</th><td class="0"</td><td class="1"</td><td class="2"</td><td class="3"</td></tr>
+                {% endfor %}
+            </table>
+
+            <table class="table table-hover table-sondes">
+                <tr><th>Arbre</th><th>Moyenne (x)</th><th>Mediane (y)</th><th>Variance (ω)</th></tr>
+                {% for arbre in range(ARBRES|length) %}
+                    <tr id='mmv{{ arbre }}'><th>{{ arbre }}</th><td class="moy"</td><td class="med"</td><td class="var"</td></tr>
+                {% endfor %}
+                <tr id='mmvmax'><th>Min – Max</th><td class="moy"</td><td class="med"</td><td class="var"</td></tr>
+            </table>
+
+            <p>Visiteurs: <strong id="visiteurs">0</strong></p>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                //var variables = ['x', 'y', 't', 'u', 'v', 'w'];
+                var mmv = ['moy', 'med', 'var'];
+                var source = new EventSource("/sub");
+                source.onmessage = function(e) {
+                    var data = JSON.parse(e.data);
+                    for (i = 0; i < data.arbres.length; i++) {
+                        var a = data.arbres[i];
+                        for (j = 0; j < 4; j++) $('#s' + i + ' .' + j).html(data.sondes[i][j].toFixed(3));
+                        //for (v in variables) $('#t' + i + ' .' + variables[v]).html(a[variables[v]]);
+                        $('#arbre' + i).attr({cx: a.x, cy: a.y, transform: 'rotate(' + a.t + ' ' + a.x + ' ' + a.y + ')'});
+                        $('#varbre' + i).attr({x1: a.x, y1: a.y + {{ R_ARBRES }}, x2: a.x, y2: a.y - {{ R_ARBRES }}, transform: 'rotate(' + a.t + ' ' + a.x + ' ' + a.y + ')'});
+                        $('#harbre' + i).attr({x1: a.x + {{ R_ARBRES }}, y1: a.y, x2: a.x - {{ R_ARBRES }}, y2: a.y, transform: 'rotate(' + a.t + ' ' + a.x + ' ' + a.y + ')'});
+                        for (v in mmv) $('#mmv' + i + ' .' + mmv[v]).html(data.mmv[i][mmv[v]].toFixed(3));
+                    }
+                    for (v in mmv) $('#mmvmax .' + mmv[v]).html(data.max[mmv[v]][0].toFixed(3) + ' – ' + data.max[mmv[v]][1].toFixed(3));
+                    $('.visiteurs').remove()
+                    for (v in data.visiteurs) {
+                        var visiteur = document.createElementNS('http://www.w3.org/2000/svg','circle');
+                        visiteur.setAttribute('class', 'visiteurs');
+                        visiteur.setAttribute('r', 2);
+                        visiteur.setAttribute('cx', data.visiteurs[v].x);
+                        visiteur.setAttribute('cy', data.visiteurs[v].y);
+                        $('svg').append(visiteur);
+                    }
+                    $('#visiteurs').html(data.visiteurs.length);
+                };
+            });
+        </script>
+    </body>
+</html>

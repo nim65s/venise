@@ -1,20 +1,21 @@
-from argparse import ArgumentParser
+from pprint import pprint
 
-from zmq import Context, PUSH
+from zmq import PUSH
 
-from ..settings import CURRENT_HOST, Hote, MAIN_HOST, PORT_ENTREES
+from ..settings import Hote, MAIN_HOST, PORT_ENTREES
+from .vmq import VMQ
 
 
-class Pusher(object):
-    def __init__(self, host, *args, **kwargs):
-        self.host = Hote[host]
-        self.context = Context()
+class Pusher(VMQ):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         self.push = self.context.socket(PUSH)
         self.push.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_ENTREES))
 
     def send(self, data):
-        self.push.send_json([self.host, data])
-
-
-pusher_parser = ArgumentParser(conflict_handler='resolve')
-pusher_parser.add_argument('-H', '--host', help="hôte source", default=CURRENT_HOST.name, choices=[h.name for h in Hote])
+        if self.verbosite > 1:
+            pprint(data)
+        elif self.verbosite > 0:
+            print(data)
+        self.push.send_json([self.hote, data])

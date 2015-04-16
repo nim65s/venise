@@ -6,4 +6,4 @@ class TrajectoireManuelle(Trajectoire):
         return {}
 
 if __name__ == '__main__':
-    TrajectoireManuelle(**vars(trajectoire_parser.parse_args())).loop()
+    TrajectoireManuelle(**vars(trajectoire_parser.parse_args())).run()

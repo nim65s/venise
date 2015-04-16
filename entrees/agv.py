@@ -34,4 +34,4 @@ entree_agv_parser.add_argument('-t', type=float, default=0, help="direction")
 entree_agv_parser.add_argument('-s', '--stop', action='store_true', help="stoppe la puissance")
 
 if __name__ == '__main__':
-    EntreeAGV(**vars(entree_agv_parser.parse_args())).loop()
+    EntreeAGV(**vars(entree_agv_parser.parse_args())).run()

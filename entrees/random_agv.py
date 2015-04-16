@@ -43,4 +43,4 @@ entree_agv_random_parser.add_argument('-wc', type=float, default=0, help="consig
 entree_agv_random_parser.add_argument('-tc', type=float, default=0, help="consigne initiale en direction")
 
 if __name__ == '__main__':
-    EntreeAGVRandom(**vars(entree_agv_random_parser.parse_args())).loop()
+    EntreeAGVRandom(**vars(entree_agv_random_parser.parse_args())).run()

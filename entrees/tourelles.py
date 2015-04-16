@@ -46,4 +46,4 @@ entree_tourelles_parser.add_argument('-t3', type=float, default=0, help="tourell
 entree_tourelles_parser.add_argument('-s', '--stop', action='store_true', help="stoppe la puissance")
 
 if __name__ == '__main__':
-    EntreeTourelles(**vars(entree_tourelles_parser.parse_args())).loop()
+    EntreeTourelles(**vars(entree_tourelles_parser.parse_args())).run()

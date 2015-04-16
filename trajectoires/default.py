@@ -12,4 +12,4 @@ class TrajectoireDefault(Trajectoire):
                 }
 
 if __name__ == '__main__':
-    TrajectoireDefault(**vars(trajectoire_parser.parse_args())).loop()
+    TrajectoireDefault(**vars(trajectoire_parser.parse_args())).run()

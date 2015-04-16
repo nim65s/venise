@@ -18,9 +18,7 @@ class GranierSerie(Granier):
         except:
             print('fail:', l)
             return {}
-        ret = [float(l[2 + s]) for s in range(3)]
-        print(ret)
-        return ret
+        return [float(l[2 + s]) for s in range(3)]
 
     def end(self):
         self.serial.close()
@@ -30,4 +28,4 @@ granier_serie_parser.add_argument('-p', '--port', type=int, default=0)
 granier_serie_parser.set_defaults(period=30, maxi=1)
 
 if __name__ == '__main__':
-    GranierSerie(**vars(granier_serie_parser.parse_args())).loop()
+    GranierSerie(**vars(granier_serie_parser.parse_args())).run()

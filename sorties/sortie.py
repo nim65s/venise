@@ -1,15 +1,10 @@
-from ..vmq.subscriber import Subscriber
+from ..vmq import Subscriber
 
 
 class Sortie(Subscriber):
     def loop(self):
-        while True:
-            try:
-                self.sub()
-                self.process(**self.data)
-            except KeyboardInterrupt:
-                print()
-                break
+        self.sub()
+        self.process(**self.data[self.hote])
 
     def process(self, **kwargs):
         raise NotImplementedError()
