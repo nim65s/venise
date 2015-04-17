@@ -24,6 +24,9 @@ class VMQ(object):
                 print()
                 break
 
+    def loop(self):
+        raise NotImplementedError
+
     def end(self):
         print('terminating…')
 

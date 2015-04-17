@@ -16,7 +16,7 @@ class Trajectoire(Puller, Publisher):
             'x': 0, 'y': 0, 'a': 0,  # Position
             'v': 0, 'w': 0, 't': 0,  # Vitesse
             't1': 0, 'v1': 0, 't2': 0, 'v2': 0, 't3': 0, 'v3': 0,  # Tourelles
-            'granier': [], 'sick': [], 'luminosite': [],  # Sondes
+            'granier': [], 'sick': [], 'luminosite': [], 'visiteurs': [],  # Sondes
             } for h in self.hotes}
 
     def loop(self):
