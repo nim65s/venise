@@ -18,5 +18,6 @@ class Subscriber(VMQ):
     def sub(self):
         data = self.subscriber.recv_json()
         for h in self.hotes:
-            self.data[h].update(**data[str(h.value)])
-        self.print([self.hote, data[str(self.hote.value)]] if self.hote > 0 else data)
+            if str(h.value) in data:
+                self.data[h].update(**data[str(h.value)])
+        self.print([self.hote, data[str(self.hote.value)] if self.hote > 1 else data])
