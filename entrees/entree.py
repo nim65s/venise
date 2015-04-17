@@ -11,7 +11,8 @@ class Entree(Pusher):
         self.period = period
 
     def loop(self):
-        self.send(self.process(**self.data[self.hote]))
+        self.process(**self.data[self.hote])
+        self.send()
         sleep(self.period)
 
     def process(self):

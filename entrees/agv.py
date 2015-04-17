@@ -7,7 +7,7 @@ from .entree import Entree, entree_parser
 class EntreeAGV(Entree):
     def __init__(self, v, w, t, stop, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data.update(v=v, w=w, t=t % (2 * pi), stop=stop)
+        self.data[self.hote].update(v=v, w=w, t=t % (2 * pi), stop=stop)
         print(self.data)
 
     def process(self, v, w, t, stop, **kwargs):
@@ -23,9 +23,7 @@ class EntreeAGV(Entree):
         if 'e' in r: t = 0
         if 'c' in r: stop = False
         if ',' in r: stop = True
-        self.data.update(v=v, w=w, t=t % (2 * pi), stop=stop)
-        print(self.data)
-        return self.data
+        self.data[self.hote].update(v=v, w=w, t=t % (2 * pi), stop=stop)
 
 entree_agv_parser = ArgumentParser(parents=[entree_parser], conflict_handler='resolve')
 entree_agv_parser.add_argument('-v', type=float, default=0, help="vitesse linéaire")
