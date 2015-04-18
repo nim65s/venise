@@ -13,7 +13,7 @@ class Subscriber(VMQ):
         if self.verbosite > 2:
             print(url)
         self.subscriber.connect(url)
-        self.subscriber.setsockopt_string(SUBSCRIBE, u'')  # TODO: les sorties devraient pouvoir override ça
+        self.subscriber.setsockopt_string(SUBSCRIBE, '')  # TODO: les sorties devraient pouvoir override ça
 
     def sub(self):
         data = self.subscriber.recv_json()

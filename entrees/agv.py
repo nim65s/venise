@@ -8,7 +8,6 @@ class EntreeAGV(Entree):
     def __init__(self, v, w, t, stop, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.data[self.hote].update(v=v, w=w, t=t % (2 * pi), stop=stop)
-        print(self.data)
 
     def process(self, v, w, t, stop, **kwargs):
         r = input('→ ')
