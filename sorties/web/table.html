@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Transhumus</title>
+        <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">-->
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+        <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>-->
+        <link rel="stylesheet" href="http://localhost/bootstrap.min.css">
+        <script src="http://localhost/jquery.min.js"></script>
+        <script src="http://localhost/bootstrap.min.js"></script>
+        <style>
+            .table th {text-align: center;}
+            svg { width: 100%; height: 400px; }
+        </style>
+    </head>
+    <body>
+            <table class="table table-striped">
+                <tr>
+                    <th>Arbre</th><th colspan="3">Position</th><th colspan="3">Vitesse</th>
+                    <th colspan="6">Tourelles</th>
+                    <th colspan="3">Granier</th>
+                </tr>
+                <tr>
+                    <td></td><td>x</td><td>y</td><td>α</td><td>v</td><td>ω</td><td>θ</td>
+                    <td>v1</td><td>t1</td><td>v2</td><td>t2</td><td>v3</td><td>t3</td>
+                    <td>1</td><td>2</td><td>3</td>
+                </tr>
+                {% for arbre in range(1, 5) %}
+                <tr id='a{{ arbre }}'>
+                    <th>{{ arbre }}</th>
+                    <td class="x"></td>
+                    <td class="y"></td>
+                    <td class="a"></td>
+                    <td class="v"></td>
+                    <td class="w"></td>
+                    <td class="t"></td>
+                    <td class="v1"></td>
+                    <td class="t1"></td>
+                    <td class="v2"></td>
+                    <td class="t2"></td>
+                    <td class="v3"></td>
+                    <td class="t3"></td>
+                    <td class="granier0"></td>
+                    <td class="granier1"></td>
+                    <td class="granier2"></td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <svg>
+            </svg>
+
+        <script>
+            var data;
+            var sv = ['x', 'y', 'a', 'v', 'w', 't', 'v1', 't1', 'v2', 't2', 'v3', 't3'];
+            var mv = ['granier'];
+            $(document).ready(function() {
+                var source = new EventSource("/sub");
+                source.onmessage = function(e) {
+                    data = JSON.parse(e.data);
+                    for (a = 1; a < 6; a++) {
+                        if (data[a]) {
+                            for (v in sv) $('#a' + a + ' .' + sv[v]).html(data[a][sv[v]].toFixed(3));
+                            for (v in mv) {
+                                for (i = 0; i < data[a][mv[v]].length; i++) {
+                                    $('#a' + a + ' .' + mv[v] + [i]).html(data[a][mv[v]][i].toFixed(3));
+                                }
+                            }
+                        }
+                    }
+                };
+            });
+        </script>
+    </body>
+</html>
