@@ -44,7 +44,7 @@ class Trajectoire(Puller, Publisher):
         super().end()
 
     def update(self):
-        for hote in Hote:
+        for hote in self.hotes:
             self.data[hote].update(**self.process_speed(**self.data[hote]))
             self.data[hote].update(**self.process_tourelles(**self.data[hote]))
 
