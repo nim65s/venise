@@ -11,45 +11,89 @@
         <script src="http://localhost/bootstrap.min.js"></script>
         <style>
             .table th {text-align: center;}
-            svg { width: 100%; height: 400px; }
+            svg { width: 1600px; height: 400px; }
         </style>
     </head>
     <body>
-            <table class="table table-striped">
-                <tr>
-                    <th>Arbre</th><th colspan="3">Position</th><th colspan="3">Vitesse</th>
-                    <th colspan="6">Tourelles</th>
-                    <th colspan="3">Granier</th>
-                </tr>
-                <tr>
-                    <td></td><td>x</td><td>y</td><td>α</td><td>v</td><td>ω</td><td>θ</td>
-                    <td>v1</td><td>t1</td><td>v2</td><td>t2</td><td>v3</td><td>t3</td>
-                    <td>1</td><td>2</td><td>3</td>
-                </tr>
-                {% for arbre in range(1, 5) %}
-                <tr id='a{{ arbre }}'>
-                    <th>{{ arbre }}</th>
-                    <td class="x"></td>
-                    <td class="y"></td>
-                    <td class="a"></td>
-                    <td class="v"></td>
-                    <td class="w"></td>
-                    <td class="t"></td>
-                    <td class="v1"></td>
-                    <td class="t1"></td>
-                    <td class="v2"></td>
-                    <td class="t2"></td>
-                    <td class="v3"></td>
-                    <td class="t3"></td>
-                    <td class="granier0"></td>
-                    <td class="granier1"></td>
-                    <td class="granier2"></td>
-                </tr>
-                {% endfor %}
-            </table>
+        <table class="table table-striped">
+            <tr>
+                <th>Arbre</th><th colspan="3">Position</th><th colspan="3">Vitesse</th>
+                <th colspan="6">Tourelles</th>
+                <th colspan="3">Granier</th>
+            </tr>
+            <tr>
+                <td></td><td>x</td><td>y</td><td>α</td><td>v</td><td>ω</td><td>θ</td>
+                <td>v1</td><td>t1</td><td>v2</td><td>t2</td><td>v3</td><td>t3</td>
+                <td>1</td><td>2</td><td>3</td>
+            </tr>
+            {% for arbre in range(1, 5) %}
+            <tr id='a{{ arbre }}'>
+                <th>{{ arbre }}</th>
+                <td class="x"></td>
+                <td class="y"></td>
+                <td class="a"></td>
+                <td class="v"></td>
+                <td class="w"></td>
+                <td class="t"></td>
+                <td class="v1"></td>
+                <td class="t1"></td>
+                <td class="v2"></td>
+                <td class="t2"></td>
+                <td class="v3"></td>
+                <td class="t3"></td>
+                <td class="granier0"></td>
+                <td class="granier1"></td>
+                <td class="granier2"></td>
+            </tr>
+            {% endfor %}
+        </table>
 
-            <svg>
-            </svg>
+        <svg>
+            <g id="agv1" transform="translate(200 200)">
+                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="green" />
+                <circle class="centre" cx="0" cy="0" r="2" />
+                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
+                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
+                <line class="v"  stroke="green" x1="0"     y1="0"      x2="10"    y2="0"      />
+                <line class="t1" stroke="green" x1="41.72" y1="-41.72" x2="51.72" y2="-41.72" />
+                <line class="t2" stroke="green" x1="41.72" y1="+41.72" x2="51.72" y2="+41.72" />
+                <line class="t3" stroke="green" x1="-59"   y1="0"      x2="-49"   y2="0"      />
+            </g>
+            <g id="agv2" transform="translate(600 200)">
+                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="green" />
+                <circle class="centre" cx="0" cy="0" r="2" />
+                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
+                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
+                <line class="v"  stroke="green" x1="0"     y1="0"      x2="10"    y2="0"      />
+                <line class="t1" stroke="green" x1="41.72" y1="-41.72" x2="51.72" y2="-41.72" />
+                <line class="t2" stroke="green" x1="41.72" y1="+41.72" x2="51.72" y2="+41.72" />
+                <line class="t3" stroke="green" x1="-59"   y1="0"      x2="-49"   y2="0"      />
+            </g>
+            <g id="agv3" transform="translate(1000 200)">
+                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="green" />
+                <circle class="centre" cx="0" cy="0" r="2" />
+                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
+                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
+                <line class="v"  stroke="green" x1="0"     y1="0"      x2="10"    y2="0"      />
+                <line class="t1" stroke="green" x1="41.72" y1="-41.72" x2="51.72" y2="-41.72" />
+                <line class="t2" stroke="green" x1="41.72" y1="+41.72" x2="51.72" y2="+41.72" />
+                <line class="t3" stroke="green" x1="-59"   y1="0"      x2="-49"   y2="0"      />
+            </g>
+            <g id="agv4" transform="translate(1400 200)">
+                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="green" />
+                <circle class="centre" cx="0" cy="0" r="2" />
+                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
+                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
+                <line class="v"  stroke="green" x1="0"     y1="0"      x2="10"    y2="0"      />
+                <line class="t1" stroke="green" x1="41.72" y1="-41.72" x2="51.72" y2="-41.72" />
+                <line class="t2" stroke="green" x1="41.72" y1="+41.72" x2="51.72" y2="+41.72" />
+                <line class="t3" stroke="green" x1="-59"   y1="0"      x2="-49"   y2="0"      />
+            </g>
+        </svg>
 
         <script>
             var data;
@@ -61,12 +105,31 @@
                     data = JSON.parse(e.data);
                     for (a = 1; a < 6; a++) {
                         if (data[a]) {
+                            // table
                             for (v in sv) $('#a' + a + ' .' + sv[v]).html(data[a][sv[v]].toFixed(3));
                             for (v in mv) {
                                 for (i = 0; i < data[a][mv[v]].length; i++) {
                                     $('#a' + a + ' .' + mv[v] + [i]).html(data[a][mv[v]][i].toFixed(3));
                                 }
                             }
+                            // svg
+                            $('#agv' + a + ' .v').attr({
+                                x2: data[a]['v'] * Math.cos(data[a]['t']) * 30,
+                                y2: data[a]['v'] * Math.sin(data[a]['t']) * 30,
+                            });
+                            $('#agv' + a + ' .t1').attr({
+                                x2: data[a]['v1'] * Math.cos(data[a]['t1']) + 41.72,
+                                y2: data[a]['v1'] * Math.sin(data[a]['t1']) - 41.72,
+                            });
+                            $('#agv' + a + ' .t2').attr({
+                                x2: data[a]['v2'] * Math.cos(data[a]['t2']) + 41.72,
+                                y2: data[a]['v2'] * Math.sin(data[a]['t2']) + 41.72,
+                            });
+                            $('#agv' + a + ' .t3').attr({
+                                x2: data[a]['v3'] * Math.cos(data[a]['t3']) - 59,
+                                y2: data[a]['v3'] * Math.sin(data[a]['t3']),
+                            });
+                            // $('#agv4').attr({transform: "translate(1500 200) rotate(20)"})
                         }
                     }
                 };
