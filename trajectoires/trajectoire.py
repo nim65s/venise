@@ -25,19 +25,17 @@ class Trajectoire(Puller, Publisher):
         self.pub()
         sleep(self.period)
 
-    def end(self, hotes=Hote):
-        if isinstance(hotes, Hote):
-            hotes = [hotes]
-        print('stopping %s…' % ', '.join([h.name for h in hotes]))
-        for hote in hotes:
-            self.data[hote].update(t1=0, v1=VIT_MOY_MAX, t2=0, v2=VIT_MOY_MAX, t3=0, v3=VIT_MOY_MAX)
+    def end(self):
+        print('stopping %s…' % ', '.join([h.name for h in self.hotes]))
+        for hote in self.hotes:
+            self.data[hote].update(v=1, w=0, t=0, t1=0, v1=VIT_MOY_MAX, t2=0, v2=VIT_MOY_MAX, t3=0, v3=VIT_MOY_MAX)
         self.pub()
         sleep(6)
-        for hote in hotes:
-            self.data[hote].update(t1=0, v1=0, t2=0, v2=0, t3=0, v3=0)
+        for hote in self.hotes:
+            self.data[hote].update(v=0, v1=0, v2=0, v3=0)
         self.pub()
         sleep(1)
-        for hote in hotes:
+        for hote in self.hotes:
             self.data[hote].update(stop=True)
         self.pub()
         print('stopped.')

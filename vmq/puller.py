@@ -17,6 +17,7 @@ class Puller(VMQ):
             try:
                 num, data = self.puller.recv_json(NOBLOCK)
                 self.data[num].update(**data)
-                self.print(data)
+                if self.verbosite > 2:
+                    self.print(data)
             except Again:
                 break

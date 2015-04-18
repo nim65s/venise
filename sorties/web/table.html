@@ -85,6 +85,7 @@
         </svg>
 
         <script>
+            var size_coef = 2; // 59 / 16.5 / 2;
             var data;
             var sv = ['x', 'y', 'a', 'v', 'w', 't', 'v1', 't1', 'v2', 't2', 'v3', 't3'];
             var mv = ['granier'];
@@ -103,20 +104,20 @@
                             }
                             // svg
                             $('#agv' + a + ' .v').attr({
-                                x2: data[a]['v'] * Math.cos(data[a]['t']) * 30,
-                                y2: data[a]['v'] * Math.sin(data[a]['t']) * 30,
+                                x2: data[a]['v'] * Math.cos(data[a]['t']) * 16.5 * size_coef,
+                                y2: data[a]['v'] * Math.sin(data[a]['t']) * 16.5 * size_coef,
                             });
                             $('#agv' + a + ' .t1').attr({
-                                x2: data[a]['v1'] * Math.cos(data[a]['t1']) + 41.72,
-                                y2: data[a]['v1'] * Math.sin(data[a]['t1']) - 41.72,
+                                x2: data[a]['v1'] * Math.cos(data[a]['t1']) * size_coef + 41.72,
+                                y2: data[a]['v1'] * Math.sin(data[a]['t1']) * size_coef - 41.72,
                             });
                             $('#agv' + a + ' .t2').attr({
-                                x2: data[a]['v2'] * Math.cos(data[a]['t2']) + 41.72,
-                                y2: data[a]['v2'] * Math.sin(data[a]['t2']) + 41.72,
+                                x2: data[a]['v2'] * Math.cos(data[a]['t2']) * size_coef + 41.72,
+                                y2: data[a]['v2'] * Math.sin(data[a]['t2']) * size_coef + 41.72,
                             });
                             $('#agv' + a + ' .t3').attr({
-                                x2: data[a]['v3'] * Math.cos(data[a]['t3']) - 59,
-                                y2: data[a]['v3'] * Math.sin(data[a]['t3']),
+                                x2: data[a]['v3'] * Math.cos(data[a]['t3']) * size_coef - 59,
+                                y2: data[a]['v3'] * Math.sin(data[a]['t3']) * size_coef,
                             });
                             // $('#agv4').attr({transform: "translate(1500 200) rotate(20)"})
                         }
