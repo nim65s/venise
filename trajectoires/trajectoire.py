@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from math import atan2, cos, hypot, pi, sin
 from time import sleep
 
-from ..settings import Hote, PERIODE, POS_ROUES, VIT_MOY_MAX
+from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX
 from ..vmq import Publisher, Puller, vmq_parser
 
 
