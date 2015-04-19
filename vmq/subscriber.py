@@ -10,8 +10,7 @@ class Subscriber(VMQ):
 
         self.subscriber = self.context.socket(SUB)
         url = "tcp://%s:%i" % (MAIN_HOST.name, PORT_SORTIES)
-        if self.verbosite > 2:
-            print(url)
+        self.printe(url)
         self.subscriber.connect(url)
         self.subscriber.setsockopt_string(SUBSCRIBE, '')  # TODO: les sorties devraient pouvoir override ça
 
@@ -20,4 +19,4 @@ class Subscriber(VMQ):
         for h in self.hotes:
             if str(h.value) in data:
                 self.data[h].update(**data[str(h.value)])
-        self.print([self.hote, data[str(self.hote.value)] if self.hote > 1 else data])
+        self.printe([self.hote, data[str(self.hote.value)] if self.hote > 1 else data])

@@ -10,8 +10,7 @@ class VMQ(object):
     def __init__(self, hote, verbosite, *args, **kwargs):
         self.hote, self.verbosite = Hote[hote], verbosite
         self.hotes = [self.hote] if self.hote > 1 else [h for h in Hote if h > 1]
-        if verbosite > 0:
-            print(self.hotes)
+        self.printe(self.hotes)
         self.context = Context()
         self.data = {h: {} for h in self.hotes}
 
@@ -30,7 +29,7 @@ class VMQ(object):
     def fin(self):
         print('terminating…')
 
-    def print(self, data=None):
+    def printe(self, data=None):
         if data is None:
             data = self.data
         if self.verbosite > 1:

@@ -14,4 +14,4 @@ class Pusher(VMQ):
     def send(self):
         for h in self.hotes:
             self.push.send_json([h, self.data[h]])
-            self.print([h, self.data[h]])
+            self.printe([h, self.data[h]])
