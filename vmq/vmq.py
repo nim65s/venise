@@ -20,14 +20,14 @@ class VMQ(object):
             try:
                 self.loop()
             except KeyboardInterrupt:
-                self.end()
+                self.fin()
                 print()
                 break
 
     def loop(self):
         raise NotImplementedError
 
-    def end(self):
+    def fin(self):
         print('terminating…')
 
     def print(self, data=None):

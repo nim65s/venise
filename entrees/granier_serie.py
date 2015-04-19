@@ -20,7 +20,7 @@ class GranierSerie(Granier):
             return {}
         return [float(l[2 + s]) for s in range(3)]
 
-    def end(self):
+    def fin(self):
         self.serial.close()
 
 granier_serie_parser = ArgumentParser(parents=[granier_parser], conflict_handler='resolve')
