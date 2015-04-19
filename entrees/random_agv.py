@@ -33,7 +33,7 @@ class EntreeAGVRandom(EntreeAGV):
             t += copysign(0.001, tc - t)
         else:
             t = tc
-        self.data[self.hote].update(vc=vc, wc=wc, tc=tc, v=v, w=w, t=t)
+        self.data[self.hote].update(vc=round(vc, 4), wc=round(wc, 4), tc=round(tc, 4), v=round(v, 4), w=round(w, 4), t=round(t, 4))
 
 entree_agv_random_parser = ArgumentParser(parents=[entree_agv_parser], conflict_handler='resolve')
 entree_agv_random_parser.add_argument('-vc', type=float, default=0, help="consigne initiale en vitesse linéaire")

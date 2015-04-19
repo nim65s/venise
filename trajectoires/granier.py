@@ -17,9 +17,9 @@ class TrajectoireGranier(Trajectoire):
             self.mini[i] = min(granier[i], self.mini[i])
             self.maxi[i] = max(granier[i], self.maxi[i])
             self.m[i] = (granier[i] - self.mini[i]) / (self.maxi[i] - self.mini[i] if self.maxi[i] != self.mini[i] else 1)
-        self.m[0] = 2 * self.m[0] - 1
-        self.m[1] = 2 * self.m[1] - 1
-        self.m[2] = 2 * self.m[2] * pi
+        self.m[0] = round(2 * self.m[0] - 1, 2)
+        self.m[1] = round(2 * self.m[1] - 1, 2)
+        self.m[2] = round(2 * self.m[2] * pi, 2)
 
         return {
                 'v': v + copysign(0.01, self.m[0] - v) if abs(v - self.m[0]) > 0.01 else v,

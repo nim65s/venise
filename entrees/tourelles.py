@@ -32,7 +32,7 @@ class EntreeTourelles(Entree):
         if 'r' in r: t3 = 0
         if 'c' in r: stop = False
         if ',' in r: stop = True
-        self.data[self.hote].update(v1=v1, v2=v2, v3=v3, t1=t1 % (2 * pi), t2=t2 % (2 * pi), t3=t3 % (2 * pi), stop=stop)
+        self.data[self.hote].update(v1=v1, v2=v2, v3=v3, t1=round(t1 % (2 * pi), 1), t2=round(t2 % (2 * pi), 1), t3=round(t3 % (2 * pi), 1), stop=stop)
         self.printe(self.data)
 
 entree_tourelles_parser = ArgumentParser(parents=[entree_parser], conflict_handler='resolve')

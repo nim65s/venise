@@ -18,7 +18,7 @@ class GranierSerie(Granier):
         except:
             print('fail:', l)
             return {}
-        return [float(l[2 + s]) for s in range(3)]
+        return [round(float(l[2 + s]), 4) for s in range(3)]
 
     def fin(self):
         self.serial.close()

@@ -6,9 +6,9 @@ from .trajectoire import Trajectoire, trajectoire_parser
 class TrajectoireDefault(Trajectoire):
     def process_speed(self, granier, **kwargs):
         return {
-                'v': mean(granier),
-                'w': median(granier),
-                't': var(granier),
+                'v': round(mean(granier), 4),
+                'w': round(median(granier), 4),
+                't': round(var(granier), 4),
                 }
 
 if __name__ == '__main__':
