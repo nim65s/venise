@@ -56,6 +56,8 @@ class Trajectoire(Puller, Publisher):
 
     def process_tourelles(self, **kwargs):
         (t1, v1), (t2, v2), (t3, v3) = [self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)]
+        if (abs(v1) < 5) + (abs(v2) < 5) + (abs(v3) < 5) > 1:
+            v1 = v2 = v3 = 0
         return {'t1': t1, 'v1': v1, 't2': t2, 'v2': v2, 't3': t3, 'v3': v3}
 
 

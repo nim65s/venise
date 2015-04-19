@@ -33,7 +33,6 @@ class EntreeTourelles(Entree):
         if 'c' in r: stop = False
         if ',' in r: stop = True
         self.data[self.hote].update(v1=v1, v2=v2, v3=v3, t1=round(t1 % (2 * pi), 1), t2=round(t2 % (2 * pi), 1), t3=round(t3 % (2 * pi), 1), stop=stop)
-        self.printe(self.data)
 
 entree_tourelles_parser = ArgumentParser(parents=[entree_parser], conflict_handler='resolve')
 entree_tourelles_parser.add_argument('-v1', type=float, default=0, help="tourelle 1: vitesse linéaire")
