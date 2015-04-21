@@ -17,9 +17,9 @@ class TrajectoirePoints(Trajectoire):
             self.state = (self.state + 1) % len(self.points)
             print(self.state)
         if abs(a) > 0.003:
-            w = max(min(round(w - copysign(0.01, a), 2), 0.1), -0.1)
+            w = max(min(round(w - copysign(0.001, a), 3), 0.2), -0.2)
         else:
-            w = round(w + copysign(0.01, a), 2) if w != 0 else 0
+            w = round(w + copysign(0.001, a), 3) if abs(w) > 0.003 else 0
         return {
                 'v': 1,
                 't': atan2(y - yi, x - xi),

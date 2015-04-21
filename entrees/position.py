@@ -27,9 +27,9 @@ class EntreePosition(Entree):
 
     def process(self, **kwargs):
         try:
-            data = self.conn.recv(8192).decode('UTF-16LE').split()  # Merci VinDuv
+            data = self.conn.recv(1024).decode('UTF-16LE').split()  # Merci VinDuv
             if len(data) != 6:
-                print('Pas prêt…')
+                print('Pas prêt… %r' % data)
                 return
             arbre, x, y, a, jour, heure = data
             # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
