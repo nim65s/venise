@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Transhumus</title>
+        <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">-->
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+        <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>-->
+        <link rel="stylesheet" href="http://localhost/bootstrap.min.css">
+        <script src="http://localhost/jquery.min.js"></script>
+        <script src="http://localhost/bootstrap.min.js"></script>
+        <style>
+            svg { width: 1800px; height: 1000px; }
+        </style>
+    </head>
+    <body>
+        <svg>
+            <path id="path2" stroke="red" fill="none"/>
+            <g id="agv2">
+                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="red" />
+                <circle class="centre" cx="0" cy="0" r="2" />
+                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
+                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
+                <line class="v"  stroke="black" x1="0"     y1="0"      />
+            </g>
+            <path id="path3" stroke="black" fill="none"/>
+            <g id="agv3">
+                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="black" />
+                <circle class="centre" cx="0" cy="0" r="2" />
+                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
+                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
+                <line class="v"  stroke="black" x1="0"     y1="0"      />
+            </g>
+            <path id="path4" stroke="blue" fill="none"/>
+            <g id="agv4">
+                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="blue" />
+                <circle class="centre" cx="0" cy="0" r="2" />
+                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
+                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
+                <line class="v"  stroke="black" x1="0"     y1="0"      />
+            </g>
+        </svg>
+
+        <script>
+            var size_coef = 2; // 59 / 16.5 / 2;
+            var data;
+            var sv = ['x', 'y', 'a', 'v', 'w', 't', 'v1', 't1', 'v2', 't2', 'v3', 't3'];
+            $(document).ready(function() {
+                var source = new EventSource("/sub");
+                source.onmessage = function(e) {
+                    data = JSON.parse(e.data);
+                    for (a = 2; a < 5; a++) {
+                        if (data[a]) {
+                            d = $('#path' + a).attr('d');
+                            if (d) d += " L ";
+                            else d = "M ";
+                            d += (data[a]['x'] * 50) + ' ' + (data[a]['x'] * 50);
+                            $('#agv' + a + ' polygon').attr({d: d});
+                            $('#agv' + a).attr({
+                                transform: 'translate(' + (data[a]['x'] * 50) + ' ' + (data[a]['y'] * 50) + ') rotate(' + data[a]['a'] +')',
+                            });
+                            $('#agv' + a + ' .v').attr({
+                                x2: data[a]['v'] * Math.cos(data[a]['t']) * 16.5 * size_coef,
+                                y2: data[a]['v'] * Math.sin(data[a]['t']) * 16.5 * size_coef,
+                            });
+                        }
+                    }
+                };
+            });
+        </script>
+    </body>
+</html>

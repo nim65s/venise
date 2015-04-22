@@ -26,6 +26,13 @@ class Root(Resource):
         return Template(open('table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
 
 
+class Plan(Resource):
+    isLeaf = True
+
+    def render_GET(self, request):
+        return Template(open('plan.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+
+
 class Subscribe(Resource):
     isLeaf = True
 
@@ -62,7 +69,9 @@ class Subscribe(Resource):
 if __name__ == '__main__':
     root = Root()
     subscribe = Subscribe()
+    plan = Plan()
     root.putChild('sub', subscribe)
+    root.putChild('plan', plan)
     site = server.Site(root)
     reactor.listenTCP(8000, site)
     log.startLogging(sys.stdout)

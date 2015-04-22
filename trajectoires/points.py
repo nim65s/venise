@@ -1,3 +1,4 @@
+from datetime import datetime
 from math import atan2, copysign, hypot
 
 from .trajectoire import Trajectoire, trajectoire_parser
@@ -15,7 +16,7 @@ class TrajectoirePoints(Trajectoire):
         xi, yi = self.points[self.state]
         if hypot(xi - x, yi - y) < 0.1:
             self.state = (self.state + 1) % len(self.points)
-            print(self.state)
+            print(self.state, datetime.now())
         if abs(a) > 0.003:
             w = max(min(round(w - copysign(0.001, a), 3), 0.2), -0.2)
         else:
