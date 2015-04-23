@@ -19,7 +19,7 @@ PERIODE = 0.1
 
 # TCP AGV
 # TODO update var names
-HOST_AGV = ['localhost', 'localhost', '192.168.10.10', '192.168.10.11', '192.168.10.12']
+HOST_AGV = ['localhost', 'localhost', '192.168.10.10', '192.168.10.11', '192.168.1.10']
 PORT_AGV = 8001
 PORT_UBISENS = 1336
 PORT_ENTREES = 1337
