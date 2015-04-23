@@ -1,8 +1,11 @@
+import datetime
 from socket import socket, timeout
 
 from ..settings import HOST_AGV, PORT_AGV
 from ..vmq import vmq_parser
 from .sortie import Sortie
+
+now = datetime.datetime.now
 
 
 class SortieAGV(Sortie):
@@ -17,16 +20,16 @@ class SortieAGV(Sortie):
                 self.socket.close()
                 self.socket = socket()
                 self.socket.settimeout(2)
-                print('connecting... %s:%i' % (HOST_AGV[self.hote], PORT_AGV))
+                print('%s connecting... %s:%i' % (now(), HOST_AGV[self.hote], PORT_AGV))
                 self.socket.connect((HOST_AGV[self.hote], PORT_AGV))
-                print('connected')
+                print('%s connected' % now())
                 break
             except timeout:
-                print('timeout…')
+                print('%s timeout…' % now())
             except ConnectionRefusedError:
-                print('Connection Refused…')
+                print('%s Connection Refused…' % now())
             except BrokenPipeError:
-                print('Broken pipe…')
+                print('%s Broken pipe…' % now())
 
     def process(self, **kwargs):
         try:
@@ -45,6 +48,7 @@ class SortieAGV(Sortie):
                 else:
                     raise RuntimeError(ret)
         except (ConnectionResetError, timeout, BrokenPipeError):
+            print('%s Failed connection !' % now())
             self.connect()
 
     def send_agv(self):
