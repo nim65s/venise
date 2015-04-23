@@ -7,7 +7,7 @@ from .trajectoire import Trajectoire, trajectoire_parser
 class TrajectoirePoints(Trajectoire):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.points = [(15, 9), (15, 13), (26, 13), (26, 9)]
+        self.points = [(17, 9), (17, 13), (28, 13), (28, 9)]
         self.state = 0
 
     def process_speed(self, x, y, a, w, **kwargs):
