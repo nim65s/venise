@@ -16,7 +16,7 @@ class TrajectoirePoints(Trajectoire):
         xi, yi = self.points[self.state]
         if hypot(xi - x, yi - y) < 0.1:
             self.state = (self.state + 1) % len(self.points)
-            print(self.state, datetime.now())
+            print(datetime.now(), self.state)
         if abs(a) > 0.003:
             w = max(min(round(w - copysign(0.001, a), 3), 0.2), -0.2)
         else:
