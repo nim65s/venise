@@ -20,8 +20,8 @@ class SortieAGV(Sortie):
                 self.socket.close()
                 self.socket = socket()
                 self.socket.settimeout(2)
-                print('%s connecting... %s:%i' % (now(), HOST_AGV[self.hote], PORT_AGV))
-                self.socket.connect((HOST_AGV[self.hote], PORT_AGV))
+                print('%s connecting... %s:%i' % (now(), HOST_AGV, PORT_AGV))
+                self.socket.connect((HOST_AGV, PORT_AGV))
                 print('%s connected' % now())
                 break
             except timeout:
