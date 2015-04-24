@@ -19,11 +19,12 @@ PERIODE = 0.1
 
 # TCP AGV
 # TODO update var names
-HOST_AGV = ['localhost', 'localhost', '192.168.10.10', '192.168.10.11', '192.168.1.10']
+HOST_AGV = ['localhost', 'localhost', '192.168.10.10', '192.168.10.11', '192.168.10.12']
 PORT_AGV = 8001
 PORT_UBISENS = 1336
 PORT_ENTREES = 1337
 PORT_SORTIES = 1338
+PORT_CACHE = 1339
 PORT_TIM = 2112  # TODO: y’en aura deux sur les AGV, et pour les tests y’a un HOST différent…
 
 # web

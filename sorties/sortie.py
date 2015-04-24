@@ -1,7 +1,7 @@
-from ..vmq import Subscriber
+from ..vmq import CacheRequester
 
 
-class Sortie(Subscriber):
+class Sortie(CacheRequester):
     def loop(self):
         self.sub()
         self.process(**self.data[self.hote])
