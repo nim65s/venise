@@ -13,7 +13,7 @@ from twisted.web import server
 from twisted.web.resource import Resource
 from zmq import Context, SUB, SUBSCRIBE
 
-from settings import MAIN_HOST, PORT_SORTIES
+from settings import MAIN_HOST, PORT_SORTIES, POINTS_SVG
 
 
 class Root(Resource):

@@ -3,6 +3,8 @@ from enum import IntEnum
 from math import pi
 from socket import gethostname
 
+from numpy import array
+
 # Scène TODO
 MAX_X = 12000
 MAX_Y = 12000
@@ -18,7 +20,6 @@ VIT_MOY_MAX = 16.5  # mm / s
 PERIODE = 0.25
 
 # TCP AGV
-# TODO update var names
 HOST_AGV = '192.168.1.10'
 PORT_AGV = 8001
 PORT_UBISENS = 1336
@@ -27,12 +28,12 @@ PORT_SORTIES = 1338
 PORT_CACHE = 1339
 PORT_TIM = 2112  # TODO: y’en aura deux sur les AGV, et pour les tests y’a un HOST différent…
 
-# web
-R_ARBRES = 16
-STROKE_WIDTH = 4
-
 # Position intiale des arbres
 N_SONDES = 3  # par arbre
+
+POINTS = [[7, 7], [11, 14], [27, 14], [30, 16], [32, 17], [32, 13], [26, 13], [24, 9], [22, 9]]
+_p = array(POINTS)
+(MIN_X, MIN_Y), (MAX_X, MAX_Y) = _p.min(axis=0) - 0.5, _p.max(axis=0) + 0.5
 
 # Position des murs
 ANGLES = [[9, 5], [942, 1], [986, 312], [542, 396], [18, 250]]

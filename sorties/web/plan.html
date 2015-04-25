@@ -17,9 +17,7 @@
     </head>
     <body>
         <svg>
-            <circle cx="750" cy="550" fill="yellow" r="10" />
-            <rect x="550" y="450" width="650" height="200" stroke="yellow" fill="none"/>
-            <rect x="500" y="400" width="750" height="300" stroke="red" fill="none"/>
+            <polygon points="{% for p in POINTS_SVG %}{{p|join(',')}} {% endfor %}" stroke="red" fill="none" />
 
             <path id="path2" stroke="red" fill="none"/>
             <g id="agv2">
