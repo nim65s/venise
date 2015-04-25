@@ -1,7 +1,7 @@
 from zmq import REQ
 
-from ..settings import PORT_CACHE, MAIN_HOST
-from .vmq import VMQ, vmq_parser
+from ..settings import MAIN_HOST, PORT_CACHE
+from .vmq import VMQ
 
 
 class CacheRequester(VMQ):
