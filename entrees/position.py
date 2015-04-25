@@ -28,17 +28,20 @@ class EntreePosition(Entree):
 
     def process(self, **kwargs):
         try:
-            for data in self.conn.recv(1024).decode('UTF-16LE').split('ArbreC'):  # Merci VinDuv
-                if not data:
+            for data in self.conn.recv(1024).decode('UTF-16LE').split('C'):  # Merci VinDuv
+                if not data or data.endswith('e'):
                     continue
-                datas = data.split()
-                if len(datas) != 6:
-                    print('Pas prêt… %r' % datas)
-                    continue
-                arbre, x, y, a, jour, heure = data
-                arbre, x, y, a = int(arbre) + 1, float(x), float(y), float(a)
-                # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
-                self.data[arbre].update(x=x, y=y, a=round(a - self.correction[arbre], 3))
+                try:
+                    data = data.split()
+                    if len(data) != 6:
+                        print('Pas prêt… %r' % data)
+                        continue
+                    arbre, x, y, a, jour, heure = data
+                    arbre, x, y, a = int(arbre[-1]) + 1, float(x.replace(',', '.')), float(y.replace(',', '.')), float(a.replace(',', '.'))
+                    # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
+                    self.data[arbre].update(x=x, y=y, a=round(a - self.correction[arbre], 3))
+                except:
+                    print('Pas prêt… %r' % data)
         except ConnectionResetError:
             print('Déconnecté…')
             self.connect()
