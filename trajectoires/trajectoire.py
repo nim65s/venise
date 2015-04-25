@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from datetime import datetime
 from math import atan2, cos, hypot, pi, sin
 from time import sleep
 
@@ -13,11 +14,14 @@ class Trajectoire(Puller, Publisher):
         self.data = {h: {
             'stop': False,
             'hote': h,
+            'event': None,
             'x': 0, 'y': 0, 'a': 0,  # Position
             'v': 0, 'w': 0, 't': 0,  # Vitesse
             't1': 0, 'v1': 0, 't2': 0, 'v2': 0, 't3': 0, 'v3': 0,  # Tourelles
             'granier': [], 'sick': [], 'luminosite': [], 'visiteurs': [],  # Sondes
             } for h in self.hotes}
+        self.data['timestamp'] = datetime.now().timestamp()
+        self.data['trajectoire'] = self.__class__.__name__
 
     def loop(self):
         self.pull()
@@ -25,7 +29,7 @@ class Trajectoire(Puller, Publisher):
         self.pub()
         sleep(self.period)
 
-    def end(self):
+    def fin(self):
         print('stopping %s…' % ', '.join([h.name for h in self.hotes]))
         for hote in self.hotes:
             self.data[hote].update(v=1, w=0, t=0, t1=0, v1=VIT_MOY_MAX, t2=0, v2=VIT_MOY_MAX, t3=0, v3=VIT_MOY_MAX)
@@ -39,12 +43,13 @@ class Trajectoire(Puller, Publisher):
             self.data[hote].update(stop=True)
         self.pub()
         print('stopped.')
-        super().end()
+        super().fin()
 
     def update(self):
         for hote in self.hotes:
             self.data[hote].update(**self.process_speed(**self.data[hote]))
             self.data[hote].update(**self.process_tourelles(**self.data[hote]))
+        self.data['timestamp'] = datetime.now().timestamp()
 
     def process_speed(self, **kwargs):
         raise NotImplementedError()

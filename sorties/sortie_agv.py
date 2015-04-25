@@ -20,16 +20,16 @@ class SortieAGV(Sortie):
                 self.socket.close()
                 self.socket = socket()
                 self.socket.settimeout(2)
-                print('%s connecting... %s:%i' % (now(), HOST_AGV, PORT_AGV))
+                self.send('%s connecting... %s:%i' % (now(), HOST_AGV, PORT_AGV))
                 self.socket.connect((HOST_AGV, PORT_AGV))
-                print('%s connected' % now())
+                self.send('%s connected' % now())
                 break
             except timeout:
-                print('%s timeout…' % now())
+                self.send('%s timeout…' % now())
             except ConnectionRefusedError:
-                print('%s Connection Refused…' % now())
+                self.send('%s Connection Refused…' % now())
             except BrokenPipeError:
-                print('%s Broken pipe…' % now())
+                self.send('%s Broken pipe…' % now())
 
     def process(self, **kwargs):
         try:
@@ -38,9 +38,9 @@ class SortieAGV(Sortie):
             if ret.startswith('+'):  # Les erreurs commencent par un +
                 code = int(ret[1:].split(',')[0])
                 if code == 3:  # Joystick connecté
-                    print('Déconnecte le joystick !')
+                    self.send('Déconnecte le joystick !')
                 elif code == 4:  # Post-démarrage ou arrêt d’urgence
-                    print('Appuie sur le bouton vert !')
+                    self.send('Appuie sur le bouton vert !')
                 elif code == 5:  # Velocity too high
                     pass
                 elif code == 10:  # no response from AGV software
@@ -48,7 +48,7 @@ class SortieAGV(Sortie):
                 else:
                     raise RuntimeError(ret)
         except (ConnectionResetError, timeout, BrokenPipeError):
-            print('%s Failed connection !' % now())
+            self.send('%s Failed connection !' % now())
             self.connect()
 
     def send_agv(self):

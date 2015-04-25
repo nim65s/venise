@@ -3,44 +3,52 @@
     <head>
         <meta charset="utf-8">
         <title>Transhumus</title>
-        <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">-->
-        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
-        <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>-->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <!--
         <link rel="stylesheet" href="http://localhost/bootstrap.min.css">
         <script src="http://localhost/jquery.min.js"></script>
         <script src="http://localhost/bootstrap.min.js"></script>
+        -->
         <style>
             svg { width: 1800px; height: 1000px; }
         </style>
     </head>
     <body>
         <svg>
+            <circle cx="750" cy="550" fill="yellow" r="10" />
+            <rect x="550" y="450" width="650" height="200" stroke="yellow" fill="none"/>
+            <rect x="500" y="400" width="750" height="300" stroke="red" fill="none"/>
+
             <path id="path2" stroke="red" fill="none"/>
             <g id="agv2">
                 <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="red" />
                 <circle class="centre" cx="0" cy="0" r="2" />
-                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r1" r="2" cx="-59" cy="0"      />
                 <circle class="r2" r="2" cx="41.72" cy="+41.72" />
                 <circle class="r3" r="2" cx="41.72" cy="-41.72" />
-                <line class="v"  stroke="black" x1="0"     y1="0"      />
+                <line class="v" stroke="black" x1="0" y1="0" />
             </g>
+
             <path id="path3" stroke="black" fill="none"/>
             <g id="agv3">
                 <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="black" />
                 <circle class="centre" cx="0" cy="0" r="2" />
-                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r1" r="2" cx="-59" cy="0" />
                 <circle class="r2" r="2" cx="41.72" cy="+41.72" />
                 <circle class="r3" r="2" cx="41.72" cy="-41.72" />
-                <line class="v"  stroke="black" x1="0"     y1="0"      />
+                <line class="v" stroke="black" x1="0" y1="0" />
             </g>
+
             <path id="path4" stroke="blue" fill="none"/>
             <g id="agv4">
                 <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="blue" />
                 <circle class="centre" cx="0" cy="0" r="2" />
-                <circle class="r1" r="2" cx="-59"   cy="0"      />
+                <circle class="r1" r="2" cx="-59" cy="0" />
                 <circle class="r2" r="2" cx="41.72" cy="+41.72" />
                 <circle class="r3" r="2" cx="41.72" cy="-41.72" />
-                <line class="v"  stroke="black" x1="0"     y1="0"      />
+                <line class="v" stroke="black" x1="0" y1="0" />
             </g>
         </svg>
 
@@ -55,16 +63,14 @@
                     for (a = 2; a < 5; a++) {
                         if (data[a]) {
                             d = $('#path' + a).attr('d');
-                            if (d) d += " L ";
-                            else d = "M ";
-                            d += (data[a]['x'] * 50) + ' ' + (data[a]['x'] * 50);
+                            $('#path' + a).attr({d: (d ? d + " L " : "M ") + (data[a]['x'] * 50) + ' ' + (data[a]['y'] * 50)});
                             $('#agv' + a + ' polygon').attr({d: d});
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * 50) + ' ' + (data[a]['y'] * 50) + ') rotate(' + data[a]['a'] +')',
                             });
                             $('#agv' + a + ' .v').attr({
-                                x2: data[a]['v'] * Math.cos(data[a]['t']) * 16.5 * size_coef,
-                                y2: data[a]['v'] * Math.sin(data[a]['t']) * 16.5 * size_coef,
+                                x2: - data[a]['v'] * Math.cos(data[a]['t']) * 16.5 * size_coef,
+                                y2: - data[a]['v'] * Math.sin(data[a]['t']) * 16.5 * size_coef,
                             });
                         }
                     }

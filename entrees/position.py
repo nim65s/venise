@@ -28,7 +28,7 @@ class EntreePosition(Entree):
 
     def process(self, **kwargs):
         try:
-            for data in self.conn.recv(1024).decode('UTF-16LE').split('C'):  # Merci VinDuv
+            for data in self.conn.recv(4096).decode('UTF-16LE').split('C'):  # Merci VinDuv
                 if not data or data.endswith('e'):
                     continue
                 try:

@@ -13,15 +13,15 @@ class VMQ(object):
         self.printe(self.hotes)
         self.context = Context()
         self.data = {h: {} for h in self.hotes}
+        self.fini = False
 
     def run(self):
-        while True:
-            try:
+        try:
+            while not self.fini:
                 self.loop()
-            except KeyboardInterrupt:
-                self.fin()
-                print()
-                break
+        except KeyboardInterrupt:
+            self.fin()
+            print()
 
     def loop(self):
         raise NotImplementedError

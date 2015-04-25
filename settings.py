@@ -15,7 +15,7 @@ POS_ROUES = [-pi / 4, pi / 4, pi]
 VIT_MOY_MAX = 16.5  # mm / s
 
 # δt
-PERIODE = 0.1
+PERIODE = 0.25
 
 # TCP AGV
 # TODO update var names
