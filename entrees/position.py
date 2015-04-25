@@ -29,10 +29,12 @@ class EntreePosition(Entree):
     def process(self, **kwargs):
         try:
             for data in self.conn.recv(1024).decode('UTF-16LE').split('ArbreC'):  # Merci VinDuv
+                if not data:
+                    continue
                 datas = data.split()
                 if len(datas) != 6:
                     print('Pas prêt… %r' % datas)
-                    return
+                    continue
                 arbre, x, y, a, jour, heure = data
                 arbre, x, y, a = int(arbre) + 1, float(x), float(y), float(a)
                 # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
