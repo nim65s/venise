@@ -7,16 +7,16 @@ from .trajectoire import Trajectoire, trajectoire_parser
 class TrajectoirePoints(Trajectoire):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.points = [(15, 9), (15, 13), (26, 13), (26, 9)]
-        self.state = 0
+        self.points = [(15, 9), (15, 13), (26, 9), (26, 13)]
+        self.state = [0, 0, 0, 0, 0]
 
-    def process_speed(self, x, y, a, w, **kwargs):
+    def process_speed(self, x, y, a, w, hote, **kwargs):
         if x == y == a == 0:
             return {}
-        xi, yi = self.points[self.state]
+        xi, yi = self.points[self.state[hote]]
         if hypot(xi - x, yi - y) < 0.1:
-            self.state = (self.state + 1) % len(self.points)
-            print(datetime.now(), self.state)
+            self.state[hote] = (self.state[hote] + 1) % len(self.points)
+            print(datetime.now(), hote, self.state[hote])
         if abs(a) > 0.003:
             w = max(min(round(w - copysign(0.001, a), 3), 0.2), -0.2)
         else:

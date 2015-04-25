@@ -15,6 +15,7 @@ class EntreePosition(Entree):
             } for h in Hote}
         self.socket = socket()
         self.connect()
+        self.correction = [0, 0, 0, 0.781, 0.828]
 
     def connect(self):
         self.socket.close()
@@ -27,13 +28,15 @@ class EntreePosition(Entree):
 
     def process(self, **kwargs):
         try:
-            data = self.conn.recv(1024).decode('UTF-16LE').split()  # Merci VinDuv
-            if len(data) != 6:
-                print('Pas prêt… %r' % data)
-                return
-            arbre, x, y, a, jour, heure = data
-            # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
-            self.data[int(arbre[-1]) + 1].update(x=float(x), y=float(y), a=round(float(a) - 0.828, 3))  # TODO
+            for data in self.conn.recv(1024).decode('UTF-16LE').split('ArbreC'):  # Merci VinDuv
+                datas = data.split()
+                if len(datas) != 6:
+                    print('Pas prêt… %r' % datas)
+                    return
+                arbre, x, y, a, jour, heure = data
+                arbre, x, y, a = int(arbre) + 1, float(x), float(y), float(a)
+                # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
+                self.data[arbre].update(x=x, y=y, a=round(a - self.correction[arbre], 3))
         except ConnectionResetError:
             print('Déconnecté…')
             self.connect()
