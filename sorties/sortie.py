@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from ..vmq import CacheRequester, Pusher
+from ..vmq import Subscriber, Pusher
 
 
-class Sortie(CacheRequester, Pusher):
+class Sortie(Subscriber, Pusher):
     def loop(self):
         self.sub()
         self.process(**self.data[self.hote])
@@ -11,5 +11,5 @@ class Sortie(CacheRequester, Pusher):
     def process(self, **kwargs):
         raise NotImplementedError()
 
-    def send(self, event):
-        self.push.send_json([self.hote, {'event': '%s %s' % (datetime.now().strftime('%H:%M'), event)}])
+    def send(self, status):
+        self.push.send_json([self.hote, {'status': status}])

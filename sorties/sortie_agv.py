@@ -47,6 +47,8 @@ class SortieAGV(Sortie):
                     self.connect()
                 else:
                     raise RuntimeError(ret)
+            else:
+                self.send('OK')
         except (ConnectionResetError, timeout, BrokenPipeError):
             self.send('%s Failed connection !' % now())
             self.connect()
