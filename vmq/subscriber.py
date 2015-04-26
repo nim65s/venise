@@ -20,11 +20,14 @@ class Subscriber(VMQ):
     def sub(self):
         while True:
             try:
-                data = self.subscriber.recv_json(NOBLOCK)
+                if 'stop' in self.data[self.hote]:
+                    data = self.subscriber.recv_json(NOBLOCK)
+                else:
+                    data = self.subscriber.recv_json()
                 for h in self.hotes:
                     if str(h.value) in data:
                         self.data[h].update(**data[str(h.value)])
                 self.last_seen = datetime.now()
+                self.printe([self.hote, data[str(self.hote.value)] if self.hote > 1 else data])
             except Again:
                 break
-        self.printe([self.hote, data[str(self.hote.value)] if self.hote > 1 else data])

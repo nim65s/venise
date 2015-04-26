@@ -12,4 +12,5 @@ class Sortie(Subscriber, Pusher):
         raise NotImplementedError()
 
     def send(self, status):
+        print(status)
         self.push.send_json([self.hote, {'status': status}])
