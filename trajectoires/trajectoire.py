@@ -30,6 +30,7 @@ class Trajectoire(Puller, Publisher):
         sleep(self.period)
 
     def fin(self):
+        return
         print('stopping %s…' % ', '.join([h.name for h in self.hotes]))
         for hote in self.hotes:
             self.data[hote].update(v=1, w=0, t=0, t1=0, v1=VIT_MOY_MAX, t2=0, v2=VIT_MOY_MAX, t3=0, v3=VIT_MOY_MAX)

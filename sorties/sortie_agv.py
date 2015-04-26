@@ -20,8 +20,8 @@ class SortieAGV(Sortie):
                 self.socket.close()
                 self.socket = socket()
                 self.socket.settimeout(2)
-                self.send('%s connecting... %s:%i' % (now(), HOST_AGV, PORT_AGV))
-                self.socket.connect(('192.168.10.11', PORT_AGV))
+                self.send('%s connecting... %s:%i' % (now(), self.hote.name, PORT_AGV))
+                self.socket.connect((self.hote.name, PORT_AGV))
                 self.send('%s connected' % now())
                 break
             except timeout:

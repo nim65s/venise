@@ -16,18 +16,18 @@ class Subscriber(VMQ):
         self.subscriber.connect(url)
         self.subscriber.setsockopt_string(SUBSCRIBE, '')  # TODO: les sorties devraient pouvoir override ça
         self.last_seen = datetime(1970, 1, 1)
+        self.sub(block=0)
 
-    def sub(self):
+    def sub(self, block=NOBLOCK):
         while True:
             try:
-                if 'stop' in self.data[self.hote]:
-                    data = self.subscriber.recv_json(NOBLOCK)
-                else:
-                    data = self.subscriber.recv_json()
+                data = self.subscriber.recv_json(block)
                 for h in self.hotes:
                     if str(h.value) in data:
                         self.data[h].update(**data[str(h.value)])
                 self.last_seen = datetime.now()
                 self.printe([self.hote, data[str(self.hote.value)] if self.hote > 1 else data])
             except Again:
+                break
+            if not block:
                 break
