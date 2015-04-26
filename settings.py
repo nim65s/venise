@@ -31,13 +31,12 @@ PORT_TIM = 2112  # TODO: y’en aura deux sur les AGV, et pour les tests y’a u
 # Position intiale des arbres
 N_SONDES = 3  # par arbre
 
-POINTS = [[7, 7], [11, 14], [27, 14], [30, 16], [32, 17], [32, 13], [26, 13], [24, 9], [22, 9]]
-_p = array(POINTS)
-(MIN_X, MIN_Y), (MAX_X, MAX_Y) = _p.min(axis=0) - 0.5, _p.max(axis=0) + 0.5
-
 # Position des murs
-ANGLES = [[9, 5], [942, 1], [986, 312], [542, 396], [18, 250]]
+ANGLES = [[7, 7], [11, 14], [27, 14], [30, 16], [32, 17], [32, 13], [26, 13], [24, 9], [22, 9]]
+_a = array(ANGLES)
 MURS = [[a, ANGLES[i + 1] if i + 1 < len(ANGLES) else ANGLES[0]] for i, a in enumerate(ANGLES)]
+
+(MIN_X, MIN_Y), (MAX_X, MAX_Y) = _a.min(axis=0) - 0.5, _a.max(axis=0) + 0.5
 
 Hote = IntEnum('Hôte', 'cerf moro ame yuki')
 try:
