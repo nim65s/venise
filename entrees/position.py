@@ -15,7 +15,7 @@ class EntreePosition(Entree):
             } for h in Hote}
         self.socket = socket()
         self.connect()
-        self.correction = [0, 0, 0, 0.781, 0.828]
+        self.correction = [0, 0, 2.32, 0.781, 0.828]
 
     def connect(self):
         self.socket.close()

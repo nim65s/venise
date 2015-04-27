@@ -13,7 +13,7 @@
         <script src="http://localhost/bootstrap.min.js"></script>
         <style>
             svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; }
-            {#svg { background-image: url("http://localhost/plan.png"); background-position: 100px 100px; background-size: 100%; }#}
+            svg { background-image: url("http://localhost/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
             #agv2, #path2 { stroke: red; }
             #agv3, #path3 { stroke: green; }
             #agv4, #path4 { stroke: blue; }
@@ -23,7 +23,7 @@
         <svg>
             <g transform="translate(0,{{ PX_PAR_M * HEIGHT }})">
                 <g transform="scale(1,-1)">
-                <g transform="translate({{ PX_PAR_M * 15 }},0)">
+                    <g transform="translate({{ PX_PAR_M * 15 }},0)">
                         <polygon points="{% for p in POINTS_SVG %}{{p|join(',')}} {% endfor %}" stroke="black" />
                         <polygon points="{% for p in INTERIEUR_SVG %}{{p|join(',')}} {% endfor %}" stroke="black" />
                         {#{% for x, y in ANTENNES %}<circle cx="{{ x }}" cy="{{ y }}" r="4" stroke="purple" />{% endfor %}#}
