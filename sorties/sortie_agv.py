@@ -8,7 +8,6 @@ from ..vmq import vmq_parser
 from .sortie import Sortie
 
 now = datetime.now
-per = timedelta(seconds=PERIODE)
 
 
 class SortieAGV(Sortie):
@@ -35,7 +34,6 @@ class SortieAGV(Sortie):
                 self.send('%s Broken pipe…' % now())
 
     def process(self, **kwargs):
-        start = now()
         self.smoothe()
         try:
             self.socket.sendall(self.send_agv())
@@ -57,12 +55,6 @@ class SortieAGV(Sortie):
         except (ConnectionResetError, timeout, BrokenPipeError):
             self.send('%s Failed connection !' % now())
             self.connect()
-        duree = now() - start
-        reste = per - duree
-        if reste > timedelta(0):
-            sleep(reste.microseconds / 1000000)
-        else:
-            print('La boucle a mis beaucoup trop de temps:', duree)
 
     def send_agv(self):
         if self.data[self.hote]['stop']:
