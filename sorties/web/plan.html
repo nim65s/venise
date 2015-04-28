@@ -12,7 +12,7 @@
         <script src="http://localhost/jquery.min.js"></script>
         <script src="http://localhost/bootstrap.min.js"></script>
         <style>
-            svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; }
+            svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; background-color: 'red'; }
             svg { background-image: url("http://localhost/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
             #agv2, #path2 { stroke: red; }
             #agv3, #path3 { stroke: green; }
@@ -71,8 +71,17 @@
                 </g>
             </g>
         </svg>
+        <dl>
+            <dd>1</dd>
+            <dt class="2"></dt>
+            <dd>2</dd>
+            <dt class="3"></dt>
+            <dd>3</dd>
+            <dt class="4"></dt>
+        </dl>
 
         <script>
+            var last_seen = new Date();
             var size_coef = 2;
             var data;
             var sv = ['x', 'y', 'a', 'v', 'w', 't', 'v1', 't1', 'v2', 't2', 'v3', 't3'];
@@ -88,30 +97,42 @@
                                 $('#agv' + a + ' polygon').attr({d: d});
                             }
                             $('#agv' + a + ' .v').attr({
-                                x2: - data[a]['v'] * Math.cos(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
-                                y2: - data[a]['v'] * Math.sin(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
+                                x2: data[a]['v'] * Math.cos(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
+                                y2: data[a]['v'] * Math.sin(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                             });
                             if (data[a]['t1s']) {
                                 $('#agv' + a + ' .t1').attr({
-                                    x2: - data[a]['v1'] * Math.cos(data[a]['t1s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                    y2: - data[a]['v1'] * Math.sin(data[a]['t1s']) * size_coef - {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                    x2: data[a]['v1'] * Math.cos(data[a]['t1s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                    y2: data[a]['v1'] * Math.sin(data[a]['t1s']) * size_coef - {{ RAYON_AGV * PX_PAR_M * 0.707 }},
                                 });
                                 $('#agv' + a + ' .t2').attr({
-                                    x2: - data[a]['v2'] * Math.cos(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                    y2: - data[a]['v2'] * Math.sin(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                    x2: data[a]['v2'] * Math.cos(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                    y2: data[a]['v2'] * Math.sin(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
                                 });
                                 $('#agv' + a + ' .t3').attr({
-                                    x2: - data[a]['v3'] * Math.cos(data[a]['t3s']) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
-                                    y2: - data[a]['v3'] * Math.sin(data[a]['t3s']) * size_coef,
+                                    x2: data[a]['v3'] * Math.cos(data[a]['t3s']) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
+                                    y2: data[a]['v3'] * Math.sin(data[a]['t3s']) * size_coef,
                                 });
                             }
                             $('#agv' + a).attr({
-                                transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +')',
+                                transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });
+                            $('dt.' +a).html(data[a]['status']);
                         }
                     }
+                    last_seen = new Date();
                 };
             });
+        setInterval(function(){
+            now = new Date();
+            diff = now - last_seen;
+            diff = new Date(diff);
+            if (diff.getSeconds() >= 1) {
+                $('svg').css("background-color", "red");
+            } else {
+                $('svg').css("background-color", "white");
+            }
+        }, 100);
         </script>
     </body>
 </html>
