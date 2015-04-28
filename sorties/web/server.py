@@ -13,7 +13,7 @@ from twisted.web import server
 from twisted.web.resource import Resource
 from zmq import Context, SUB, SUBSCRIBE
 
-from settings import MAIN_HOST, PORT_SORTIES, POINTS_SVG, PX_PAR_M, VIT_MOY_MAX, HEIGHT, WIDTH, RAYON_AGV, ANTENNES, INTERIEUR_SVG, PATH_EXT_SVG
+from settings import MAIN_HOST, PORT_PUB, POINTS_SVG, PX_PAR_M, VIT_MOY_MAX, HEIGHT, WIDTH, RAYON_AGV, ANTENNES, INTERIEUR_SVG, PATH_EXT_SVG
 
 
 class Root(Resource):
@@ -40,7 +40,7 @@ class Subscribe(Resource):
         self.subscribers = set()
         self.context = Context()
         self.socket = self.context.socket(SUB)
-        self.socket.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_SORTIES))
+        self.socket.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_PUB))
         self.socket.setsockopt_string(SUBSCRIBE, u'')  # TODO: les sorties devraient pouvoir override ça
 
     def render_GET(self, request):

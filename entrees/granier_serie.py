@@ -20,10 +20,9 @@ class GranierSerie(Granier):
         except:
             print('fail:', l)
             return {}
-        vals = [round(float(l[2 + s]), 4) for s in range(3)]
         with open(self.fichier, 'a') as f:
-            print(';'.join(vals), file=f)
-        return vals
+            print(';'.join(l[:5]), file=f)
+        return [round(float(l[2 + s]), 4) for s in range(3)]
 
     def fin(self):
         self.serial.close()

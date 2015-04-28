@@ -5,7 +5,7 @@ from math import atan2, cos, hypot, pi, sin, copysign
 from time import sleep
 
 from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH
-from ..vmq import Puller
+from ..vmq import Puller, Publisher, vmq_parser
 
 
 class Trajectoire(Puller, Publisher):

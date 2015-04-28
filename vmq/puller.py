@@ -14,7 +14,9 @@ class Puller(VMQ):
         self.puller = self.context.socket(PULL)
         self.puller.bind("tcp://*:%i" % PORT_PUSH)
         self.last_seen = datetime(1970, 1, 1)
+        print('Attente de connexion')
         self.pull(block=0)
+        print('Connecté')
 
     def pull(self, block=NOBLOCK):
         while True:

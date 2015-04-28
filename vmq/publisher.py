@@ -1,6 +1,6 @@
 from zmq import PUB
 
-from ..settings import PORT_SORTIES
+from ..settings import PORT_PUB
 from .vmq import VMQ
 
 
@@ -9,7 +9,7 @@ class Publisher(VMQ):
         super().__init__(*args, **kwargs)
 
         self.publisher = self.context.socket(PUB)
-        self.publisher.bind("tcp://*:%i" % PORT_SORTIES)
+        self.publisher.bind("tcp://*:%i" % PORT_PUB)
 
     def pub(self):
         self.publisher.send_json(self.data)

@@ -2,7 +2,7 @@ from datetime import datetime
 from zmq import SUB, SUBSCRIBE, NOBLOCK
 from zmq.error import Again
 
-from ..settings import MAIN_HOST, PORT_SORTIES
+from ..settings import MAIN_HOST, PORT_PUB
 from .vmq import VMQ
 
 
@@ -11,7 +11,7 @@ class Subscriber(VMQ):
         super().__init__(*args, **kwargs)
 
         self.subscriber = self.context.socket(SUB)
-        url = "tcp://%s:%i" % (MAIN_HOST.name, PORT_SORTIES)
+        url = "tcp://%s:%i" % (MAIN_HOST.name, PORT_PUB)
         self.printe(url)
         self.subscriber.connect(url)
         self.subscriber.setsockopt_string(SUBSCRIBE, '')  # TODO: les sorties devraient pouvoir override ça

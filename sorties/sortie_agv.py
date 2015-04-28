@@ -1,4 +1,5 @@
-import datetime
+from datetime import datetime, timedelta
+from math import pi, copysign
 from time import sleep
 from socket import socket, timeout
 
@@ -6,8 +7,8 @@ from ..settings import HOST_AGV, PORT_AGV, PERIODE, SMOOTH_FACTOR
 from ..vmq import vmq_parser
 from .sortie import Sortie
 
-now = datetime.datetime.now
-per = datetime.timedelta(seconds=PERIODE)
+now = datetime.now
+per = timedelta(seconds=PERIODE)
 
 
 class SortieAGV(Sortie):
@@ -23,7 +24,7 @@ class SortieAGV(Sortie):
                 self.socket = socket()
                 self.socket.settimeout(2)
                 self.send('%s connecting... %s:%i' % (now(), self.hote.name, PORT_AGV))
-                self.socket.connect((self.hote.name, PORT_AGV))
+                self.socket.connect((HOST_AGV, PORT_AGV))
                 self.send('%s connected' % now())
                 break
             except timeout:
@@ -57,7 +58,7 @@ class SortieAGV(Sortie):
             self.connect()
         duree = now() - start
         reste = per - duree
-        if reste > timdelta(0):
+        if reste > timedelta(0):
             sleep(reste.microseconds / 1000000)
         else:
             print('La boucle a mis beaucoup trop de temps:', duree)

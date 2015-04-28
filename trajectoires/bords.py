@@ -17,8 +17,8 @@ class TrajectoireBords(Trajectoire):
         if hote == Hote.moro:
             return self.process_speed_moro(x, y, a, w, hote, **kwargs)
         if not (MIN_X < x < MAX_X) or not (MIN_Y < y < MAX_Y):
-            print('OWAIT, %.3f %.3f' % (x, y))
-            return {'v': 0, 'w': 0}
+            print('OWAIT %s, %.3f %.3f' % (hote, x, y))
+            #return {'v': 0, 'w': 0}
         xi, yi = PATH_EXT[self.state[hote]]
         if hypot(xi - x, yi - y) < 0.3:
             self.state[hote] = (self.state[hote] + 1) % len(PATH_EXT)

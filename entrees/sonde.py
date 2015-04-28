@@ -11,7 +11,7 @@ class Sonde(Entree):
         self.data[self.hote][nom] = [(maxi + mini) / 2] * n_values
 
     def loop(self):
-        self.send(self.check_value(self.process(self.data[self.hote][self.nom])))
+        self.check_value(self.process(self.data[self.hote][self.nom]))
         sleep(self.period)
 
     def check_value(self, value):
@@ -21,7 +21,6 @@ class Sonde(Entree):
             if not self.mini <= v <= self.maxi:
                 raise ValueError('%s.%i sur %s: %f pas entre %f et %f' % (self.nom, i, self.hote.name, v, self.mini, self.maxi))
         self.data[self.hote][self.nom] = value
-        return self.data[self.hote]
 
 sonde_parser = ArgumentParser(parents=[entree_parser], conflict_handler='resolve')
 sonde_parser.add_argument('-n', '--nom', choices=['granier', 'sick', 'luminosite'])
