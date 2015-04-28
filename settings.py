@@ -19,8 +19,8 @@ PERIODE = 0.1
 HOST_AGV = '192.168.1.10'
 PORT_AGV = 8001
 PORT_UBISENS = 1336
-PORT_ENTREES = 1337
-PORT_SORTIES = 1338
+PORT_PUSH = 1337
+PORT_PUB = 1338
 PORT_CACHE = 1339
 PORT_TIM = 2112  # TODO: y’en aura deux sur les AGV, et pour les tests y’a un HOST différent…
 

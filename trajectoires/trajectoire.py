@@ -1,10 +1,11 @@
+from zmq import PUSH
 from argparse import ArgumentParser
 from datetime import datetime
-from math import atan2, cos, hypot, pi, sin
+from math import atan2, cos, hypot, pi, sin, copysign
 from time import sleep
 
-from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX
-from ..vmq import Publisher, Puller, vmq_parser
+from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH
+from ..vmq import Puller
 
 
 class Trajectoire(Puller, Publisher):
@@ -23,10 +24,19 @@ class Trajectoire(Puller, Publisher):
         self.data['timestamp'] = datetime.now().timestamp()
         self.data['trajectoire'] = self.__class__.__name__
 
+        self.push = {h: self.context.socket(PUSH) for h in self.hotes}
+        for h in self.hotes:
+            self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
+
+    def send(self):
+        self.pub()
+        for h in self.hotes:
+            self.push[h].send_json([h, self.data[h]])
+
     def loop(self):
         self.pull()
         self.update()
-        self.pub()
+        self.send()
         sleep(self.period)
 
     def fin(self):
@@ -34,15 +44,15 @@ class Trajectoire(Puller, Publisher):
         print('stopping %s…' % ', '.join([h.name for h in self.hotes]))
         for hote in self.hotes:
             self.data[hote].update(v=1, w=0, t=0, t1=0, v1=VIT_MOY_MAX, t2=0, v2=VIT_MOY_MAX, t3=0, v3=VIT_MOY_MAX)
-        self.pub()
+        self.send()
         sleep(6)
         for hote in self.hotes:
             self.data[hote].update(v=0, v1=0, v2=0, v3=0)
-        self.pub()
+        self.send()
         sleep(1)
         for hote in self.hotes:
             self.data[hote].update(stop=True)
-        self.pub()
+        self.send()
         print('stopped.')
         super().fin()
 

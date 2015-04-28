@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from ..vmq import Subscriber, Pusher
+from ..vmq import Puller, Pusher
 
 
-class Sortie(Subscriber, Pusher):
+class Sortie(Puller, Pusher):
     def loop(self):
-        self.sub()
+        self.pull()
         self.process(**self.data[self.hote])
 
     def process(self, **kwargs):
