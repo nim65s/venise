@@ -26,6 +26,8 @@ PORT_TIM = 2112  # TODO: y’en aura deux sur les AGV, et pour les tests y’a u
 
 N_SONDES = 3  # par arbre
 
+# On veut faire faire pi/2 en 50 cm, si on est à vitesse max
+SMOOTH_FACTOR = pi / 2 / (60 * 0.5 / PERIODE)
 
 # Position des murs
 ANGLES = [[8, 7], [8, 8], [11, 14], [13, 17], [14.5, 17.5], [16, 17], [17, 16], [20, 14], [27, 14], [30, 16], [31, 17], [33, 17], [34, 16], [34, 15], [32, 13], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5], [9, 6.5]]
@@ -33,6 +35,8 @@ MURS = [[a, ANGLES[i + 1] if i + 1 < len(ANGLES) else ANGLES[0]] for i, a in enu
 _N = 24
 #INTERIEUR = [[-14, 4.5], [-14, 13.5], [-5, 13.5], [-5, 4.5]]
 INTERIEUR = [(3 * cos(i * pi / _N) - 9, 3 * sin(i * pi / _N) + 9) for i in range(2 * _N)]
+
+PATH_EXT = [[8.5, 7], [13, 17], [16, 17], [20, 13.5], [27, 13.5], [32, 17], [25, 9], [25, 4], [20, 4], [15, 8]]
 
 _a, _i = array(ANGLES), array(INTERIEUR)
 (MIN_X, MIN_Y), (MAX_X, MAX_Y) = _a.min(axis=0) - 0.5, _a.max(axis=0) + 0.5
@@ -54,6 +58,7 @@ ANTENNES = array([
     [33.95, 25.85],
     [28.39, 5.36],
     ]) * PX_PAR_M
+PATH_EXT_SVG = array(PATH_EXT) * PX_PAR_M
 
 
 Hote = IntEnum('Hôte', 'cerf moro ame yuki')

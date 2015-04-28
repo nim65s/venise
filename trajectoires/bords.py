@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from datetime import datetime
 from math import atan2, copysign, hypot
 
-from ..settings import ANGLES, INTERIEUR, Hote, MAX_X, MAX_Y, MIN_X, MIN_Y, MAX_X_INT, MAX_Y_INT, MIN_X_INT, MIN_Y_INT
+from ..settings import PATH_EXT, INTERIEUR, Hote, MAX_X, MAX_Y, MIN_X, MIN_Y, MAX_X_INT, MAX_Y_INT, MIN_X_INT, MIN_Y_INT
 from .trajectoire import Trajectoire, trajectoire_parser
 
 
@@ -19,9 +19,9 @@ class TrajectoireBords(Trajectoire):
         if not (MIN_X < x < MAX_X) or not (MIN_Y < y < MAX_Y):
             print('OWAIT, %.3f %.3f' % (x, y))
             return {'v': 0, 'w': 0}
-        xi, yi = ANGLES[self.state[hote]]
+        xi, yi = PATH_EXT[self.state[hote]]
         if hypot(xi - x, yi - y) < 0.3:
-            self.state[hote] = (self.state[hote] + 1) % len(ANGLES)
+            self.state[hote] = (self.state[hote] + 1) % len(PATH_EXT)
             print(datetime.now(), hote, self.state[hote])
         return {
                 'v': 1,
@@ -34,7 +34,7 @@ class TrajectoireBords(Trajectoire):
             print('OWAIT MORO, %.3f %.3f' % (x, y))
             return {'v': 0, 'w': 0}
         xi, yi = INTERIEUR[self.state[hote]]
-        if hypot(xi - x, yi - y) < 0.2:
+        if hypot(xi - x, yi - y) < 0.5:
             self.state[hote] = (self.state[hote] + 1) % len(INTERIEUR)
             print(datetime.now(), hote, self.state[hote])
         return {
@@ -45,8 +45,8 @@ class TrajectoireBords(Trajectoire):
 
 trajectoire_bords_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')
 trajectoire_bords_parser.add_argument('--s1', type=int, default=0, choices=range(len(INTERIEUR)))
-trajectoire_bords_parser.add_argument('--s2', type=int, default=0, choices=range(len(ANGLES)))
-trajectoire_bords_parser.add_argument('--s3', type=int, default=0, choices=range(len(ANGLES)))
+trajectoire_bords_parser.add_argument('--s2', type=int, default=0, choices=range(len(PATH_EXT)))
+trajectoire_bords_parser.add_argument('--s3', type=int, default=0, choices=range(len(PATH_EXT)))
 
 if __name__ == '__main__':
     TrajectoireBords(**vars(trajectoire_bords_parser.parse_args())).run()

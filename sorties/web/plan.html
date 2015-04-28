@@ -26,6 +26,7 @@
                     <g transform="translate({{ PX_PAR_M * 15 }},0)">
                         <polygon points="{% for p in POINTS_SVG %}{{p|join(',')}} {% endfor %}" stroke="black" />
                         <polygon points="{% for p in INTERIEUR_SVG %}{{p|join(',')}} {% endfor %}" stroke="black" />
+                        <polygon points="{% for p in PATH_EXT_SVG %}{{p|join(',')}} {% endfor %}" stroke="black" />
                         {#{% for x, y in ANTENNES %}<circle cx="{{ x }}" cy="{{ y }}" r="4" stroke="purple" />{% endfor %}#}
 
                         <path id="path2" />

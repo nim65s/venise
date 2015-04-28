@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from datetime import datetime
+from os.path import expanduser
 
 from serial import Serial
 
@@ -7,9 +8,10 @@ from .granier import Granier, granier_parser
 
 
 class GranierSerie(Granier):
-    def __init__(self, port, *args, **kwargs):
+    def __init__(self, port, fichier, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.serial = Serial('/dev/ttyUSB%i' % port, 38400)
+        self.fichier = expanduser(fichier % self.hote)
 
     def process(self, value):
         l = self.serial.readline().decode('ascii').replace('\x00', '').replace('\x04', '').split()
@@ -18,13 +20,17 @@ class GranierSerie(Granier):
         except:
             print('fail:', l)
             return {}
-        return [round(float(l[2 + s]), 4) for s in range(3)]
+        vals = [round(float(l[2 + s]), 4) for s in range(3)]
+        with open(self.fichier, 'a') as f:
+            print(vals, file=f)
+        return vals
 
     def fin(self):
         self.serial.close()
 
 granier_serie_parser = ArgumentParser(parents=[granier_parser], conflict_handler='resolve')
 granier_serie_parser.add_argument('-p', '--port', type=int, default=0)
+granier_serie_parser.add_argument('-f', '--fichier', default='~/logs/granier_%i.log', help="fichier d’enregistrement des sondes")
 granier_serie_parser.set_defaults(period=30, maxi=1)
 
 if __name__ == '__main__':
