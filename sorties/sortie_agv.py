@@ -36,6 +36,7 @@ class SortieAGV(Sortie):
 
     def process(self, **kwargs):
         start = now()
+        self.smoothe()
         try:
             self.socket.sendall(self.send_agv())
             ret = self.socket.recv(1024).decode('ascii')
@@ -64,7 +65,6 @@ class SortieAGV(Sortie):
             print('La boucle a mis beaucoup trop de temps:', duree)
 
     def send_agv(self):
-        self.smoothe()
         if self.data[self.hote]['stop']:
             return b'stop()'
         template = 'setSpeedAndPosition({v1}, {t1s}, {v2}, {t2s}, {v3}, {t3s})'
@@ -76,19 +76,19 @@ class SortieAGV(Sortie):
             t = self.data[self.hote][vt]
             if vts not in self.data[self.hote]:
                 self.data[self.hote][vts] = t
+                continue
             ts = self.data[self.hote][vts]
             dst = ts - t
+            if abs(dst) < SMOOTH_FACTOR:
+                self.data[self.hote][vts] = t
+                continue
             while dst < -pi:
                 dst += 2 * pi
             while dst > pi:
                 dst -= 2 * pi
-            ts = ts + copysign(SMOOTH_FACTOR, dst) if abs(dst) > SMOOTH_FACTOR else t
-            self.data[self.hote][vts] = ts % (2 * pi)
-
-
-
-
-
+            ts = round((ts - copysign(SMOOTH_FACTOR, dst)) % (2 * pi), 5)
+            self.data[self.hote][vts] = ts
+        self.push.send_json([self.hote, {key: self.data[self.hote][key] for key in ['t1s', 't2s', 't3s']}])
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()

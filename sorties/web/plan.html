@@ -37,6 +37,9 @@
                             <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
                             <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
                             <line class="v" x1="0" y1="0" />
+                            <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                            <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                            <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
                         </g>
 
                         <path id="path3" />
@@ -47,6 +50,9 @@
                             <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
                             <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
                             <line class="v" x1="0" y1="0" />
+                            <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                            <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                            <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
                         </g>
 
                         <path id="path4" />
@@ -57,6 +63,9 @@
                             <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
                             <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
                             <line class="v" x1="0" y1="0" />
+                            <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                            <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                            <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
                         </g>
                     </g>
                 </g>
@@ -80,6 +89,20 @@
                                 x2: - data[a]['v'] * Math.cos(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                                 y2: - data[a]['v'] * Math.sin(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                             });
+                            if (data[a]['t1s']) {
+                                $('#agv' + a + ' .t1').attr({
+                                    x2: - data[a]['v1'] * Math.cos(data[a]['t1s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                    y2: - data[a]['v1'] * Math.sin(data[a]['t1s']) * size_coef - {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                });
+                                $('#agv' + a + ' .t2').attr({
+                                    x2: - data[a]['v2'] * Math.cos(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                    y2: - data[a]['v2'] * Math.sin(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                });
+                                $('#agv' + a + ' .t3').attr({
+                                    x2: - data[a]['v3'] * Math.cos(data[a]['t3s']) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
+                                    y2: - data[a]['v3'] * Math.sin(data[a]['t3s']) * size_coef,
+                                });
+                            }
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (- data[a]['a']) +')',
                             });

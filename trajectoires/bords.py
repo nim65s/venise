@@ -7,9 +7,10 @@ from .trajectoire import Trajectoire, trajectoire_parser
 
 
 class TrajectoireBords(Trajectoire):
-    def __init__(self, s1, s2, s3, *args, **kwargs):
+    def __init__(self, s1, s2, s3, va, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.state = {2: s1, 3: s2, 4: s3}
+        self.va = va
 
     def process_speed(self, x, y, a, w, hote, **kwargs):
         if x == y == a == 0:
@@ -26,7 +27,7 @@ class TrajectoireBords(Trajectoire):
         return {
                 'v': 1,
                 't': atan2(y - yi, x - xi) - a,
-                'w': w,
+                'w': self.va,
                 }
 
     def process_speed_moro(self, x, y, a, w, hote, **kwargs):
@@ -47,6 +48,7 @@ trajectoire_bords_parser = ArgumentParser(parents=[trajectoire_parser], conflict
 trajectoire_bords_parser.add_argument('--s1', type=int, default=0, choices=range(len(INTERIEUR)))
 trajectoire_bords_parser.add_argument('--s2', type=int, default=0, choices=range(len(PATH_EXT)))
 trajectoire_bords_parser.add_argument('--s3', type=int, default=0, choices=range(len(PATH_EXT)))
+trajectoire_bords_parser.add_argument('-w', '--va', type=float, default=0)
 
 if __name__ == '__main__':
     TrajectoireBords(**vars(trajectoire_bords_parser.parse_args())).run()
