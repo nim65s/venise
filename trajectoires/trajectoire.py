@@ -10,7 +10,7 @@ from ..vmq import Puller, Publisher, vmq_parser
 
 class Trajectoire(Puller, Publisher):
     def __init__(self, period, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(wait=False, *args, **kwargs)
         self.period = period
         self.data = {h: {
             'stop': False,
@@ -29,6 +29,7 @@ class Trajectoire(Puller, Publisher):
             self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
 
     def send(self):
+        self.data['timestamp'] = datetime.now().timestamp()
         self.pub()
         for h in self.hotes:
             self.push[h].send_json([h, self.data[h]])

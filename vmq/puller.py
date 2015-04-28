@@ -8,15 +8,16 @@ from .vmq import VMQ
 
 
 class Puller(VMQ):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, wait=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.puller = self.context.socket(PULL)
         self.puller.bind("tcp://*:%i" % PORT_PUSH)
         self.last_seen = datetime(1970, 1, 1)
-        print('Attente de connexion')
-        self.pull(block=0)
-        print('Connecté')
+        if wait:
+            print('Attente de connexion')
+            self.pull(block=0)
+            print('Connecté')
 
     def pull(self, block=NOBLOCK):
         while True:
@@ -24,7 +25,6 @@ class Puller(VMQ):
                 num, data = self.puller.recv_json(block)
                 self.data[num].update(**data)
                 self.last_seen = datetime.now()
-                self.printe(data)
             except Again:
                 break
             if block != NOBLOCK:

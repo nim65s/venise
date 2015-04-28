@@ -12,6 +12,7 @@ class Sonde(Entree):
 
     def loop(self):
         self.check_value(self.process(self.data[self.hote][self.nom]))
+        self.send()
         sleep(self.period)
 
     def check_value(self, value):
