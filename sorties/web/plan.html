@@ -82,8 +82,10 @@
                     data = JSON.parse(e.data);
                     for (a = 2; a < 5; a++) {
                         if (data[a]) {
-                            d = $('#path' + a).attr('d');
-                            $('#path' + a).attr({d: (d ? d + " L " : "M ") + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }})});
+                            if (data[a]['x'] != 0) {
+                                d = $('#path' + a).attr('d');
+                                $('#path' + a).attr({d: (d ? d + " L " : "M ") + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }})});
+                            }
                             $('#agv' + a + ' polygon').attr({d: d});
                             $('#agv' + a + ' .v').attr({
                                 x2: - data[a]['v'] * Math.cos(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
