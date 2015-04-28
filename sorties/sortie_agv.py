@@ -1,11 +1,13 @@
 import datetime
+from time import sleep
 from socket import socket, timeout
 
-from ..settings import HOST_AGV, PORT_AGV
+from ..settings import HOST_AGV, PORT_AGV, PERIODE, SMOOTH_FACTOR
 from ..vmq import vmq_parser
 from .sortie import Sortie
 
 now = datetime.datetime.now
+per = datetime.timedelta(seconds=PERIODE)
 
 
 class SortieAGV(Sortie):
@@ -32,6 +34,7 @@ class SortieAGV(Sortie):
                 self.send('%s Broken pipe…' % now())
 
     def process(self, **kwargs):
+        start = now()
         try:
             self.socket.sendall(self.send_agv())
             ret = self.socket.recv(1024).decode('ascii')
@@ -52,12 +55,39 @@ class SortieAGV(Sortie):
         except (ConnectionResetError, timeout, BrokenPipeError):
             self.send('%s Failed connection !' % now())
             self.connect()
+        duree = now() - start
+        reste = per - duree
+        if reste > timdelta(0):
+            sleep(reste.microseconds / 1000000)
+        else:
+            print('La boucle a mis beaucoup trop de temps:', duree)
 
     def send_agv(self):
-        if 'stop' in self.data[self.hote] and self.data[self.hote]['stop']:  # TODO
+        self.smoothe()
+        if self.data[self.hote]['stop']:
             return b'stop()'
-        template = 'setSpeedAndPosition({v1}, {t1}, {v2}, {t2}, {v3}, {t3})'
+        template = 'setSpeedAndPosition({v1}, {t1s}, {v2}, {t2s}, {v3}, {t3s})'
         return bytes(template.format(**self.data[self.hote]).encode('ascii'))
+
+    def smoothe(self):
+        for i in range(1, 4):
+            vt, vts = 't%i' % i, 't%is' % i
+            t = self.data[self.hote][vt]
+            if vts not in self.data[self.hote]:
+                self.data[self.hote][vts] = t
+            ts = self.data[self.hote][vts]
+            dst = ts - t
+            while dst < -pi:
+                dst += 2 * pi
+            while dst > pi:
+                dst -= 2 * pi
+            ts = ts + copysign(SMOOTH_FACTOR, dst) if abs(dst) > SMOOTH_FACTOR else t
+            self.data[self.hote][vts] = ts % (2 * pi)
+
+
+
+
+
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()
