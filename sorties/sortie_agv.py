@@ -46,7 +46,7 @@ class SortieAGV(Sortie):
                 elif code == 3:  # Joystick connecté
                     self.send('Déconnecte le joystick !')
                 elif code == 4:  # Post-démarrage ou arrêt d’urgence
-                    self.send('Appuie sur le bouton vert !')
+                    self.send('Désarme l’arrête d’urgence et Appuie sur le bouton vert !')
                 elif code == 5:  # Velocity ou angle too high
                     pass
                 elif code == 6:  #Initialisation ongoing
