@@ -5,23 +5,23 @@ from os.path import expanduser, isfile
 
 from ..settings import PATHS
 from .trajectoire import trajectoire_parser
-from .points import TrajectoirePoints
+from .destination import TrajectoireDestination
 
 
-class TrajectoireBords(TrajectoirePoints):
+class TrajectoireBords(TrajectoireDestination):
     def __init__(self, s1, s2, s3, w1, w2, w3, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.set_state(s1, s2, s3)
         self.wi = {2: w1, 3: w2, 4: w3}
         for hote in self.hotes:
-            self.points[hote] = PATHS[hote][self.state[hote]]
+            self.destination[hote] = PATHS[hote][self.state[hote]]
 
 
     def process_speed(self, x, y, a, w, hote, **kwargs):
-        if self.dist_point(hote, x, y) < 0.5:
+        if self.distance(hote, x, y) < 0.5:
             self.state[hote] = (self.state[hote] + 1) % len(PATHS[hote])
             print(datetime.now(), hote, self.state[hote])
-            self.points[hote] = PATHS[hote][self.state[hote]]
+            self.destination[hote] = PATHS[hote][self.state[hote]]
             self.save_state(hote)
         return self.go_to_point(hote, x, y, a)
 

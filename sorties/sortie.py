@@ -24,6 +24,5 @@ class Sortie(Puller, Pusher):
     def process(self, **kwargs):
         raise NotImplementedError()
 
-    def send(self, status):
-        print(status)
-        self.push.send_json([self.hote, {'status': status}])
+    def send(self, val, var='status'):
+        self.push.send_json([self.hote, {var: val}])

@@ -40,18 +40,24 @@ class SortieAGV(Sortie):
             ret = self.socket.recv(1024).decode('ascii')
             if ret.startswith('+'):  # Les erreurs commencent par un +
                 code = int(ret[1:].split(',')[0])
-                if code == 3:  # Joystick connecté
+                if code == 2:  # Wrong number or format of arguments
+                    self.send('Mauvais format d’envoi à BA !')
+                    raise AttributeError
+                elif code == 3:  # Joystick connecté
                     self.send('Déconnecte le joystick !')
                 elif code == 4:  # Post-démarrage ou arrêt d’urgence
                     self.send('Appuie sur le bouton vert !')
-                elif code == 5:  # Velocity too high
+                elif code == 5:  # Velocity ou angle too high
                     pass
-                elif code == 10:  # no response from AGV software
-                    self.connect()
+                elif code == 6:  #Initialisation ongoing
+                    self.send('Initialisation en cours…')
+                elif code == 7:  # Trop de tours
+                    self.send('Trop de tours !')
                 else:
                     raise RuntimeError(ret)
             else:
                 self.send('OK')
+            self.recv_agv()
         except (ConnectionResetError, timeout, BrokenPipeError):
             self.send('%s Failed connection !' % now())
             self.connect()
@@ -61,6 +67,12 @@ class SortieAGV(Sortie):
             return b'stop()'
         template = 'setSpeedAndPosition({v1}, {t1s}, {v2}, {t2s}, {v3}, {t3s})'
         return bytes(template.format(**self.data[self.hote]).encode('ascii'))
+
+    def recv_agv(self):
+        self.socket.sendall('getPosition()'.encode('ascii'))
+        pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
+        self.send([float(i.strip()) for i in pos[1:]], 'tr')
+
 
     def smoothe(self):
         for i in range(1, 4):

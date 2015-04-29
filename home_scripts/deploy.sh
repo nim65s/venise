@@ -6,6 +6,7 @@ for h in moro ame yuki
 do
     (
     ssh $h 'cd /etc/systemd/system; sudo cp /home/pi/venise/conf/*.service .'
+    ssh $h 'cd /usr/local/lib/python3.4/dist-packages/; sudo ln -s /home/pi/venise/'
     ssh $h 'sudo systemctl daemon-reload'
     ssh $h 'sudo systemctl restart agv.service'
     ssh $h 'sudo systemctl reenable agv.service'

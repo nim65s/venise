@@ -8,4 +8,4 @@ Group=pi
 ExecStart=/usr/bin/env python3 -m venise.entrees.granier_serie
 
 [Install]
-Wantedby=multi-user.target
+WantedBy=multi-user.target
