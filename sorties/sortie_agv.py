@@ -1,6 +1,8 @@
 from datetime import datetime
-from math import pi, copysign
+from math import pi
 from socket import socket, timeout
+
+from numpy import array, where, copysign
 
 from ..settings import HOST_AGV, PORT_AGV, SMOOTH_FACTOR
 from ..vmq import vmq_parser
@@ -14,6 +16,7 @@ class SortieAGV(Sortie):
         super().__init__(*args, **kwargs)
         self.socket = socket()
         self.connect()
+        self.to_send = ['tc', 'tm', 'nt']
 
     def connect(self):
         while True:
@@ -33,7 +36,7 @@ class SortieAGV(Sortie):
                 self.send('%s Broken pipe…' % now())
 
     def process(self, **kwargs):
-        self.smoothe()
+        self.data[self.hote]['tc'] = self.smoothe()
         try:
             self.recv_agv()
             self.socket.sendall(self.send_agv())
@@ -73,23 +76,17 @@ class SortieAGV(Sortie):
         angles = [float(i.strip()) for i in pos[1:]]
         self.data[self.hote]['tm'] = [round(a % (2 * pi), 4) for a in angles]
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
-        self.send_data('tm')
-        self.send_data('nt')
 
     def smoothe(self):
-        for i in range(3):
-            tm, tt = self.data[self.hote]['tm'][i], self.data[self.hote]['tt'][i]
-            dst = tm - tt
-            if abs(dst) < SMOOTH_FACTOR:
-                self.data[self.hote]['tc'][i] = tt
-                continue
-            while dst < -pi:
-                dst += 2 * pi
-            while dst > pi:
-                dst -= 2 * pi
-            tc = round((tm % (2 * pi) - copysign(SMOOTH_FACTOR, dst)) % (2 * pi), 5)
-            self.data[self.hote]['tc'][i] = tc
-        self.send_data('tc')
+        tm, tt = array(self.data[self.hote]['tm']), array(self.data[self.hote]['tt'])
+        dst = tm - tt
+        if abs(dst).max() < SMOOTH_FACTOR:
+            return tt.tolist()
+        while (dst < -pi).any():
+            dst[where(dst < -pi)] += 2 * pi
+        while (dst > pi).any():
+            dst[where(dst > pi)] -= 2 * pi
+        return ((tm % (2 * pi) - SMOOTH_FACTOR * dst / dst.max()) % (2 * pi)).round(5).tolist()
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()
