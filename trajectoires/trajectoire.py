@@ -4,7 +4,7 @@ from datetime import datetime
 from math import atan2, cos, hypot, pi, sin
 from time import sleep
 
-from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH
+from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES
 from ..vmq import Puller, Publisher, vmq_parser
 
 
@@ -18,8 +18,9 @@ class Trajectoire(Puller, Publisher):
             'status': 'Pas connecté',
             'x': 0, 'y': 0, 'a': 0,  # Position
             'v': 0, 'w': 0, 't': 0,  # Vitesse
+            'vg': 0, 'wg': 0, 'tg': 0,  # Vitesse
             'vt': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne
-            'granier': [], 'sick': [], 'luminosite': [], 'visiteurs': [],  # Sondes
+            'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,
             } for h in self.hotes}
         self.data['timestamp'] = datetime.now().timestamp()
         self.data['trajectoire'] = self.__class__.__name__
