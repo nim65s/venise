@@ -1,0 +1,11 @@
+[Unit]
+Description=Venise: Envoie les consignes aux tourelles des AGV
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+ExecStart=/usr/bin/env python3 -m venise.sorties.sortie_agv
+
+[Install]
+Wantedby=multi-user.target

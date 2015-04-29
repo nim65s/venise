@@ -1,0 +1,11 @@
+[Unit]
+Description=Venise: Lecture, écriture et envoi des sondes granier
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+ExecStart=/usr/bin/env python3 -m venise.entrees.granier_serie
+
+[Install]
+Wantedby=multi-user.target
