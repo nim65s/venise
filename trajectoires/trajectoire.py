@@ -18,7 +18,7 @@ class Trajectoire(Puller, Publisher):
             'status': 'Pas connecté',
             'x': 0, 'y': 0, 'a': 0,  # Position
             'v': 0, 'w': 0, 't': 0,  # Vitesse
-            't1': 0, 'v1': 0, 't2': 0, 'v2': 0, 't3': 0, 'v3': 0,  # Tourelles
+            'vt': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne
             'granier': [], 'sick': [], 'luminosite': [], 'visiteurs': [],  # Sondes
             } for h in self.hotes}
         self.data['timestamp'] = datetime.now().timestamp()
@@ -75,7 +75,7 @@ class Trajectoire(Puller, Publisher):
         (t1, v1), (t2, v2), (t3, v3) = [self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)]
         if (abs(v1) < 5) + (abs(v2) < 5) + (abs(v3) < 5) > 1:
             v1 = v2 = v3 = 0
-        return {'t1': t1, 'v1': v1, 't2': t2, 'v2': v2, 't3': t3, 'v3': v3}
+        return {'tt': [t1, t2, t3], 'vt': [v1, v2, v3]}
 
 
 trajectoire_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')

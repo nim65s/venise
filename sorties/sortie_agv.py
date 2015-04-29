@@ -36,6 +36,7 @@ class SortieAGV(Sortie):
     def process(self, **kwargs):
         self.smoothe()
         try:
+            self.recv_agv()
             self.socket.sendall(self.send_agv())
             ret = self.socket.recv(1024).decode('ascii')
             if ret.startswith('+'):  # Les erreurs commencent par un +
@@ -57,7 +58,6 @@ class SortieAGV(Sortie):
                     raise RuntimeError(ret)
             else:
                 self.send('OK')
-            self.recv_agv()
         except (ConnectionResetError, timeout, BrokenPipeError):
             self.send('%s Failed connection !' % now())
             self.connect()
@@ -65,34 +65,33 @@ class SortieAGV(Sortie):
     def send_agv(self):
         if self.data[self.hote]['stop']:
             return b'stop()'
-        template = 'setSpeedAndPosition({v1}, {t1s}, {v2}, {t2s}, {v3}, {t3s})'
+        template = 'setSpeedAndPosition({vt[0]}, {tc[0]}, {vt[1]}, {tc[1]}, {vt[2]}, {tc[1]})'
         return bytes(template.format(**self.data[self.hote]).encode('ascii'))
 
     def recv_agv(self):
         self.socket.sendall('getPosition()'.encode('ascii'))
         pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
-        self.send([float(i.strip()) for i in pos[1:]], 'tr')
+        angles = [float(i.strip()) for i in pos[1:]]
+        self.data[self.hote]['tm'] = [round(a % (2 * pi), 4) for a in angles]
+        self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
+        self.send_data('tm')
+        self.send_data('nt')
 
 
     def smoothe(self):
-        for i in range(1, 4):
-            vt, vts = 't%i' % i, 't%is' % i
-            t = self.data[self.hote][vt]
-            if vts not in self.data[self.hote]:
-                self.data[self.hote][vts] = t
-                continue
-            ts = self.data[self.hote][vts]
-            dst = ts - t
+        for i in range(3):
+            tm, tt = self.data[self.hote]['tm'][i], self.data[self.hote]['tt'][i]
+            dst = tm - tt
             if abs(dst) < SMOOTH_FACTOR:
-                self.data[self.hote][vts] = t
+                self.data[self.hote]['tc'][i] = tt
                 continue
             while dst < -pi:
                 dst += 2 * pi
             while dst > pi:
                 dst -= 2 * pi
-            ts = round((ts - copysign(SMOOTH_FACTOR, dst)) % (2 * pi), 5)
-            self.data[self.hote][vts] = ts
-        self.push.send_json([self.hote, {key: self.data[self.hote][key] for key in ['t1s', 't2s', 't3s']}])
+            tc = round((tm % (2 * pi) - copysign(SMOOTH_FACTOR, dst)) % (2 * pi), 5)
+            self.data[self.hote]['tc'][i] = tc
+        self.send_data('tc')
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()

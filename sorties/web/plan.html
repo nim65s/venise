@@ -98,20 +98,18 @@
                                 x2: data[a]['v'] * Math.cos(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                                 y2: data[a]['v'] * Math.sin(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                             });
-                            if (data[a]['t1s']) {
-                                $('#agv' + a + ' .t1').attr({
-                                    x2: data[a]['v1'] * Math.cos(data[a]['t1s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                    y2: data[a]['v1'] * Math.sin(data[a]['t1s']) * size_coef - {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                });
-                                $('#agv' + a + ' .t2').attr({
-                                    x2: data[a]['v2'] * Math.cos(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                    y2: data[a]['v2'] * Math.sin(data[a]['t2s']) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                });
-                                $('#agv' + a + ' .t3').attr({
-                                    x2: data[a]['v3'] * Math.cos(data[a]['t3s']) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
-                                    y2: data[a]['v3'] * Math.sin(data[a]['t3s']) * size_coef,
-                                });
-                            }
+                            $('#agv' + a + ' .t1').attr({
+                                x2: data[a]['vt'][0] * Math.cos(data[a]['tm'][0]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                y2: data[a]['vt'][0] * Math.sin(data[a]['tm'][0]) * size_coef - {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                            });
+                            $('#agv' + a + ' .t2').attr({
+                                x2: data[a]['vt'][1] * Math.cos(data[a]['tm'][1]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                y2: data[a]['vt'][1] * Math.sin(data[a]['tm'][1]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                            });
+                            $('#agv' + a + ' .t3').attr({
+                                x2: data[a]['vt'][2] * Math.cos(data[a]['tm'][2]) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
+                                y2: data[a]['vt'][2] * Math.sin(data[a]['tm'][2]) * size_coef,
+                            });
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });

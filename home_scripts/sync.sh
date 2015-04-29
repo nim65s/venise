@@ -2,7 +2,7 @@
 
 for h in moro ame yuki
 do
-    rsync -avP --exclude='*.pyc' --exclude='*.orig' venise $h: &
+    rsync -avP --exclude='*.pyc' --exclude='*.orig' --exclude='__pycache__' venise $h: &
 done
 
 wait

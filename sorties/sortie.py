@@ -26,3 +26,6 @@ class Sortie(Puller, Pusher):
 
     def send(self, val, var='status'):
         self.push.send_json([self.hote, {var: val}])
+
+    def send_data(self, var):
+        self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
