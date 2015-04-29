@@ -1,6 +1,7 @@
 from math import hypot, atan2
 from .trajectoire import Trajectoire
 
+
 class TrajectoireDestination(Trajectoire):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

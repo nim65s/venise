@@ -6,6 +6,7 @@ from ..settings import PERIODE
 
 per = timedelta(seconds=PERIODE)
 
+
 class Sortie(Puller, Pusher):
     def loop(self):
         start = datetime.now()

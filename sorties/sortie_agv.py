@@ -1,9 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from math import pi, copysign
-from time import sleep
 from socket import socket, timeout
 
-from ..settings import HOST_AGV, PORT_AGV, PERIODE, SMOOTH_FACTOR
+from ..settings import HOST_AGV, PORT_AGV, SMOOTH_FACTOR
 from ..vmq import vmq_parser
 from .sortie import Sortie
 
@@ -50,7 +49,7 @@ class SortieAGV(Sortie):
                     self.send('Désarme l’arrête d’urgence et Appuie sur le bouton vert !')
                 elif code == 5:  # Velocity ou angle too high
                     pass
-                elif code == 6:  #Initialisation ongoing
+                elif code == 6:  # Initialisation ongoing
                     self.send('Initialisation en cours…')
                 elif code == 7:  # Trop de tours
                     self.send('Trop de tours !')
@@ -76,7 +75,6 @@ class SortieAGV(Sortie):
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
         self.send_data('tm')
         self.send_data('nt')
-
 
     def smoothe(self):
         for i in range(3):

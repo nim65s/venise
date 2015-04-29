@@ -1,7 +1,7 @@
 from zmq import PUSH
 from argparse import ArgumentParser
 from datetime import datetime
-from math import atan2, cos, hypot, pi, sin, copysign
+from math import atan2, cos, hypot, pi, sin
 from time import sleep
 
 from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH

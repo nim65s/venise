@@ -1,12 +1,12 @@
 from ..vmq import Puller, Pusher, vmq_parser
-from datetime import datetime, timedelta
+from datetime import datetime
 from pprint import pprint
+
 
 class TestSortieAGV(Puller, Pusher):
     def loop(self):
         self.pull()
         self.process(**self.data[self.hote])
-
 
     def send(self, status):
         print(status)

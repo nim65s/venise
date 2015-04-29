@@ -1,9 +1,9 @@
 from argparse import ArgumentParser
 from zmq import PUSH
-from datetime import datetime, timedelta
+from datetime import datetime
 from time import sleep
 
-from ..settings import *
+from ..settings import PORT_PUSH, PERIODE
 from ..vmq import Puller, Publisher, vmq_parser
 
 

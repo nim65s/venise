@@ -25,3 +25,8 @@ class GranierFile(Granier):
         while d < self.dates[-1]:
             if d > self.dates[i]:
                 pass  # TODO
+        sleep(30)
+
+
+if __name__ == '__main__':
+    GranierFile(**vars(granier_parser.parse_args())).run()

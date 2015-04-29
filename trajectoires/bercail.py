@@ -1,4 +1,4 @@
-from math import atan2, copysign, hypot
+from math import atan2, hypot
 
 from ..settings import BERCAIL
 from .trajectoire import Trajectoire, trajectoire_parser

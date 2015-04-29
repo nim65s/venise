@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 from datetime import datetime
-from math import atan2, copysign, hypot
 from os.path import expanduser, isfile
 
 from ..settings import PATHS
@@ -15,7 +14,6 @@ class TrajectoireBords(TrajectoireDestination):
         self.wi = {2: w1, 3: w2, 4: w3}
         for hote in self.hotes:
             self.destination[hote] = PATHS[hote][self.state[hote]]
-
 
     def process_speed(self, x, y, a, w, hote, **kwargs):
         if self.distance(hote, x, y) < 0.5:
