@@ -123,6 +123,7 @@
                                 x2: data[a]['vt'][2] * Math.cos(data[a]['tm'][2]) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
                                 y2: data[a]['vt'][2] * Math.sin(data[a]['tm'][2]) * size_coef,
                             });
+                            $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
                         }
                     }
                 };

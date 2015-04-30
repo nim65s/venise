@@ -1,19 +1,23 @@
-from math import atan2, hypot
-
 from ..settings import BERCAIL
-from .trajectoire import Trajectoire, trajectoire_parser
+from .trajectoire import trajectoire_parser
+from .destination import TrajectoireDestination
 
 
-class TrajectoireBercail(Trajectoire):
+class TrajectoireBercail(TrajectoireDestination):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for hote in self.hotes:
+            self.destination[hote] = BERCAIL[hote]
+        self.arrive = {h: False for h in self.hotes}
+
     def process_speed(self, x, y, a, hote, **kwargs):
-        xi, yi = BERCAIL[hote]
-        if hypot(xi - x, yi - y) < 0.3:
-            return {'v': 0, 'w': 0, 'stop': True}
-        return {
-                'v': 1,
-                't': atan2(y - yi, x - xi) - a,
-                'w': 0,
-                }
+        if self.arrive[hote] or self.distance(hote, x, y) < 0.5:
+            self.arrive[hote] = True
+            if all([self.arrive[h] for h in self.hotes]):
+                self.fini = True
+            return {'stop': True}
+        return self.go_to_point(hote, x, y, a)
+
 
 if __name__ == '__main__':
     TrajectoireBercail(**vars(trajectoire_parser.parse_args())).run()
