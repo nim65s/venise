@@ -3,7 +3,7 @@ from math import pi, cos, sin, copysign
 from .trajectoire import trajectoire_parser
 from .destination import TrajectoireDestination
 
-from ..settings import N_SONDES, Hote, SMOOTH_SPEED
+from ..settings import N_SONDES, Hote, SMOOTH_SPEED, ALLER_RETOURS
 
 
 class TrajectoireGranier(TrajectoireDestination):

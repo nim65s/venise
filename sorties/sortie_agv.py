@@ -18,8 +18,8 @@ class SortieAGV(Sortie):
         super().__init__(*args, **kwargs)
         self.socket = socket()
         self.connect()
-        self.to_send = ['tc', 'tm', 'nt']
-        self.reversed = array([False, False, False])
+        self.to_send = ['tc', 'tm', 'nt', 'reversed']
+        self.data[self.hote]['reversed'] = [False, False, False]
 
     def loop(self):
         start = datetime.now()
@@ -58,7 +58,7 @@ class SortieAGV(Sortie):
     def process(self, **kwargs):
         try:
             self.recv_agv()
-            self.data[self.hote]['tc'] = self.smoothe(self.reverse())
+            self.data[self.hote]['tc'] = self.smoothe(*self.reverse())
             self.socket.sendall(self.send_agv())
             ret = self.socket.recv(1024).decode('ascii')
             if ret.startswith('+'):  # Les erreurs commencent par un +
@@ -100,11 +100,12 @@ class SortieAGV(Sortie):
     def reverse(self):
         vt, tt, tm = array(self.data[self.hote]['vt']), array(self.data[self.hote]['tt']), array(self.data[self.hote]['tm'])
         dst = tm - tt
-        self.reversed = logical_and(dst > 2 * pi / 3, abs(vt) > 8)
-        vt[where(self.reversed)] *= -1
-        tt[where(self.reversed)] += pi
-        tt[where(self.reversed)] %= 2 * pi
+        rev = logical_and(dst > 2 * pi / 3, abs(vt) > 8)
+        vt[where(rev)] *= -1
+        tt[where(rev)] += pi
+        tt[where(rev)] %= 2 * pi
         self.data[self.hote]['vt'] = vt
+        self.data[self.hote]['reversed'] = rev.tolist()
         return tm, tt
 
     def smoothe(self, tm, tt):
