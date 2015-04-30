@@ -3,7 +3,7 @@ from math import pi
 from socket import socket, timeout
 from time import sleep
 
-from numpy import array, copysign, where
+from numpy import array, where
 
 from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR
 from ..vmq import vmq_parser
