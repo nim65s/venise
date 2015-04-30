@@ -19,7 +19,7 @@ class SortieAGV(Sortie):
         super().__init__(*args, **kwargs)
         self.socket = socket()
         self.connect()
-        self.to_send = ['tc', 'tm', 'nt', 'reversed']
+        self.to_send = ['vc', 'tc', 'tm', 'nt', 'reversed']
         self.data[self.hote]['reversed'] = [False, False, False]
 
     def loop(self):
@@ -89,7 +89,7 @@ class SortieAGV(Sortie):
     def send_agv(self):
         if self.data[self.hote]['stop']:
             return b'stop()'
-        template = 'setSpeedAndPosition({vt[0]}, {tc[0]}, {vt[1]}, {tc[1]}, {vt[2]}, {tc[1]})'
+        template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[1]})'
         return bytes(template.format(**self.data[self.hote]).encode('ascii'))
 
     def recv_agv(self):
@@ -100,13 +100,13 @@ class SortieAGV(Sortie):
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
 
     def reverse(self):
-        vt, tt, tm = array(self.data[self.hote]['vt']), array(self.data[self.hote]['tt']), array(self.data[self.hote]['tm'])
+        vc, tt, tm = array(self.data[self.hote]['vt']), array(self.data[self.hote]['tt']), array(self.data[self.hote]['tm'])
         dst = tm - tt
-        rev = logical_and(dst > 2 * pi / 3, abs(vt) > VIT_LIM_REV)
-        vt[where(rev)] *= -1
+        rev = logical_and(dst > 2 * pi / 3, abs(vc) > VIT_LIM_REV)
+        vc[where(rev)] *= -1
         tt[where(rev)] += pi
         tt[where(rev)] %= 2 * pi
-        self.data[self.hote]['vt'] = vt
+        self.data[self.hote]['vc'] = vc
         self.data[self.hote]['reversed'] = rev.tolist()
         return tm, tt
 

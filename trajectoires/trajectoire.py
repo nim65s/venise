@@ -19,7 +19,7 @@ class Trajectoire(Puller, Publisher):
             'x': 0, 'y': 0, 'a': 0,  # Position
             'v': 0, 'w': 0, 't': 0,  # Vitesse
             'vg': 0, 'wg': 0, 'tg': 0,  # Vitesse
-            'vt': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne
+            'vt': [0, 0, 0], 'vc': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne
             'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,
             } for h in self.hotes}
         self.data['timestamp'] = datetime.now().timestamp()
