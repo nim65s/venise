@@ -19,7 +19,7 @@ class TrajectoirePoints(TrajectoireDestination):
     def process_speed(self, x, y, a, w, hote, **kwargs):
         if self.distance(hote, x, y) < 0.5:
             self.state[hote] = (self.state[hote] + 1) % len(self.paths[hote])
-            print(datetime.now(), hote, self.state[hote])
+            print(datetime.now(), hote, self.state[hote], self.paths[hote][self.state[hote]])
             self.destination[hote] = self.paths[hote][self.state[hote]]
             self.save_state(hote)
         return self.go_to_point(hote, x, y, a)

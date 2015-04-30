@@ -14,9 +14,9 @@
         <style>
             svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; background-color: 'orange'; }
             svg { background-image: url("http://bde.saurel.me/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
-            #agv2, #paths2, #path2 { stroke: red; }
-            #agv3, #paths3, #path3 { stroke: green; }
-            #agv4, #paths4, #path4 { stroke: blue; }
+            #g2 { stroke: red; }
+            #g3 { stroke: green; }
+            #g4 { stroke: blue; }
         </style>
     </head>
     <body>
@@ -24,46 +24,55 @@
             <g transform="translate(0,{{ PX_PAR_M * HEIGHT }})">
                 <g transform="scale(1,-1)">
                     <g transform="translate({{ PX_PAR_M * 15 }},0)">
-                        <polygon id="paths2" points="{% for p in PATHS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
-                        <path id="path2" />
-                        <g id="agv2">
-                            <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
-                            <circle class="centre" cx="0" cy="0" r="2" />
-                            <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
-                            <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="v" x1="0" y1="0" />
-                            <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
+                        <g id="g2">
+                            <polygon points="{% for p in PATHS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
+                            <polygon points="{% for p in ALLER_RETOURS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
+                            <path id="path2" />
+                            <g id="agv2">
+                                <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
+                                <circle class="centre" cx="0" cy="0" r="2" />
+                                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
+                                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="v" x1="0" y1="0" />
+                                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
+                            </g>
                         </g>
 
-                        <polygon id="paths3" points="{% for p in PATHS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
-                        <path id="path3" />
-                        <g id="agv3">
-                            <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
-                            <circle class="centre" cx="0" cy="0" r="2" />
-                            <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
-                            <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="v" x1="0" y1="0" />
-                            <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
+                        <g id="g3">
+                            <polygon points="{% for p in PATHS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
+                            <polygon points="{% for p in ALLER_RETOURS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
+                            <path id="path3" />
+                            <g id="agv3">
+                                <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
+                                <circle class="centre" cx="0" cy="0" r="2" />
+                                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
+                                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="v" x1="0" y1="0" />
+                                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
+                            </g>
                         </g>
 
-                        <polygon id="paths4" points="{% for p in PATHS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
-                        <path id="path4" />
-                        <g id="agv4">
-                            <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
-                            <circle class="centre" cx="0" cy="0" r="2" />
-                            <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
-                            <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="v" x1="0" y1="0" />
-                            <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                            <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
+                        <g id="g4">
+                            <polygon points="{% for p in PATHS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
+                            <polygon points="{% for p in ALLER_RETOURS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
+                            <path id="path4" />
+                            <g id="agv4">
+                                <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
+                                <circle class="centre" cx="0" cy="0" r="2" />
+                                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
+                                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="v" x1="0" y1="0" />
+                                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
+                            </g>
                         </g>
                     </g>
                 </g>

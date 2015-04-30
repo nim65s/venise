@@ -68,6 +68,7 @@ WIDTH = 35 + 15
 HEIGHT = 20
 PX_PAR_M = 35
 PATHS_SVG = {h: array(PATHS[h]) * PX_PAR_M for h in [2, 3, 4]}
+ALLER_RETOURS_SVG = {h: array(ALLER_RETOURS[h]) * PX_PAR_M for h in [2, 3, 4]}
 
 BERCAIL = {
         Hote.moro: (-10, 9),
