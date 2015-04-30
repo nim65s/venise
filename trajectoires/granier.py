@@ -37,7 +37,7 @@ class TrajectoireGranier(TrajectoireDestination):
         return {
                 'v': v - copysign(SMOOTH_SPEED['v'], dv) if abs(dv) > SMOOTH_SPEED['v'] else vg,
                 'w': w - copysign(SMOOTH_SPEED['w'], dw) if abs(dw) > SMOOTH_SPEED['w'] else wg,
-                't': t - copysign(SMOOTH_SPEED['t'], dt) if abs(dt) > SMOOTH_SPEED['t'] else tg,
+                't': round((t - copysign(SMOOTH_SPEED['t'], dt)) % (2 * pi), 5) if abs(dt) > SMOOTH_SPEED['t'] else tg,
                 'gmi': gmi, 'gma': gma, 'gm': gm,
                 'vg': vg, 'wg': wg, 'tg': tg,
                 }

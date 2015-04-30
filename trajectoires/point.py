@@ -16,7 +16,7 @@ class TrajectoirePoint(Trajectoire):
         if hypot(xi - x, yi - y) < 0.2:
             self.fini = True
             return {'v': 0, 'w': 0}
-        return {'v': 2, 'w': 0, 't': atan2(y - yi, x - xi) - a}
+        return {'v': 2, 'w': 0, 't': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5)}
 
 trajectoire_point_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')
 trajectoire_point_parser.add_argument('--xi', type=float, default=11, help="Abscisse du point cible")
