@@ -10,7 +10,7 @@ class SortieGranierInterieur(Subscriber, Pusher):
         self.hotes = [Hote.ame, Hote.yuki]
 
     def loop(self):
-        self.data[self.hote]['granier'] = array([self.data[h]['granier'] for h in self.hotes]).mean(axis=0).tolist()
+        self.data[self.hote]['granier'] = array([self.data[h]['granier'] for h in self.hotes]).mean(axis=0).round(3).tolist()
         self.push.send_json([self.hote, {'granier': self.data[self.hote]['granier']}])
 
 

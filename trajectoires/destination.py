@@ -8,6 +8,7 @@ class TrajectoireDestination(Trajectoire):
         super().__init__(*args, **kwargs)
         self.destination = {h: (0, 0) for h in self.hotes}
         self.wi = {h: 0 for h in self.hotes}
+        self.vi = {h: 1 for h in self.hotes}
 
     def distance(self, hote, x, y):
         xi, yi = self.destination[hote]
@@ -18,7 +19,7 @@ class TrajectoireDestination(Trajectoire):
         if x == y == a == 0 or self.distance(hote, x, y) < 0.3 or xi == yi == 0:
             return {'v': 0, 'w': 0}
         return {
-                'v': 1,
+                'v': self.vi[hote],
                 't': round((atan2(y - yi, x - xi) - a) % (2 * pi), 4),
                 'w': self.wi[hote],
                 }

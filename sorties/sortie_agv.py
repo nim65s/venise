@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
+from pprint import pprint
 from math import pi
 from socket import socket, timeout
 from time import sleep
 
 from numpy import array, where, logical_and
 
-from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR
+from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR, VIT_LIM_REV
 from ..vmq import vmq_parser
 from .sortie import Sortie
 
@@ -60,6 +61,7 @@ class SortieAGV(Sortie):
             self.recv_agv()
             self.data[self.hote]['tc'] = self.smoothe(*self.reverse())
             self.socket.sendall(self.send_agv())
+            pprint(self.data[self.hote])
             ret = self.socket.recv(1024).decode('ascii')
             if ret.startswith('+'):  # Les erreurs commencent par un +
                 code = int(ret[1:].split(',')[0])
@@ -100,7 +102,7 @@ class SortieAGV(Sortie):
     def reverse(self):
         vt, tt, tm = array(self.data[self.hote]['vt']), array(self.data[self.hote]['tt']), array(self.data[self.hote]['tm'])
         dst = tm - tt
-        rev = logical_and(dst > 2 * pi / 3, abs(vt) > 8)
+        rev = logical_and(dst > 2 * pi / 3, abs(vt) > VIT_LIM_REV)
         vt[where(rev)] *= -1
         tt[where(rev)] += pi
         tt[where(rev)] %= 2 * pi

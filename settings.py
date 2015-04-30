@@ -18,6 +18,7 @@ POS_ROUES = [-pi / 4, pi / 4, pi]
 
 # Constantes Tourelles
 VIT_MOY_MAX = 16.5  # mm / s
+VIT_LIM_REV = 8
 
 DIST_MIN_AGV = 5
 
