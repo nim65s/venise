@@ -106,7 +106,7 @@ class SortieAGV(Sortie):
         vc[where(rev)] *= -1
         tt[where(rev)] += pi
         tt[where(rev)] %= 2 * pi
-        self.data[self.hote]['vc'] = vc
+        self.data[self.hote]['vc'] = vc.tolist()
         self.data[self.hote]['reversed'] = rev.tolist()
         return tm, tt
 
