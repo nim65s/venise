@@ -12,7 +12,7 @@
         <script src="http://192.168.10.140/bootstrap.min.js"></script>
         -->
         <style>
-            svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; background-color: 'red'; }
+            svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; background-color: 'orange'; }
             svg { background-image: url("http://bde.saurel.me/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
             #agv2, #paths2, #path2 { stroke: red; }
             #agv3, #paths3, #path3 { stroke: green; }
@@ -82,7 +82,6 @@
             var last_seen = new Date();
             var size_coef = 2;
             var data;
-            var sv = ['x', 'y', 'a', 'v', 'w', 't', 'v1', 't1', 'v2', 't2', 'v3', 't3'];
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {

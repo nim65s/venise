@@ -12,8 +12,10 @@
         <script src="http://localhost/bootstrap.min.js"></script>
         -->
         <style>
-            .table th {text-align: center;}
-            svg { width: 1200px; height: 400px; }
+            svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; background-color: 'orange'; }
+            #agv2, #paths2, #path2 { stroke: red; }
+            #agv3, #paths3, #path3 { stroke: green; }
+            #agv4, #paths4, #path4 { stroke: blue; }
         </style>
     </head>
     <body>
@@ -37,12 +39,12 @@
                 <td class="v"></td>
                 <td class="w"></td>
                 <td class="t"></td>
-                <td class="v1"></td>
-                <td class="t1"></td>
-                <td class="v2"></td>
-                <td class="t2"></td>
-                <td class="v3"></td>
-                <td class="t3"></td>
+                <td class="vt0"></td>
+                <td class="tm0"></td>
+                <td class="vt1"></td>
+                <td class="tm1"></td>
+                <td class="vt2"></td>
+                <td class="tm2"></td>
                 <td class="granier0"></td>
                 <td class="granier1"></td>
                 <td class="granier2"></td>
@@ -52,45 +54,45 @@
 
         <svg>
             <g id="agv2" transform="translate(200 200) scale(2)">
-                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="black" />
+                <circle cx="0" cy="0" r="70" />
                 <circle class="centre" cx="0" cy="0" r="2" />
-                <circle class="r1" r="2" cx="-59"   cy="0"      />
-                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
-                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
-                <line class="v"  stroke="black" x1="0"     y1="0"      />
-                <line class="t1" stroke="black" x1="41.72" y1="-41.72" />
-                <line class="t2" stroke="black" x1="41.72" y1="+41.72" />
-                <line class="t3" stroke="black" x1="-59"   y1="0"      />
+                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
+                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="v" x1="0" y1="0" />
+                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
             </g>
             <g id="agv3" transform="translate(600 200) scale(2)">
-                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="black" />
+                <circle cx="0" cy="0" r="70" />
                 <circle class="centre" cx="0" cy="0" r="2" />
-                <circle class="r1" r="2" cx="-59"   cy="0"      />
-                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
-                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
-                <line class="v"  stroke="black" x1="0"     y1="0"      />
-                <line class="t1" stroke="black" x1="41.72" y1="-41.72" />
-                <line class="t2" stroke="black" x1="41.72" y1="+41.72" />
-                <line class="t3" stroke="black" x1="-59"   y1="0"      />
+                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
+                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="v" x1="0" y1="0" />
+                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
             </g>
             <g id="agv4" transform="translate(1000 200) scale(2)">
-                <circle cx="0" cy="0" r="70" fill-opacity="0" stroke="black" />
+                <circle cx="0" cy="0" r="70" />
                 <circle class="centre" cx="0" cy="0" r="2" />
-                <circle class="r1" r="2" cx="-59"   cy="0"      />
-                <circle class="r2" r="2" cx="41.72" cy="+41.72" />
-                <circle class="r3" r="2" cx="41.72" cy="-41.72" />
-                <line class="v"  stroke="black" x1="0"     y1="0"      />
-                <line class="t1" stroke="black" x1="41.72" y1="-41.72" />
-                <line class="t2" stroke="black" x1="41.72" y1="+41.72" />
-                <line class="t3" stroke="black" x1="-59"   y1="0"      />
+                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
+                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="v" x1="0" y1="0" />
+                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
             </g>
         </svg>
 
         <script>
             var size_coef = 2; // 59 / 16.5 / 2;
             var data;
-            var sv = ['x', 'y', 'a', 'v', 'w', 't', 'v1', 't1', 'v2', 't2', 'v3', 't3'];
-            var mv = ['granier'];
+            var sv = ['x', 'y', 'a', 'v', 'w', 't'];
+            var mv = ['granier', 'vt', 'tt', 'tm', 'tc', 'nt', 'gmi', 'gma', 'gm'];
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {
@@ -106,22 +108,21 @@
                             }
                             // svg
                             $('#agv' + a + ' .v').attr({
-                                x2: data[a]['v'] * Math.cos(data[a]['t']) * 16.5 * size_coef,
-                                y2: data[a]['v'] * Math.sin(data[a]['t']) * 16.5 * size_coef,
+                                x2: data[a]['v'] * Math.cos(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
+                                y2: data[a]['v'] * Math.sin(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                             });
                             $('#agv' + a + ' .t1').attr({
-                                x2: data[a]['v1'] * Math.cos(data[a]['t1']) * size_coef + 41.72,
-                                y2: data[a]['v1'] * Math.sin(data[a]['t1']) * size_coef - 41.72,
+                                x2: data[a]['vt'][0] * Math.cos(data[a]['tm'][0]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                y2: data[a]['vt'][0] * Math.sin(data[a]['tm'][0]) * size_coef - {{ RAYON_AGV * PX_PAR_M * 0.707 }},
                             });
                             $('#agv' + a + ' .t2').attr({
-                                x2: data[a]['v2'] * Math.cos(data[a]['t2']) * size_coef + 41.72,
-                                y2: data[a]['v2'] * Math.sin(data[a]['t2']) * size_coef + 41.72,
+                                x2: data[a]['vt'][1] * Math.cos(data[a]['tm'][1]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                y2: data[a]['vt'][1] * Math.sin(data[a]['tm'][1]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
                             });
                             $('#agv' + a + ' .t3').attr({
-                                x2: data[a]['v3'] * Math.cos(data[a]['t3']) * size_coef - 59,
-                                y2: data[a]['v3'] * Math.sin(data[a]['t3']) * size_coef,
+                                x2: data[a]['vt'][2] * Math.cos(data[a]['tm'][2]) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
+                                y2: data[a]['vt'][2] * Math.sin(data[a]['tm'][2]) * size_coef,
                             });
-                            // $('#agv4').attr({transform: "translate(1500 200) rotate(20)"})
                         }
                     }
                 };
