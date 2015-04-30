@@ -105,7 +105,7 @@ class SortieAGV(Sortie):
             dst[where(dst < -pi)] += 2 * pi
         while (dst > pi).any():
             dst[where(dst > pi)] -= 2 * pi
-        return ((tm + SMOOTH_FACTOR * dst / dst.max()) % (2 * pi)).round(5).tolist()
+        return ((tm + SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)).round(5).tolist()
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()
