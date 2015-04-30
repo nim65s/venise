@@ -27,7 +27,7 @@
                         <polygon id="paths2" points="{% for p in PATHS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
                         <path id="path2" />
                         <g id="agv2">
-                            <circle cx="0" cy="0" r="70" />
+                            <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
                             <circle class="centre" cx="0" cy="0" r="2" />
                             <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
                             <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
@@ -41,7 +41,7 @@
                         <polygon id="paths3" points="{% for p in PATHS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
                         <path id="path3" />
                         <g id="agv3">
-                            <circle cx="0" cy="0" r="70" />
+                            <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
                             <circle class="centre" cx="0" cy="0" r="2" />
                             <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
                             <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
@@ -55,7 +55,7 @@
                         <polygon id="paths4" points="{% for p in PATHS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
                         <path id="path4" />
                         <g id="agv4">
-                            <circle cx="0" cy="0" r="70" />
+                            <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
                             <circle class="centre" cx="0" cy="0" r="2" />
                             <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
                             <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
@@ -69,13 +69,10 @@
                 </g>
             </g>
         </svg>
-        <dl>
-            <dd>1</dd>
-            <dt class="2"></dt>
-            <dd>2</dd>
-            <dt class="3"></dt>
-            <dd>3</dd>
-            <dt class="4"></dt>
+        <ul>
+            <li class="2" style="color: red;"></li>
+            <li class="3" style="color: green;"></li>
+            <li class="4" style="color: blue;"></li>
         </dl>
 
         <script>
@@ -112,7 +109,7 @@
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });
-                            $('dt.' +a).html(data[a]['status']);
+                            $('li.' + a).html(data[a]['status']);
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
                         }
                     }

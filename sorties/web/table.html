@@ -12,7 +12,7 @@
         <script src="http://localhost/bootstrap.min.js"></script>
         -->
         <style>
-            svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; background-color: 'orange'; }
+            svg { width: 1600px; height: 400px; fill: none; background-color: 'orange'; }
             #agv2, #paths2, #path2 { stroke: red; }
             #agv3, #paths3, #path3 { stroke: green; }
             #agv4, #paths4, #path4 { stroke: blue; }
@@ -87,6 +87,11 @@
                 <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
             </g>
         </svg>
+        <ul>
+            <li class="2" style="color: red;"></li>
+            <li class="3" style="color: green;"></li>
+            <li class="4" style="color: blue;"></li>
+        </dl>
 
         <script>
             var size_coef = 2; // 59 / 16.5 / 2;
@@ -123,6 +128,7 @@
                                 x2: data[a]['vt'][2] * Math.cos(data[a]['tm'][2]) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
                                 y2: data[a]['vt'][2] * Math.sin(data[a]['tm'][2]) * size_coef,
                             });
+                            $('li.' + a).html(data[a]['status']);
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
                         }
                     }

@@ -10,7 +10,7 @@ class TrajectoireGranier(TrajectoireDestination):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.permutations = {h: range(N_SONDES) for h in self.hotes}
-        self.destination = {h: [11, 10] for h in self.hotes}
+        self.destination = {h: [-12, 7] for h in self.hotes}
 
     def process_speed(self, hote, granier, gmi, gma, gm, x, y, a, v, w, t, **kwargs):
         if not granier or x == y == a == 0:
@@ -27,7 +27,7 @@ class TrajectoireGranier(TrajectoireDestination):
         #         self.permutations[hote][(i + 1) % N_SONDES] = tmp
         #         print(hote, self.permutations)
         if self.distance(hote, x, y) < 0.5:
-            self.destination[hote][0] = 18 if self.destination[hote][0] == 11 else 11
+            self.destination[hote] = [-12, 7] if self.destination[hote] == [-8, 11] else [-8, 11]
         t = self.go_to_point(hote, x, y, a)['t']
         # TODO: ce lissage devrait pouvoir se faire dans une classe à part
         vg = round(cos(2 * pi * gm[self.permutations[hote][0]]) / 2 + 0.5, 4)
