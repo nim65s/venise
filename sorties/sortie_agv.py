@@ -3,7 +3,7 @@ from math import pi
 from socket import socket, timeout
 from time import sleep
 
-from numpy import array, where
+from numpy import array, where, logical_and
 
 from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR
 from ..vmq import vmq_parser
@@ -19,6 +19,7 @@ class SortieAGV(Sortie):
         self.socket = socket()
         self.connect()
         self.to_send = ['tc', 'tm', 'nt']
+        self.reversed = array([False, False, False])
 
     def loop(self):
         start = datetime.now()
@@ -55,9 +56,9 @@ class SortieAGV(Sortie):
                 self.send('%s Broken pipe…' % now())
 
     def process(self, **kwargs):
-        self.data[self.hote]['tc'] = self.smoothe()
         try:
             self.recv_agv()
+            self.data[self.hote]['tc'] = self.smoothe(self.reverse())
             self.socket.sendall(self.send_agv())
             ret = self.socket.recv(1024).decode('ascii')
             if ret.startswith('+'):  # Les erreurs commencent par un +
@@ -96,8 +97,17 @@ class SortieAGV(Sortie):
         self.data[self.hote]['tm'] = [round(a % (2 * pi), 4) for a in angles]
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
 
-    def smoothe(self):
-        tm, tt = array(self.data[self.hote]['tm']), array(self.data[self.hote]['tt'])
+    def reverse(self):
+        vt, tt, tm = array(self.data[self.hote]['vt']), array(self.data[self.hote]['tt']), array(self.data[self.hote]['tm'])
+        dst = tm - tt
+        self.reversed = logical_and(dst > 2 * pi / 3, abs(vt) > 8)
+        vt[where(self.reversed)] *= -1
+        tt[where(self.reversed)] += pi
+        tt[where(self.reversed)] %= 2 * pi
+        self.data[self.hote]['vt'] = vt
+        return tm, tt
+
+    def smoothe(self, tm, tt):
         dst = tm - tt
         if abs(dst).max() < SMOOTH_FACTOR:
             return tt.tolist()
