@@ -1,4 +1,5 @@
-from math import hypot, atan2
+from math import atan2, hypot, pi
+
 from .trajectoire import Trajectoire
 
 
@@ -18,6 +19,6 @@ class TrajectoireDestination(Trajectoire):
             return {'v': 0, 'w': 0}
         return {
                 'v': 1,
-                't': atan2(y - yi, x - xi) - a,
+                't': (atan2(y - yi, x - xi) - a) % (2 * pi),
                 'w': self.wi[hote],
                 }

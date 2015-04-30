@@ -1,14 +1,16 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from math import pi
 from socket import socket, timeout
+from time import sleep
 
-from numpy import array, where, copysign
+from numpy import array, copysign, where
 
-from ..settings import HOST_AGV, PORT_AGV, SMOOTH_FACTOR
+from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR
 from ..vmq import vmq_parser
 from .sortie import Sortie
 
 now = datetime.now
+per = timedelta(seconds=PERIODE)
 
 
 class SortieAGV(Sortie):
@@ -17,6 +19,23 @@ class SortieAGV(Sortie):
         self.socket = socket()
         self.connect()
         self.to_send = ['tc', 'tm', 'nt']
+
+    def loop(self):
+        start = datetime.now()
+        self.pull()
+        if datetime.now() - self.last_seen > timedelta(seconds=2):
+            self.send('déconnecté du serveur')
+        if datetime.now() - self.last_seen > timedelta(seconds=3):
+            self.data[self.hote]['stop'] = True
+        self.process(**self.data[self.hote])
+        for var in self.to_send:
+            self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
+        duree = datetime.now() - start
+        reste = per - duree
+        if reste < timedelta(0):
+            self.send('La boucle a mis beaucoup trop de temps: %s' % duree)
+        else:
+            sleep(reste.microseconds / 1000000)
 
     def connect(self):
         while True:
