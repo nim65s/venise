@@ -95,6 +95,7 @@ class SortieAGV(Sortie):
 
     def reverse(self, vt, tt, tm, **kwargs):
         vc, tt, tm = array(vt), array(tt), array(tm)
+        return tm, tt
         dst = tm - tt
         rev = logical_and(dst > 2 * pi / 3, abs(vc) > VIT_LIM_REV)
         vc[where(rev)] *= -1

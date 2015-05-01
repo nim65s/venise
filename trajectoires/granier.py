@@ -12,6 +12,7 @@ class TrajectoireGranier(TrajectoireAllerRetours):
         self.permutations = {h: range(N_SONDES) for h in self.hotes}
 
     def process_speed(self, hote, granier, gmi, gma, gm, x, y, a, v, w, t, **kwargs):
+        self.check_distance(hote, x, y)
         if not granier or x == y == a == 0:
             return {'v': 0, 'w': 0}
         for i in range(N_SONDES):
@@ -31,17 +32,17 @@ class TrajectoireGranier(TrajectoireAllerRetours):
         wg = round(gm[self.permutations[hote][2]] * 2 - 1, 5)
         tg = round((sin(2 * pi * gm[self.permutations[hote][1]]) * pi / 2 + t) % (2 * pi), 5)
 
-      # return {
-      #         'v': vg, 'w': wg, 't': tg,
-      #         'gmi': gmi, 'gma': gma, 'gm': gm,
-      #         'vg': vg, 'wg': wg, 'tg': tg,
-      #         }
-
+        if False:
+            return {
+                    'v': vg, 'w': wg, 't': tg,
+                    'gmi': gmi, 'gma': gma, 'gm': gm,
+                    'vg': vg, 'wg': wg, 'tg': tg,
+                    }
 
         dv, dw, dt = v - vg, w - wg, t - tg
         return {
-                'v': v - copysign(SMOOTH_SPEED['v'], dv) if abs(dv) > SMOOTH_SPEED['v'] else vg,
-                'w': w - copysign(SMOOTH_SPEED['w'], dw) if abs(dw) > SMOOTH_SPEED['w'] else wg,
+                'v': round(v - copysign(SMOOTH_SPEED['v'], dv), 5) if abs(dv) > SMOOTH_SPEED['v'] else vg,
+                'w': round(w - copysign(SMOOTH_SPEED['w'], dw), 5) if abs(dw) > SMOOTH_SPEED['w'] else wg,
                 't': round((t - copysign(SMOOTH_SPEED['t'], dt)) % (2 * pi), 5) if abs(dt) > SMOOTH_SPEED['t'] else tg,
                 'gmi': gmi, 'gma': gma, 'gm': gm,
                 'vg': vg, 'wg': wg, 'tg': tg,
