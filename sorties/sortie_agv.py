@@ -63,7 +63,7 @@ class SortieAGV(Sortie):
         self.recv_agv()
         self.data[self.hote]['tc'] = self.smoothe(*self.reverse(**kwargs))
         self.force(**kwargs)
-        self.socket.sendall(self.send_agv())
+        self.socket.sendall(self.send_agv(**self.data[self.hote]))
         self.check_ret(self.socket.recv(1024).decode('ascii'))
 
     def check_ret(self, ret):
@@ -87,11 +87,11 @@ class SortieAGV(Sortie):
         else:
             raise RuntimeError(ret)
 
-    def send_agv(self):
-        if self.data[self.hote]['stop']:
+    def send_agv(self, stop, **kwargs):
+        if stop or kwargs['vc'] == [0, 0, 0]:
             return b'stop()'
         template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[1]})'
-        return bytes(template.format(**self.data[self.hote]).encode('ascii'))
+        return bytes(template.format(**kwargs).encode('ascii'))
 
     def recv_agv(self):
         self.socket.sendall('getPosition()'.encode('ascii'))
