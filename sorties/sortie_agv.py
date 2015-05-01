@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from pprint import pprint
 from math import pi
 from socket import socket, timeout
 from time import sleep
@@ -65,7 +64,6 @@ class SortieAGV(Sortie):
         self.data[self.hote]['tc'] = self.smoothe(*self.reverse())
         self.force()
         self.socket.sendall(self.send_agv())
-        pprint(self.data[self.hote])
         self.check_ret(self.socket.recv(1024).decode('ascii'))
 
     def check_ret(self, ret):
