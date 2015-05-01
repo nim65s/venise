@@ -10,7 +10,7 @@ from ..vmq import vmq_parser
 from .sortie import Sortie
 
 now = datetime.now
-per = timedelta(seconds=PERIODE)
+per = timedelta(seconds=PERIODE / 2)
 
 
 class SortieAGV(Sortie):
