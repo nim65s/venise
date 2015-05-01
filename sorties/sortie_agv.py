@@ -61,8 +61,8 @@ class SortieAGV(Sortie):
 
     def process(self, **kwargs):
         self.recv_agv()
-        self.data[self.hote]['tc'] = self.smoothe(*self.reverse())
-        self.force()
+        self.data[self.hote]['tc'] = self.smoothe(*self.reverse(**kwargs))
+        self.force(**kwargs)
         self.socket.sendall(self.send_agv())
         self.check_ret(self.socket.recv(1024).decode('ascii'))
 
@@ -100,8 +100,8 @@ class SortieAGV(Sortie):
         self.data[self.hote]['tm'] = [round(a % (2 * pi), 4) for a in angles]
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
 
-    def reverse(self):
-        vc, tt, tm = array(self.data[self.hote]['vt']), array(self.data[self.hote]['tt']), array(self.data[self.hote]['tm'])
+    def reverse(self, vt, tt, tm, **kwargs):
+        vc, tt, tm = array(vt), array(tt), array(tm)
         dst = tm - tt
         rev = logical_and(dst > 2 * pi / 3, abs(vc) > VIT_LIM_REV)
         vc[where(rev)] *= -1
@@ -121,14 +121,14 @@ class SortieAGV(Sortie):
             dst[where(dst > pi)] -= 2 * pi
         return ((tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)).round(5).tolist()
 
-    def force(self):
-        if not self.data[self.hote]['force']:
+    def force(self, force, tt, tm, **kwargs):
+        if not force:
             return
-        if (abs(array(self.data[self.hote]['tt']) - array(self.data[self.hote]['tm'])) < 0.01).all():
+        if (abs((array(tt) - array(tm)) % pi < 0.01).all():
             self.push.send_json([self.hote, {'force': False}])
             return
         self.data[self.hote]['vc'] = [5, 5, 5]
-        self.data[self.hote]['tc'] = self.data[self.hote]['tt']
+        self.data[self.hote]['tc'] = tt
 
 
 if __name__ == '__main__':
