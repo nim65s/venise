@@ -40,7 +40,7 @@ N_SONDES = 3  # par arbre
 SMOOTH_FACTOR = pi / 2 / (60 * 0.1 / PERIODE)
 SMOOTH_SPEED = {
         'v': 0.0003 / PERIODE,
-        'w': 0.0001 / PERIODE,
+        'w': 0.00003 / PERIODE,
         't': SMOOTH_FACTOR,
         }
 
