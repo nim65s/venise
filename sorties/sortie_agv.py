@@ -124,7 +124,7 @@ class SortieAGV(Sortie):
     def force(self):
         if not self.data[self.hote]['force']:
             return
-        if abs(array(self.data[self.hote]['tt']) - array(self.data[self.hote]['tm'])) < 0.01:
+        if (abs(array(self.data[self.hote]['tt']) - array(self.data[self.hote]['tm'])) < 0.01).all():
             self.push.send_json([self.hote, {'force': False}])
             return
         self.data['vc'] = [5, 5, 5]
