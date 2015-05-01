@@ -31,11 +31,11 @@ class TrajectoireGranier(TrajectoireAllerRetours):
         wg = round(gm[self.permutations[hote][2]] * 2 - 1, 5)
         tg = round((sin(2 * pi * gm[self.permutations[hote][1]]) * pi / 2 + t) % (2 * pi), 5)
 
-        return {
-                'v': vg, 'w': wg, 't': tg,
-                'gmi': gmi, 'gma': gma, 'gm': gm,
-                'vg': vg, 'wg': wg, 'tg': tg,
-                }
+      # return {
+      #         'v': vg, 'w': wg, 't': tg,
+      #         'gmi': gmi, 'gma': gma, 'gm': gm,
+      #         'vg': vg, 'wg': wg, 'tg': tg,
+      #         }
 
 
         dv, dw, dt = v - vg, w - wg, t - tg
