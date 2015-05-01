@@ -22,7 +22,6 @@ class SortieAGV(Sortie):
         self.data[self.hote]['reversed'] = [False, False, False]
 
     def loop(self):
-        start = datetime.now()
         self.pull()
         if datetime.now() - self.last_seen > timedelta(seconds=2):
             self.send('déconnecté du serveur')
@@ -35,12 +34,6 @@ class SortieAGV(Sortie):
             self.connect()
         for var in self.to_send:
             self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
-        duree = datetime.now() - start
-        reste = per - duree
-        if reste < timedelta(0):
-            self.send('La boucle a mis beaucoup trop de temps: %s' % duree)
-        else:
-            sleep(reste.microseconds / 1000000)
 
     def connect(self):
         while True:
