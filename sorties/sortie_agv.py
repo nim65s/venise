@@ -127,8 +127,8 @@ class SortieAGV(Sortie):
         if (abs(array(self.data[self.hote]['tt']) - array(self.data[self.hote]['tm'])) < 0.01).all():
             self.push.send_json([self.hote, {'force': False}])
             return
-        self.data['vc'] = [5, 5, 5]
-        self.data['tc'] = self.data['tt']
+        self.data[self.hote]['vc'] = [5, 5, 5]
+        self.data[self.hote]['tc'] = self.data['tt']
 
 
 if __name__ == '__main__':
