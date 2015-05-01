@@ -129,7 +129,7 @@ class SortieAGV(Sortie):
             self.push.send_json([self.hote, {'force': False}])
             return
         self.data[self.hote]['vc'] = [10, 10, 10]
-        self.data[self.hote]['tc'] = tt.round(5)
+        self.data[self.hote]['tc'] = tt.round(5).tolist()
 
 
 if __name__ == '__main__':

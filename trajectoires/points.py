@@ -16,8 +16,8 @@ class TrajectoirePoints(TrajectoireDestination):
         for hote in self.hotes:
             self.destination[hote] = self.paths[hote][self.state[hote]]
 
-        def get_paths(self):
-            return PATHS
+    def get_paths(self):
+        return PATHS
 
     def process_speed(self, x, y, a, w, hote, **kwargs):
         if self.distance(hote, x, y) < 0.5:
@@ -49,4 +49,4 @@ trajectoire_points_parser.add_argument('--w2', type=float, default=0)
 trajectoire_points_parser.add_argument('--w3', type=float, default=0)
 
 if __name__ == '__main__':
-    TrajectoireBords(**vars(trajectoire_points_parser.parse_args())).run()
+    TrajectoirePoints(**vars(trajectoire_points_parser.parse_args())).run()
