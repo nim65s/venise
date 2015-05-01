@@ -106,6 +106,10 @@ class SortieAGV(Sortie):
 
         vc, tt, tm = array(vt), array(tt), array(tm)
         dst = tm - tt
+        while (dst < -pi).any():
+            dst[where(dst < -pi)] += 2 * pi
+        while (dst > pi).any():
+            dst[where(dst > pi)] -= 2 * pi
         rev = dst > 2 * pi / 3
         vc[where(rev)] *= -1
         tt[where(rev)] += pi
