@@ -17,7 +17,7 @@ class TrajectoireGranier(TrajectoireAllerRetours):
         for i in range(N_SONDES):
             gmi[i] = min(granier[i], gmi[i])
             gma[i] = max(granier[i], gma[i])
-            gm[i] = round((granier[i] - gmi[i]) / (gma[i] - gmi[i] if gma[i] != gmi[i] else 1), 4)
+            gm[i] = round((granier[i] - gmi[i]) / (gma[i] - gmi[i] if gma[i] != gmi[i] else 1), 5)
         # TODO: en cas de croisement, on permute
         # for i in range(N_SONDES):
         #     if gmi[i] == gmi[(i + 1) % N_SONDES]:
@@ -27,15 +27,15 @@ class TrajectoireGranier(TrajectoireAllerRetours):
         #         print(hote, self.permutations)
         t = self.go_to_point(hote, x, y, a)['t']
         # TODO: ce lissage devrait pouvoir se faire dans une classe à part
-        vg = round(cos(2 * pi * gm[self.permutations[hote][0]]) / 2 + 0.5, 4)
-        wg = round(gm[self.permutations[hote][2]] * 2 - 1, 4)
-        tg = round((sin(2 * pi * gm[self.permutations[hote][1]]) * pi / 2 + t) % (2 * pi), 4)
+        vg = round(cos(2 * pi * gm[self.permutations[hote][0]]) / 2 + 0.5, 5)
+        wg = round(gm[self.permutations[hote][2]] * 2 - 1, 5)
+        tg = round((sin(2 * pi * gm[self.permutations[hote][1]]) * pi / 2 + t) % (2 * pi), 5)
 
-     #  return {
-     #          'v': vg, 'w': wg, 't': tg,
-     #          'gmi': gmi, 'gma': gma, 'gm': gm,
-     #          'vg': vg, 'wg': wg, 'tg': tg,
-     #          }
+        return {
+                'v': vg, 'w': wg, 't': tg,
+                'gmi': gmi, 'gma': gma, 'gm': gm,
+                'vg': vg, 'wg': wg, 'tg': tg,
+                }
 
 
         dv, dw, dt = v - vg, w - wg, t - tg

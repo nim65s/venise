@@ -97,7 +97,7 @@ class SortieAGV(Sortie):
         self.socket.sendall('getPosition()'.encode('ascii'))
         pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
         angles = [float(i.strip()) for i in pos[1:]]
-        self.data[self.hote]['tm'] = [round(a % (2 * pi), 4) for a in angles]
+        self.data[self.hote]['tm'] = [round(a % (2 * pi), 5) for a in angles]
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
 
     def reverse(self, vt, tt, tm, **kwargs):

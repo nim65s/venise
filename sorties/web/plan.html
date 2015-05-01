@@ -129,11 +129,7 @@
             now = new Date();
             diff = now - last_seen;
             diff = new Date(diff);
-            if (diff.getSeconds() >= 1) {
-                $('svg').css("background-color", "red");
-            } else {
-                $('svg').css("background-color", "white");
-            }
+            $('svg').css("background-color", diff.getSeconds() >= 1 ? "orange" : "white");
         }, 500);
         </script>
     </body>

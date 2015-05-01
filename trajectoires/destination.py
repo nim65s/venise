@@ -20,6 +20,6 @@ class TrajectoireDestination(Trajectoire):
             return {'v': 0, 'w': 0}
         return {
                 'v': self.vi[hote],
-                't': round((atan2(y - yi, x - xi) - a) % (2 * pi), 4),
+                't': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
                 'w': self.wi[hote],
                 }

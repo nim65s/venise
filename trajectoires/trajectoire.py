@@ -63,7 +63,7 @@ class Trajectoire(Puller, Publisher):
     def tourelle(self, pos_roue, v, w, t, **kwargs):
         vit_x = v * cos(t) - w * sin(pos_roue)
         vit_y = v * sin(t) + w * cos(pos_roue)
-        return round(atan2(vit_y, vit_x) % (2 * pi), 4), round(VIT_MOY_MAX * hypot(vit_x, vit_y), 3)
+        return round(atan2(vit_y, vit_x) % (2 * pi), 5), round(VIT_MOY_MAX * hypot(vit_x, vit_y), 5)
 
     def process_tourelles(self, **kwargs):
         (t1, v1), (t2, v2), (t3, v3) = [self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)]

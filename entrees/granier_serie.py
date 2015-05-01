@@ -22,7 +22,7 @@ class GranierSerie(Granier):
             return {}
         with open(self.fichier, 'a') as f:
             print(';'.join(l[:5]), file=f)
-        return [round(float(l[2 + s]), 4) for s in range(3)]
+        return [round(float(l[2 + s]), 5) for s in range(3)]
 
     def fin(self):
         self.serial.close()
