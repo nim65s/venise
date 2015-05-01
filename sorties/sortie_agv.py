@@ -93,12 +93,20 @@ class SortieAGV(Sortie):
         self.data[self.hote]['tm'] = [round(a % (2 * pi), 5) for a in angles]
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
 
-    def reverse(self, vt, tt, tm, **kwargs):
+    def reverse(self, vt, tt, tm, reversed, **kwargs):
+       #vc = vt
+       #dst = [0, 0, 0]
+       #for i in range(3):
+       #    if reversed[i]:
+       #        vc[i] *= -1
+       #        tt[i] += pi
+       #        tt[i] %= 2 * pi
+       #    dst[i] = tm[i] - tt[i]
+       #    reversed[i] = dst[i] > 2 * pi / 3 and abs(vc[i] > VIT_LIM_REV)
+
         vc, tt, tm = array(vt), array(tt), array(tm)
-        self.data[self.hote]['vc'] = vc.tolist()
-        return tm, tt
         dst = tm - tt
-        rev = logical_and(dst > 2 * pi / 3, abs(vc) > VIT_LIM_REV)
+        rev = dst > (1 + reversed) * pi / 3
         vc[where(rev)] *= -1
         tt[where(rev)] += pi
         tt[where(rev)] %= 2 * pi
