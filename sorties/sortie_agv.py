@@ -106,7 +106,7 @@ class SortieAGV(Sortie):
 
         vc, tt, tm = array(vt), array(tt), array(tm)
         dst = tm - tt
-        rev = dst > (1 + reversed) * pi / 3
+        rev = dst > 2 * pi / 3
         vc[where(rev)] *= -1
         tt[where(rev)] += pi
         tt[where(rev)] %= 2 * pi
