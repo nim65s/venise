@@ -124,11 +124,12 @@ class SortieAGV(Sortie):
     def force(self, force, tt, tm, **kwargs):
         if not force:
             return
-        if (abs(array(tt) - array(tm)) % pi < 0.01).all():
+        tt, tm = array(tt), array(tm)
+        if (abs(tt - tm) % pi < 0.01).all():
             self.push.send_json([self.hote, {'force': False}])
             return
         self.data[self.hote]['vc'] = [10, 10, 10]
-        self.data[self.hote]['tc'] = tt
+        self.data[self.hote]['tc'] = tt.round(5)
 
 
 if __name__ == '__main__':

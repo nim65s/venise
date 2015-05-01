@@ -39,7 +39,7 @@ N_SONDES = 3  # par arbre
 # On veut faire faire pi/2 en 10 cm, si on est à vitesse max
 SMOOTH_FACTOR = pi / 2 / (60 * 0.1 / PERIODE)
 SMOOTH_SPEED = {
-        'v': 0.00003 / PERIODE,
+        'v': 0.0001 / PERIODE,
         'w': 0.00001 / PERIODE,
         't': SMOOTH_FACTOR,
         }
