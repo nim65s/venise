@@ -95,6 +95,7 @@ class SortieAGV(Sortie):
 
     def reverse(self, vt, tt, tm, **kwargs):
         vc, tt, tm = array(vt), array(tt), array(tm)
+        self.data[self.hote]['vc'] = vc.tolist()
         return tm, tt
         dst = tm - tt
         rev = logical_and(dst > 2 * pi / 3, abs(vc) > VIT_LIM_REV)
