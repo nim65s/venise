@@ -119,7 +119,7 @@ class SortieAGV(Sortie):
         return tm, tt
 
     def smoothe(self, tm, tt):
-        return tt
+        return tt.tolist()
         dst = tm - tt
         if abs(dst).max() < SMOOTH_FACTOR:
             return tt.tolist()
