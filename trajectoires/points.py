@@ -12,9 +12,12 @@ class TrajectoirePoints(TrajectoireDestination):
         super().__init__(*args, **kwargs)
         self.set_state(s1, s2, s3)
         self.wi = {2: w1, 3: w2, 4: w3}
-        self.paths = PATHS
+        self.paths = self.get_paths()
         for hote in self.hotes:
             self.destination[hote] = self.paths[hote][self.state[hote]]
+
+        def get_paths(self):
+            return PATHS
 
     def process_speed(self, x, y, a, w, hote, **kwargs):
         if self.distance(hote, x, y) < 0.5:

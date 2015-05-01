@@ -29,7 +29,11 @@ class SortieAGV(Sortie):
             self.send('déconnecté du serveur')
         if datetime.now() - self.last_seen > timedelta(seconds=3):
             self.data[self.hote]['stop'] = True
-        self.process(**self.data[self.hote])
+        try:
+            self.process(**self.data[self.hote])
+        except (ConnectionResetError, timeout, BrokenPipeError):
+            self.send('%s Failed connection !' % now())
+            self.connect()
         for var in self.to_send:
             self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
         duree = datetime.now() - start
@@ -57,34 +61,33 @@ class SortieAGV(Sortie):
                 self.send('%s Broken pipe…' % now())
 
     def process(self, **kwargs):
-        try:
-            self.recv_agv()
-            self.data[self.hote]['tc'] = self.smoothe(*self.reverse())
-            self.socket.sendall(self.send_agv())
-            pprint(self.data[self.hote])
-            ret = self.socket.recv(1024).decode('ascii')
-            if ret.startswith('+'):  # Les erreurs commencent par un +
-                code = int(ret[1:].split(',')[0])
-                if code == 2:  # Wrong number or format of arguments
-                    self.send('Mauvais format d’envoi à BA !')
-                    raise AttributeError
-                elif code == 3:  # Joystick connecté
-                    self.send('Déconnecte le joystick !')
-                elif code == 4:  # Post-démarrage ou arrêt d’urgence
-                    self.send('Désarme l’arrête d’urgence et Appuie sur le bouton vert !')
-                elif code == 5:  # Velocity ou angle too high
-                    pass
-                elif code == 6:  # Initialisation ongoing
-                    self.send('Initialisation en cours…')
-                elif code == 7:  # Trop de tours
-                    self.send('Trop de tours !')
-                else:
-                    raise RuntimeError(ret)
-            else:
-                self.send('OK')
-        except (ConnectionResetError, timeout, BrokenPipeError):
-            self.send('%s Failed connection !' % now())
-            self.connect()
+        self.recv_agv()
+        self.data[self.hote]['tc'] = self.smoothe(*self.reverse())
+        self.force()
+        self.socket.sendall(self.send_agv())
+        pprint(self.data[self.hote])
+        self.check_ret(self.socket.recv(1024).decode('ascii'))
+
+    def check_ret(self, ret):
+        if not ret.startswith('+'):  # Les erreurs commencent par un +
+            self.send('OK')
+            return
+        code = int(ret[1:].split(',')[0])
+        if code == 2:  # Wrong number or format of arguments
+            self.send('Mauvais format d’envoi à BA !')
+            raise AttributeError
+        elif code == 3:  # Joystick connecté
+            self.send('Déconnecte le joystick !')
+        elif code == 4:  # Post-démarrage ou arrêt d’urgence
+            self.send('Désarme l’arrête d’urgence et Appuie sur le bouton vert !')
+        elif code == 5:  # Velocity ou angle too high
+            pass
+        elif code == 6:  # Initialisation ongoing
+            self.send('Initialisation en cours…')
+        elif code == 7:  # Trop de tours
+            self.send('Trop de tours !')
+        else:
+            raise RuntimeError(ret)
 
     def send_agv(self):
         if self.data[self.hote]['stop']:
@@ -119,6 +122,16 @@ class SortieAGV(Sortie):
         while (dst > pi).any():
             dst[where(dst > pi)] -= 2 * pi
         return ((tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)).round(5).tolist()
+
+    def force(self):
+        if not self.data[self.hote]['force']:
+            return
+        if abs(array(self.data[self.hote]['tt']) - array(self.data[self.hote]['tm'])) < 0.01:
+            self.push.send_json([self.hote, {'force': False}])
+            return
+        self.data['vc'] = [0, 0, 0]
+        self.data['tc'] = self.data['tt']
+
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()
