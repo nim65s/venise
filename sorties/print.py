@@ -7,6 +7,7 @@ from ..vmq import Subscriber, vmq_parser
 
 class SortiePrint(Subscriber):
     def loop(self):
+        self.sub()
         pprint(self.data)
         sleep(PERIODE)
 
