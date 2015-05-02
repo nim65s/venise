@@ -93,7 +93,8 @@
             <li class="4" style="color: blue;"></li>
         </dl>
         {% for arbre in range(2, 5) %}
-            <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop']})" type="button" class="btn btn-xs">Stop {{ arbre - 1 }}</button>
+            <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop']})" type="button" class="btn btn-warning">Stop {{ arbre - 1 }}</button>
+            <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'start']})" type="button" class="btn btn-warning">Start {{ arbre - 1 }}</button>
         {% endfor %}
         <script>
             var size_coef = 2; // 59 / 16.5 / 2;

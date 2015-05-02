@@ -83,6 +83,10 @@
             <li class="3" style="color: green;"></li>
             <li class="4" style="color: blue;"></li>
         </dl>
+        {% for arbre in range(2, 5) %}
+            <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop']})" type="button" class="btn btn-warning">Stop {{ arbre - 1 }}</button>
+            <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'start']})" type="button" class="btn btn-success">Start {{ arbre - 1 }}</button>
+        {% endfor %}
 
         <script>
             var last_seen = new Date();
@@ -118,7 +122,7 @@
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });
-                            $('li.' + a).html(data[a]['status']);
+                            $('li.' + a).html((a - 1) + ' : ' + data[a]['status']);
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
                         }
                     }

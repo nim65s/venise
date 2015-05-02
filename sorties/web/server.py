@@ -28,14 +28,11 @@ class Root(Resource):
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
         self.socket.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_PUSH))
-        print 0
-        print request.args
-        print 1
-        cmd = request.args['cmd'][0]
-        if cmd == 'stop moro':
-            self.socket.send_json([4, {'stop': True}])
-        elif cmd == 'start moro':
-            self.socket.send_json([4, {'stop': False}])
+        agv, cmd = request.args['cmd[]']
+        if cmd == 'stop':
+            self.socket.send_json([int(agv), {'stop': True}])
+        elif cmd == 'start':
+            self.socket.send_json([int(agv), {'stop': False}])
         request.setResponseCode(200)
         return 'Ok'
 
