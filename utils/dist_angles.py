@@ -1,5 +1,5 @@
 from math import pi
-from numpy import array
+from numpy import array, where
 
 def dist_angles(actuel, cible):
     dst = array(actuel) - array(cible)
