@@ -34,6 +34,7 @@ class SortieAGV(Sortie):
             self.send('%s Failed connection !' % now())
             self.connect()
         for var in self.to_send:
+            print(var, self.data[self.hote][var])
             self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
 
     def connect(self):
