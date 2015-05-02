@@ -91,11 +91,11 @@ class SortieAGV(Sortie):
         dst = dist_angles(tm, tc)
         return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR else (tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)}
 
-    def send_agv(self, stop, **kwargs):
-        if stop or kwargs['vc'] == [0, 0, 0]:
+    def send_agv(self, stop, vc, tc, **kwargs):
+        if stop or abs(vc).sum() < 10:
             return b'stop()'
         template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[1]})'
-        return bytes(template.format(**kwargs).encode('ascii'))
+        return bytes(template.format(vc=vc, tc=tc).encode('ascii'))
 
     def check_ret(self, ret):
         if not ret.startswith('+'):  # Les erreurs commencent par un +
