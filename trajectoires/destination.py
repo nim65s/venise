@@ -1,14 +1,15 @@
+from argparse import ArgumentParser
 from math import atan2, hypot, pi
 
-from .trajectoire import Trajectoire
+from .trajectoire import Trajectoire, trajectoire_parser
 
 
 class TrajectoireDestination(Trajectoire):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, v1, v2, v3, w1, w2, w3, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.destination = {h: (0, 0) for h in self.hotes}
-        self.wi = {h: 0 for h in self.hotes}
-        self.vi = {h: 1 for h in self.hotes}
+        self.wi = {2: w1, 3: w2, 4: w3}
+        self.vi = {2: v1, 3: v2, 4: v3}
 
     def distance(self, hote, x, y):
         xi, yi = self.destination[hote]
@@ -23,3 +24,12 @@ class TrajectoireDestination(Trajectoire):
                 't': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
                 'w': self.wi[hote],
                 }
+
+
+trajectoire_destination_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')
+trajectoire_destination_parser.add_argument('--w1', type=float, default=0)
+trajectoire_destination_parser.add_argument('--w2', type=float, default=0)
+trajectoire_destination_parser.add_argument('--w3', type=float, default=0)
+trajectoire_destination_parser.add_argument('--v1', type=float, default=1)
+trajectoire_destination_parser.add_argument('--v2', type=float, default=1)
+trajectoire_destination_parser.add_argument('--v3', type=float, default=1)

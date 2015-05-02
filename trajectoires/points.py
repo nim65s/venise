@@ -3,15 +3,13 @@ from datetime import datetime
 from os.path import expanduser, isfile
 
 from ..settings import PATHS
-from .trajectoire import trajectoire_parser
-from .destination import TrajectoireDestination
+from .destination import TrajectoireDestination, trajectoire_destination_parser
 
 
 class TrajectoirePoints(TrajectoireDestination):
-    def __init__(self, s1, s2, s3, w1, w2, w3, *args, **kwargs):
+    def __init__(self, s1, s2, s3, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.set_state(s1, s2, s3)
-        self.wi = {2: w1, 3: w2, 4: w3}
         self.paths = self.get_paths()
         for hote in self.hotes:
             self.destination[hote] = self.paths[hote][self.state[hote]]
@@ -45,13 +43,10 @@ class TrajectoirePoints(TrajectoireDestination):
                         self.state[i] = int(f.read().strip())
         print(self.state)
 
-trajectoire_points_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')
+trajectoire_points_parser = ArgumentParser(parents=[trajectoire_destination_parser], conflict_handler='resolve')
 trajectoire_points_parser.add_argument('--s1', type=int, default=-1, choices=list(range(len(PATHS[2]))) + [-1])
 trajectoire_points_parser.add_argument('--s2', type=int, default=-1, choices=list(range(len(PATHS[3]))) + [-1])
 trajectoire_points_parser.add_argument('--s3', type=int, default=-1, choices=list(range(len(PATHS[4]))) + [-1])
-trajectoire_points_parser.add_argument('--w1', type=float, default=0)
-trajectoire_points_parser.add_argument('--w2', type=float, default=0)
-trajectoire_points_parser.add_argument('--w3', type=float, default=0)
 
 if __name__ == '__main__':
     TrajectoirePoints(**vars(trajectoire_points_parser.parse_args())).run()

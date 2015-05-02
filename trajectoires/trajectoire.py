@@ -67,7 +67,7 @@ class Trajectoire(Puller, Publisher):
 
     def process_tourelles(self, **kwargs):
         tt, vt = zip(*[self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)])
-        if sum(abs(v) < 5 for v in vt > 1:
+        if sum(abs(v) < 5 for v in vt) > 1:
             vt = [0, 0, 0]
         return {'tt': tt, 'vt': vt}
 

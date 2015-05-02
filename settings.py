@@ -84,5 +84,5 @@ DATA = {
         'vt': [0, 0, 0], 'vc': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne
         'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,
         'force': False,
-        'last_seen_agv': datetime(1970, 1, 1),
+        'last_seen_agv': str(datetime(1970, 1, 1)),
         }
