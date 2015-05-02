@@ -7,6 +7,7 @@ from numpy import array, where, logical_and
 
 from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR, VIT_LIM_REV
 from ..vmq import vmq_parser
+from ..utils.dist_angles import dist_angles
 from .sortie import Sortie
 
 now = datetime.now
@@ -54,7 +55,8 @@ class SortieAGV(Sortie):
 
     def process(self, **kwargs):
         self.recv_agv()
-        self.data[self.hote]['tc'] = self.smoothe(*self.reverse(**kwargs))
+        #self.data[self.hote]['tc'] = self.smoothe(*self.reverse(**kwargs))
+        self.data[self.hote]['tc'] = self.data[self.hote]['tt']
         self.force(**kwargs)
         self.socket.sendall(self.send_agv(**self.data[self.hote]))
         self.check_ret(self.socket.recv(1024).decode('ascii'))
@@ -93,24 +95,12 @@ class SortieAGV(Sortie):
         self.data[self.hote]['tm'] = [round(a % (2 * pi), 5) for a in angles]
         self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
 
-    def reverse(self, vt, tt, tm, reversed, **kwargs):
-       #vc = vt
-       #dst = [0, 0, 0]
-       #for i in range(3):
-       #    if reversed[i]:
-       #        vc[i] *= -1
-       #        tt[i] += pi
-       #        tt[i] %= 2 * pi
-       #    dst[i] = tm[i] - tt[i]
-       #    reversed[i] = dst[i] > 2 * pi / 3 and abs(vc[i] > VIT_LIM_REV)
-
+    def reverse(self, vt, tt, tm, **kwargs):
         vc, tt, tm = array(vt), array(tt), array(tm)
-        dst = tm - tt
-        while (dst < -pi).any():
-            dst[where(dst < -pi)] += 2 * pi
-        while (dst > pi).any():
-            dst[where(dst > pi)] -= 2 * pi
-        rev = dst > 2 * pi / 3
+        if True:
+            return tm, tt
+        dst = dist_angles(tm, tt)
+        rev = abs(dst) > 2 * pi / 3
         vc[where(rev)] *= -1
         tt[where(rev)] += pi
         tt[where(rev)] %= 2 * pi
@@ -119,17 +109,14 @@ class SortieAGV(Sortie):
         return tm, tt
 
     def smoothe(self, tm, tt):
-        return tt.tolist()
-        dst = tm - tt
-        if abs(dst).max() < SMOOTH_FACTOR:
+        """ Renvoie la consigne en angle """
+        if True:
             return tt.tolist()
-        while (dst < -pi).any():
-            dst[where(dst < -pi)] += 2 * pi
-        while (dst > pi).any():
-            dst[where(dst > pi)] -= 2 * pi
-        return ((tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)).round(5).tolist()
+        dst = dist_angles(tm, tt)
+        return tt.tolist() if abs(dst).max() < SMOOTH_FACTOR else ((tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)).round(5).tolist()
 
     def force(self, force, tt, tm, **kwargs):
+        """ Sur un ordre de dé-smoothage, on dé-smoothe """
         if not force:
             return
         tt, tm = array(tt), array(tm)
