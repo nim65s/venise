@@ -98,6 +98,7 @@ class SortieAGV(Sortie):
     def reverse(self, vt, tt, tm, **kwargs):
         vc, tt, tm = array(vt), array(tt), array(tm)
         if True:
+            self.data[self.hote]['vc'] = vc.tolist()
             return tm, tt
         dst = dist_angles(tm, tt)
         rev = abs(dst) > 2 * pi / 3

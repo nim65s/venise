@@ -46,9 +46,9 @@ class TrajectoirePoints(TrajectoireDestination):
         print(self.state)
 
 trajectoire_points_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')
-trajectoire_points_parser.add_argument('--s1', type=int, default=-1, choices=range(len(PATHS[2])) + [-1])
-trajectoire_points_parser.add_argument('--s2', type=int, default=-1, choices=range(len(PATHS[3])) + [-1])
-trajectoire_points_parser.add_argument('--s3', type=int, default=-1, choices=range(len(PATHS[4])) + [-1])
+trajectoire_points_parser.add_argument('--s1', type=int, default=-1, choices=list(range(len(PATHS[2]))) + [-1])
+trajectoire_points_parser.add_argument('--s2', type=int, default=-1, choices=list(range(len(PATHS[3]))) + [-1])
+trajectoire_points_parser.add_argument('--s3', type=int, default=-1, choices=list(range(len(PATHS[4]))) + [-1])
 trajectoire_points_parser.add_argument('--w1', type=float, default=0)
 trajectoire_points_parser.add_argument('--w2', type=float, default=0)
 trajectoire_points_parser.add_argument('--w3', type=float, default=0)
