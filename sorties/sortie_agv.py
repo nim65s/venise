@@ -99,7 +99,7 @@ class SortieAGV(Sortie):
 
     def check_ret(self, ret):
         if not ret.startswith('+'):  # Les erreurs commencent par un +
-            self.send('OK')
+            self.send(ret.split(',')[1])
             return
         code = int(ret[1:].split(',')[0])
         if code == 2:  # Wrong number or format of arguments

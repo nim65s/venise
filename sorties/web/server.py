@@ -23,7 +23,7 @@ class Root(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        return Template(open('table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+        return Template(open('plan.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
 
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
@@ -37,11 +37,11 @@ class Root(Resource):
         return 'Ok'
 
 
-class Plan(Resource):
+class Table(Resource):
     isLeaf = True
 
     def render_GET(self, request):
-        return Template(open('plan.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+        return Template(open('table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
 
 
 class Subscribe(Resource):
@@ -80,9 +80,9 @@ class Subscribe(Resource):
 if __name__ == '__main__':
     root = Root()
     subscribe = Subscribe()
-    plan = Plan()
+    table = Table()
     root.putChild('sub', subscribe)
-    root.putChild('plan', plan)
+    root.putChild('table', table)
     site = server.Site(root)
     reactor.listenTCP(8000, site)
     log.startLogging(sys.stdout)
