@@ -33,6 +33,14 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'stop': True}])
         elif cmd == 'start':
             self.socket.send_json([int(agv), {'stop': False}])
+        elif cmd == 'reverse-ok':
+            self.socket.send_json([int(agv), {'reverse': True}])
+        elif cmd == 'reverse-ko':
+            self.socket.send_json([int(agv), {'reverse': False}])
+        elif cmd == 'smoothe-ok':
+            self.socket.send_json([int(agv), {'smoothe': True}])
+        elif cmd == 'smoothe-ko':
+            self.socket.send_json([int(agv), {'smoothe': False}])
         request.setResponseCode(200)
         return 'Ok'
 

@@ -78,20 +78,47 @@
                 </g>
             </g>
         </svg>
-        <ul>
-            <li class="2" style="color: red;"></li>
-            <li class="3" style="color: green;"></li>
-            <li class="4" style="color: blue;"></li>
-        </dl>
-        {% for arbre in range(2, 5) %}
-            <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop']})" type="button" class="btn btn-warning">Stop {{ arbre - 1 }}</button>
-            <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'start']})" type="button" class="btn btn-success">Start {{ arbre - 1 }}</button>
-        {% endfor %}
+        <table class="table table-striped">
+            <tr>
+                <th>Arbre</th><th colspan="2">Position</th><th colspan="2">Vitesse</th><th colspan="3">Tours</th>
+                <th>Marche</th><th>Reverse</th><th>Lissage</th>
+            </tr>
+            {% for arbre in range(2, 5) %}
+            <tr id='a{{ arbre }}'>
+                <th>{{ arbre - 1}}</th>
+                <td class="x"></td>
+                <td class="y"></td>
+                <td class="v"></td>
+                <td class="w"></td>
+                <td class="nt0"></td>
+                <td class="nt1"></td>
+                <td class="nt2"></td>
+                <td>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'start']})" type="button" class="btn btn-success">✔</button>
+                    <span class="stop"></span>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop']})" type="button" class="btn btn-warning">✘</button>
+                </td>
+                <td>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'reverse-ok']})" type="button" class="btn btn-success">✔</button>
+                    <span class="reverse"></span>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'reverse-ko']})" type="button" class="btn btn-warning">✘</button>
+                </td>
+                <td>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-ok']})" type="button" class="btn btn-success">✔</button>
+                    <span class="smoothe"></span>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-ko']})" type="button" class="btn btn-warning">✘</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
 
         <script>
             var last_seen = new Date();
             var size_coef = 2;
             var data;
+            var sv = ['x', 'y', 'v', 'w'];
+            var mv = ['nt'];
+            var bv = ['stop', 'reverse', 'smoothe'];
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {
@@ -122,8 +149,8 @@
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });
-                            $('li.' + a).html((a - 1) + ' : ' + data[a]['status']);
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
+                            $('#a' + a + ' .stop').html(data[a]['stop'] ? '✘' : '✔');
                         }
                     }
                     last_seen = new Date();
