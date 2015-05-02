@@ -55,7 +55,7 @@ class SortieAGV(Sortie):
                 self.send('%s Broken pipe…' % now())
 
     def process(self, reverse, smoothe, hote, **kwargs):
-        self.data[hote].update(**self.recv_agv(**kwargs))
+        self.data[hote].update(**self.recv_agv())
         self.data[hote].update(**self.copy_consignes(**kwargs))
         if reverse:
             self.data[hote].update(**self.reverse(**kwargs))
@@ -64,7 +64,7 @@ class SortieAGV(Sortie):
         self.socket.sendall(self.send_agv(**kwargs))
         self.check_ret(self.socket.recv(1024).decode('ascii'))
 
-    def recv_agv(self, hote, **kwargs):
+    def recv_agv(self):
         self.socket.sendall('getPosition()'.encode('ascii'))
         pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
         angles = [float(i.strip()) for i in pos[1:]]
