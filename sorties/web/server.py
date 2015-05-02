@@ -11,7 +11,7 @@ from twisted.internet.task import LoopingCall
 from twisted.python import log
 from twisted.web import server
 from twisted.web.resource import Resource
-from zmq import Context, SUB, SUBSCRIBE
+from zmq import Context, PUSH, SUB, SUBSCRIBE
 
 from settings import *  # YOLO
 
@@ -24,6 +24,20 @@ class Root(Resource):
 
     def render_GET(self, request):
         return Template(open('table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+
+    def render_POST(self, request):
+        self.socket = Context().socket(PUSH)
+        self.socket.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_PUSH))
+        print 0
+        print request.args
+        print 1
+        cmd = request.args['cmd'][0]
+        if cmd == 'stop moro':
+            self.socket.send_json([4, {'stop': True}])
+        elif cmd == 'start moro':
+            self.socket.send_json([4, {'stop': False}])
+        request.setResponseCode(200)
+        return 'Ok'
 
 
 class Plan(Resource):
