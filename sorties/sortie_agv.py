@@ -35,6 +35,7 @@ class SortieAGV(Sortie):
             self.connect()
         for var in self.to_send:
             self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
+        self.push.send_json([self.hote, {'last_seen_agv': str(now())}])
 
     def connect(self):
         while True:
