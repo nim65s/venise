@@ -94,7 +94,7 @@ class SortieAGV(Sortie):
     def send_agv(self, stop, vc, tc, **kwargs):
         if stop or abs(vc).sum() < 10:
             return b'stop()'
-        template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[1]})'
+        template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[2]})'
         return bytes(template.format(vc=vc, tc=tc).encode('ascii'))
 
     def check_ret(self, ret):
