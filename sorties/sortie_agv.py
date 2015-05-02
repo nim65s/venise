@@ -34,7 +34,6 @@ class SortieAGV(Sortie):
             self.send('%s Failed connection !' % now())
             self.connect()
         for var in self.to_send:
-            print(var, self.data[self.hote][var])
             self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
 
     def connect(self):
@@ -99,7 +98,6 @@ class SortieAGV(Sortie):
         vc, tt, tm = array(vt), array(tt), array(tm)
         if False:
             self.data[self.hote]['vc'] = vt
-            print(self.data[self.hote]['vc'], vt)
             return tm, tt
         dst = dist_angles(tm, tt)
         rev = abs(dst) > 2 * pi / 3
