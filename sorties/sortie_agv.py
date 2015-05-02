@@ -86,6 +86,7 @@ class SortieAGV(Sortie):
         if stop or kwargs['vc'] == [0, 0, 0]:
             return b'stop()'
         template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[1]})'
+        template = 'setSpeedAndPosition({vt[0]}, {tt[0]}, {vt[1]}, {tt[1]}, {vt[2]}, {tt[1]})'
         return bytes(template.format(**kwargs).encode('ascii'))
 
     def recv_agv(self):

@@ -66,10 +66,10 @@ class Trajectoire(Puller, Publisher):
         return round(atan2(vit_y, vit_x) % (2 * pi), 5), round(VIT_MOY_MAX * hypot(vit_x, vit_y), 5)
 
     def process_tourelles(self, **kwargs):
-        (t1, v1), (t2, v2), (t3, v3) = [self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)]
-        if (abs(v1) < 5) + (abs(v2) < 5) + (abs(v3) < 5) > 1:
-            v1 = v2 = v3 = 0
-        return {'tt': [t1, t2, t3], 'vt': [v1, v2, v3]}
+        tt, vt = zip(*[self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)])
+        if sum(abs(v) < 5 for v in vt > 1:
+            vt = [0, 0, 0]
+        return {'tt': tt, 'vt': vt}
 
 
 trajectoire_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
