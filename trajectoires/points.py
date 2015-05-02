@@ -38,16 +38,17 @@ class TrajectoirePoints(TrajectoireDestination):
     def set_state(self, s1, s2, s3):
         self.state = {2: s1, 3: s2, 4: s3}
         for i in [2, 3, 4]:
-            filename = expanduser('~/.state_%s_%i' % (self.__class__.__name__, i))
-            if isfile(filename):
-                with open(filename, 'r') as f:
-                    self.state[i] = int(f.read().strip())
+            if self.state[i] == -1:
+                filename = expanduser('~/.state_%s_%i' % (self.__class__.__name__, i))
+                if isfile(filename):
+                    with open(filename, 'r') as f:
+                        self.state[i] = int(f.read().strip())
         print(self.state)
 
 trajectoire_points_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')
-trajectoire_points_parser.add_argument('--s1', type=int, default=0, choices=range(len(PATHS[2])))
-trajectoire_points_parser.add_argument('--s2', type=int, default=0, choices=range(len(PATHS[3])))
-trajectoire_points_parser.add_argument('--s3', type=int, default=0, choices=range(len(PATHS[4])))
+trajectoire_points_parser.add_argument('--s1', type=int, default=-1, choices=range(len(PATHS[2])) + [-1])
+trajectoire_points_parser.add_argument('--s2', type=int, default=-1, choices=range(len(PATHS[3])) + [-1])
+trajectoire_points_parser.add_argument('--s3', type=int, default=-1, choices=range(len(PATHS[4])) + [-1])
 trajectoire_points_parser.add_argument('--w1', type=float, default=0)
 trajectoire_points_parser.add_argument('--w2', type=float, default=0)
 trajectoire_points_parser.add_argument('--w3', type=float, default=0)
