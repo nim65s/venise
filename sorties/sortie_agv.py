@@ -98,7 +98,7 @@ class SortieAGV(Sortie):
 
     def reverse(self, vt, tt, tm, **kwargs):
         vc, tt, tm = array(vt), array(tt), array(tm)
-        if False:
+        if self.data[self.hote]['reversable']:
             self.data[self.hote]['vc'] = vt
             return tm, tt
         dst = dist_angles(tm, tt)
@@ -112,7 +112,7 @@ class SortieAGV(Sortie):
 
     def smoothe(self, tm, tt):
         """ Renvoie la consigne en angle """
-        if True:
+        if self.data[self.hote]['smoothable']:
             return tt.tolist()
         dst = dist_angles(tm, tt)
         return tt.tolist() if abs(dst).max() < SMOOTH_FACTOR else ((tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)).round(5).tolist()
