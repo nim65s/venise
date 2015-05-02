@@ -100,6 +100,7 @@ class SortieAGV(Sortie):
         vc, tt, tm = array(vt), array(tt), array(tm)
         if True:
             self.data[self.hote]['vc'] = vt
+            print(self.data[self.hote]['vc'], vt)
             return tm, tt
         dst = dist_angles(tm, tt)
         rev = abs(dst) > 2 * pi / 3
