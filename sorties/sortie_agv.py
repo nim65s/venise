@@ -34,7 +34,7 @@ class SortieAGV(Sortie):
             self.send('%s Failed connection !' % now())
             self.connect()
         for var in self.to_send:
-            self.push.send_json([self.hote, {var: self.data[self.hote][var]}])
+            self.push.send_json([self.hote, {var: self.data[self.hote][var].round(5).tolist()}])
         self.push.send_json([self.hote, {'last_seen_agv': str(now())}])
 
     def connect(self):
@@ -54,12 +54,48 @@ class SortieAGV(Sortie):
             except BrokenPipeError:
                 self.send('%s Broken pipe…' % now())
 
-    def process(self, **kwargs):
-        self.recv_agv()
-        self.data[self.hote]['tc'] = self.smoothe(*self.reverse(**kwargs))
-        self.force(**kwargs)
-        self.socket.sendall(self.send_agv(**self.data[self.hote]))
+    def process(self, reverse, smoothe, hote, **kwargs):
+        self.data[hote].update(**self.recv_agv(**kwargs))
+        self.data[hote].update(**self.copy_consignes(**kwargs))
+        if reverse:
+            self.data[hote].update(**self.reverse(**kwargs))
+        if smoothe:
+            self.data[hote].update(**self.smoothe(**kwargs))
+        self.socket.sendall(self.send_agv(**kwargs))
         self.check_ret(self.socket.recv(1024).decode('ascii'))
+
+    def recv_agv(self, hote, **kwargs):
+        self.socket.sendall('getPosition()'.encode('ascii'))
+        pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
+        angles = [float(i.strip()) for i in pos[1:]]
+        return {
+                'tm': array([a % (2 * pi) for a in angles]),
+                'nt': array([a // (2 * pi) for a in angles]).astype(int),
+                }
+
+    def copy_consignes(self, vt, tt, reversed, **kwargs):
+        return {'vc': array(vt), 'tc': array(tt), 'reversed': array(reversed)}
+
+    def reverse(self, vc, tc, tm, reversed, **kwargs):
+        vc[where(reversed)] *= -1
+        tc[where(reversed)] += pi
+        tc[where(reversed)] %= 2 * pi
+        rev = abs(dist_angles(tm, tc)) > 2 * pi / 3
+        vc[where(rev)] *= -1
+        tc[where(rev)] += pi
+        tc[where(rev)] %= 2 * pi
+        reversed ^= rev
+        return {'vc': vc, 'reversed': reversed}
+
+    def smoothe(self, tm, tc, **kwargs):
+        dst = dist_angles(tm, tc)
+        return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR else (tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)}
+
+    def send_agv(self, stop, **kwargs):
+        if stop or kwargs['vc'] == [0, 0, 0]:
+            return b'stop()'
+        template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[1]})'
+        return bytes(template.format(**kwargs).encode('ascii'))
 
     def check_ret(self, ret):
         if not ret.startswith('+'):  # Les erreurs commencent par un +
@@ -81,53 +117,6 @@ class SortieAGV(Sortie):
             self.send('Trop de tours !')
         else:
             raise RuntimeError(ret)
-
-    def send_agv(self, stop, **kwargs):
-        if stop or kwargs['vc'] == [0, 0, 0]:
-            return b'stop()'
-        template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[1]})'
-        template = 'setSpeedAndPosition({vt[0]}, {tt[0]}, {vt[1]}, {tt[1]}, {vt[2]}, {tt[1]})'
-        return bytes(template.format(**kwargs).encode('ascii'))
-
-    def recv_agv(self):
-        self.socket.sendall('getPosition()'.encode('ascii'))
-        pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
-        angles = [float(i.strip()) for i in pos[1:]]
-        self.data[self.hote]['tm'] = [round(a % (2 * pi), 5) for a in angles]
-        self.data[self.hote]['nt'] = [int(a // (2 * pi)) for a in angles]
-
-    def reverse(self, vt, tt, tm, **kwargs):
-        vc, tt, tm = array(vt), array(tt), array(tm)
-        if self.data[self.hote]['reversable']:
-            self.data[self.hote]['vc'] = vt
-            return tm, tt
-        dst = dist_angles(tm, tt)
-        rev = abs(dst) > 2 * pi / 3
-        vc[where(rev)] *= -1
-        tt[where(rev)] += pi
-        tt[where(rev)] %= 2 * pi
-        self.data[self.hote]['vc'] = vc.tolist()
-        self.data[self.hote]['reversed'] = rev.tolist()
-        return tm, tt
-
-    def smoothe(self, tm, tt):
-        """ Renvoie la consigne en angle """
-        if self.data[self.hote]['smoothable']:
-            return tt.tolist()
-        dst = dist_angles(tm, tt)
-        return tt.tolist() if abs(dst).max() < SMOOTH_FACTOR else ((tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)).round(5).tolist()
-
-    def force(self, force, tt, tm, **kwargs):
-        """ Sur un ordre de dé-smoothage, on dé-smoothe """
-        if not force:
-            return
-        tt, tm = array(tt), array(tm)
-        if (abs(tt - tm) % pi < 0.01).all():
-            self.push.send_json([self.hote, {'force': False}])
-            return
-        self.data[self.hote]['vc'] = [10, 10, 10]
-        self.data[self.hote]['tc'] = tt.round(5).tolist()
-
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()
