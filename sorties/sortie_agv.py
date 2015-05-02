@@ -97,7 +97,7 @@ class SortieAGV(Sortie):
 
     def reverse(self, vt, tt, tm, **kwargs):
         vc, tt, tm = array(vt), array(tt), array(tm)
-        if True:
+        if False:
             self.data[self.hote]['vc'] = vt
             print(self.data[self.hote]['vc'], vt)
             return tm, tt
