@@ -56,12 +56,12 @@ class SortieAGV(Sortie):
 
     def process(self, reverse, smoothe, hote, **kwargs):
         self.data[hote].update(**self.recv_agv())
-        self.data[hote].update(**self.copy_consignes(**kwargs))
+        self.data[hote].update(**self.copy_consignes(**self.data[hote]))
         if reverse:
-            self.data[hote].update(**self.reverse(**kwargs))
+            self.data[hote].update(**self.reverse(**self.data[hote]))
         if smoothe:
-            self.data[hote].update(**self.smoothe(**kwargs))
-        self.socket.sendall(self.send_agv(**kwargs))
+            self.data[hote].update(**self.smoothe(**self.data[hote]))
+        self.socket.sendall(self.send_agv(**self.data[hote]))
         self.check_ret(self.socket.recv(1024).decode('ascii'))
 
     def recv_agv(self):
