@@ -56,8 +56,7 @@ class SortieAGV(Sortie):
 
     def process(self, **kwargs):
         self.recv_agv()
-        #self.data[self.hote]['tc'] = self.smoothe(*self.reverse(**kwargs))
-        self.data[self.hote]['tc'] = self.data[self.hote]['tt']
+        self.data[self.hote]['tc'] = self.smoothe(*self.reverse(**kwargs))
         self.force(**kwargs)
         self.socket.sendall(self.send_agv(**self.data[self.hote]))
         self.check_ret(self.socket.recv(1024).decode('ascii'))
