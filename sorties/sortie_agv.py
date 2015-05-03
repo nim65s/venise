@@ -27,10 +27,10 @@ class SortieAGV(Puller, Pusher):
 
     def loop(self):
         self.pull()
-      # if datetime.now() - self.last_seen > timedelta(seconds=4):
-      #     self.send('déconnecté du serveur')
-      # if datetime.now() - self.last_seen > timedelta(seconds=5):
-      #     self.data[self.hote]['stop'] = True
+        if datetime.now() - self.last_seen > timedelta(seconds=4):
+            self.send('déconnecté du serveur')
+        if datetime.now() - self.last_seen > timedelta(seconds=5):
+            self.data[self.hote]['stop'] = True
         try:
             self.process(**self.data[self.hote])
         except (ConnectionResetError, timeout, BrokenPipeError):
