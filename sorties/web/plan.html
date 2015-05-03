@@ -137,7 +137,7 @@
                                     $('#a' + a + ' .' + mv[v] + [i]).html(data[a][mv[v]][i]);
                                 }
                             }
-                            for (v in bv) $('#a' + a + ' .' + bv[v]).html(data[a][bv[v]] ? '✘' : '✔');
+                            for (v in bv) $('#a' + a + ' .' + bv[v]).html(data[a][bv[v]] ? '✔' : '✘');
                             if (data[a]['x'] != 0) {
                                 d = $('#path' + a).attr('d');
                                 $('#path' + a).attr({d: (d ? d + " L " : "M ") + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }})});
