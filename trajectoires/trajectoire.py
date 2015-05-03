@@ -46,7 +46,7 @@ class Trajectoire(Puller, Publisher):
         self.send()
         sleep(1)
         for hote in self.hotes:
-            self.data[hote].update(stop=True)
+            self.data[hote].update(start=False)
         self.send()
         print('stopped.')
         super().fin()

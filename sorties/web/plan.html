@@ -95,7 +95,7 @@
                 <td class="nt2"></td>
                 <td>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'start']})" type="button" class="btn btn-success">✔</button>
-                    <span class="stop"></span>
+                    <span class="start"></span>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop']})" type="button" class="btn btn-warning">✘</button>
                 </td>
                 <td>
@@ -112,19 +112,32 @@
             {% endfor %}
         </table>
 
+        <ul>
+            <li class="2" style="color: red;"></li>
+            <li class="3" style="color: green;"></li>
+            <li class="4" style="color: blue;"></li>
+        </ul>
+
         <script>
             var last_seen = new Date();
             var size_coef = 2;
             var data;
             var sv = ['x', 'y', 'v', 'w'];
             var mv = ['nt'];
-            var bv = ['stop', 'reverse', 'smoothe'];
+            var bv = ['start', 'reverse', 'smoothe'];
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {
                     data = JSON.parse(e.data);
                     for (a = 2; a < 5; a++) {
                         if (data[a]) {
+                            for (v in sv) $('#a' + a + ' .' + sv[v]).html(data[a][sv[v]].toFixed(1));
+                            for (v in mv) {
+                                for (i = 0; i < data[a][mv[v]].length; i++) {
+                                    $('#a' + a + ' .' + mv[v] + [i]).html(data[a][mv[v]][i]);
+                                }
+                            }
+                            for (v in bv) $('#a' + a + ' .' + bv[v]).html(data[a][bv[v]] ? '✘' : '✔');
                             if (data[a]['x'] != 0) {
                                 d = $('#path' + a).attr('d');
                                 $('#path' + a).attr({d: (d ? d + " L " : "M ") + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }})});
@@ -149,8 +162,8 @@
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });
-                            $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
-                            $('#a' + a + ' .stop').html(data[a]['stop'] ? '✘' : '✔');
+                            $('#agv' + a).css('fill', data[a]['start'] ? 'none' : 'yellow');
+                            $('li.' + a).html(data[a]['status']);
                         }
                     }
                     last_seen = new Date();

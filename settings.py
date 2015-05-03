@@ -38,7 +38,7 @@ PORT_TIM = 2112  # TODO: y’en aura deux sur les AGV, et pour les tests y’a u
 N_SONDES = 3  # par arbre
 
 # On veut faire faire pi/2 en 10 cm, si on est à vitesse max
-SMOOTH_FACTOR = pi / 2 / (60 * 0.1 / PERIODE)
+SMOOTH_FACTOR = pi / 2 / (60 * 0.5 / PERIODE)
 SMOOTH_SPEED = {
         'v': 0.0003 / PERIODE,
         'w': 0.00003 / PERIODE,
@@ -55,9 +55,11 @@ ALLER_RETOURS = {
         Hote.ame: [[13, 14], [18, 14]],
         }
 PATHS = {
-        Hote.moro: [[-7, 6], [-7, 12], [-10, 12], [-13, 9], [-13, 6]],
-        Hote.ame: [[8, 7], [8, 8], [11, 14], [13, 17], [14.5, 17.5], [16, 17], [17, 16], [20, 14], [27, 14], [30, 16], [31, 17],
-            [33, 17], [34, 16], [34, 15], [32, 13], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5], [9, 6.5]],
+       # Hote.moro: [[-7, 6], [-7, 12], [-9, 12], [-13, 8], [-13, 6]],
+        Hote.moro: [[-8, 7], [-12, 7], [-8, 11]],
+        Hote.ame: [[11, 10], [16, 10], [18, 14], [13, 14]],
+      #  Hote.ame: [[8, 7], [8, 8], [11, 14], [13, 17], [14.5, 17.5], [16, 17], [17, 16], [20, 14], [27, 14], [30, 16], [31, 17],
+      #      [33, 17], [34, 16], [34, 15], [32, 13], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5], [9, 6.5]],
         Hote.yuki: [[8, 7], [8, 8], [11, 14], [13, 17], [14.5, 17.5], [16, 17], [17, 16], [20, 14], [27, 14], [30, 16], [31, 17],
             [33, 17], [34, 16], [34, 15], [32, 13], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5], [9, 6.5]],
         }
@@ -76,12 +78,11 @@ BERCAIL = {
         }
 
 DATA = {
-        'stop': False,
         'status': 'Pas connecté',
         'x': 0, 'y': 0, 'a': 0,  # Position
         'v': 0, 'w': 0, 't': 0,  # Vitesse
         'vg': 0, 'wg': 0, 'tg': 0,  # Vitesse
         'vt': [0, 0, 0], 'vc': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne
         'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,
-        'smoothe': True, 'reverse': True, 'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)),
+        'start': True, 'smoothe': True, 'reverse': True, 'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)),
         }
