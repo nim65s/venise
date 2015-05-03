@@ -6,7 +6,7 @@ from time import sleep
 from numpy import array, where, logical_and
 
 from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR, VIT_LIM_REV
-from ..vmq import vmq_parser
+from ..vmq import Puller, Pusher, vmq_parser
 from ..utils.dist_angles import dist_angles
 from .sortie import Sortie
 
@@ -14,13 +14,16 @@ now = datetime.now
 per = timedelta(seconds=PERIODE / 2)
 
 
-class SortieAGV(Sortie):
+class SortieAGV(Puller, Pusher):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.socket = socket()
         self.connect()
         self.to_send = ['vc', 'tc', 'tm', 'nt', 'reversed']
         self.data[self.hote]['reversed'] = [False, False, False]
+
+    def send(self, val, var='status'):
+        self.push.send_json([self.hote, {var: val}])
 
     def loop(self):
         self.pull()
