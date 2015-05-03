@@ -1,5 +1,6 @@
 from ..settings import BERCAIL
-from .destination import TrajectoireDestination, trajectoire_destination_parser
+from .trajectoire import trajectoire_parser
+from .destination import TrajectoireDestination
 
 
 class TrajectoireBercail(TrajectoireDestination):
@@ -19,4 +20,4 @@ class TrajectoireBercail(TrajectoireDestination):
 
 
 if __name__ == '__main__':
-    TrajectoireBercail(**vars(trajectoire_destination_parser.parse_args())).run()
+    TrajectoireBercail(**vars(trajectoire_parser.parse_args())).run()
