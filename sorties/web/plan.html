@@ -80,8 +80,8 @@
         </svg>
         <table class="table table-striped">
             <tr>
-                <th>Arbre</th><th colspan="2">Position</th><th colspan="2">Vitesse</th><th colspan="3">Tours</th>
-                <th>Marche</th><th>Reverse</th><th>Lissage</th>
+                <th>Arbre</th><th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>
+                <th>Marche</th><th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th>
             </tr>
             {% for arbre in range(2, 5) %}
             <tr id='a{{ arbre }}'>
@@ -108,6 +108,11 @@
                     <span class="smoothe"></span>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-ko']})" type="button" class="btn btn-warning">✘</button>
                 </td>
+                <td>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-speed-ok']})" type="button" class="btn btn-success">✔</button>
+                    <span class="smoothe-speed"></span>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-speed-ko']})" type="button" class="btn btn-warning">✘</button>
+                </td>
             </tr>
             {% endfor %}
         </table>
@@ -124,7 +129,7 @@
             var data;
             var sv = ['x', 'y', 'v', 'w'];
             var mv = ['nt'];
-            var bv = ['start', 'reverse', 'smoothe'];
+            var bv = ['start', 'reverse', 'smoothe', 'smoothe_speed'];
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {

@@ -1,10 +1,11 @@
 from zmq import PUSH
 from argparse import ArgumentParser
 from datetime import datetime
-from math import atan2, cos, hypot, pi, sin
+from math import atan2, cos, hypot, pi, sin, copysign
 from time import sleep
 
-from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA, Hote
+from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA, Hote, SMOOTH_SPEED
+from ..utils.dist_angles import dist_angle
 from ..vmq import Puller, Publisher, vmq_parser
 
 
@@ -65,7 +66,7 @@ class Trajectoire(Puller, Publisher):
 
     def smooth_speed(self, smoothe_speed, v, w, t, vg, wg, tg, **kwargs):
         if smoothe_speed:
-            dv, dw, dt = v - vg, w - wg, t - tg
+            dv, dw, dt = v - vg, w - wg, dist_angle(t, tg)
             return {
                     'v': round(v - copysign(SMOOTH_SPEED['v'], dv), 5) if abs(dv) > SMOOTH_SPEED['v'] else vg,
                     'w': round(w - copysign(SMOOTH_SPEED['w'], dw), 5) if abs(dw) > SMOOTH_SPEED['w'] else wg,

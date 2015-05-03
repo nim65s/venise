@@ -9,3 +9,10 @@ def dist_angles(actuel, cible):
         dst[where(dst > pi)] -= 2 * pi
     return dst
 
+def dist_angle(actuel, cible):
+    dst = actuel - cible
+    while dst < -pi:
+        dst += 2 * pi
+    while dst > pi:
+        dst -= 2 * pi
+    return dst
