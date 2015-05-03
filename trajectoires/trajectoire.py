@@ -18,20 +18,18 @@ class Trajectoire(Puller, Publisher):
         self.data['timestamp'] = datetime.now().timestamp()
         self.data['trajectoire'] = self.__class__.__name__
 
-        self.push = {h: self.context.socket(PUSH) for h in self.hotes}
-        for h in self.hotes:
-            self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
-
     def send(self):
         self.data['timestamp'] = datetime.now().timestamp()
         self.pub()
-        for h in self.hotes:
-            self.push[h].send_json([h, self.data[h]])
 
     def loop(self):
+        print(0)
         self.pull()
+        print(1)
         self.update()
+        print(2)
         self.send()
+        print(3)
         sleep(self.period)
 
     def fin(self):

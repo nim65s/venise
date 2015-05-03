@@ -24,9 +24,9 @@ class SortieAGV(Sortie):
 
     def loop(self):
         self.pull()
-        if datetime.now() - self.last_seen > timedelta(seconds=2):
+        if datetime.now() - self.last_seen > timedelta(seconds=4):
             self.send('déconnecté du serveur')
-        if datetime.now() - self.last_seen > timedelta(seconds=3):
+        if datetime.now() - self.last_seen > timedelta(seconds=5):
             self.data[self.hote]['stop'] = True
         try:
             self.process(**self.data[self.hote])
