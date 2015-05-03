@@ -4,7 +4,7 @@ from datetime import datetime
 from math import atan2, cos, hypot, pi, sin
 from time import sleep
 
-from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA
+from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA, Hote
 from ..vmq import Puller, Publisher, vmq_parser
 
 
@@ -20,13 +20,15 @@ class Trajectoire(Puller, Publisher):
 
         self.push = {h: self.context.socket(PUSH) for h in self.hotes}
         for h in self.hotes:
-            self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
+            if h != Hote.yuki:
+                self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
 
     def send(self):
         self.data['timestamp'] = datetime.now().timestamp()
         self.pub()
         for h in self.hotes:
-            self.push[h].send_json([h, self.data[h]])
+            if h != Hote.yuki:
+                self.push[h].send_json([h, self.data[h]])
 
     def loop(self):
         self.pull()
@@ -54,11 +56,22 @@ class Trajectoire(Puller, Publisher):
     def update(self):
         for hote in self.hotes:
             self.data[hote].update(**self.process_speed(**self.data[hote]))
+            self.data[hote].update(**self.smooth_speed(**self.data[hote]))
             self.data[hote].update(**self.process_tourelles(**self.data[hote]))
         self.data['timestamp'] = datetime.now().timestamp()
 
     def process_speed(self, **kwargs):
         raise NotImplementedError()
+
+    def smooth_speed(self, smoothe_speed, v, w, t, vg, wg, tg, **kwargs):
+        if smoothe_speed:
+            dv, dw, dt = v - vg, w - wg, t - tg
+            return {
+                    'v': round(v - copysign(SMOOTH_SPEED['v'], dv), 5) if abs(dv) > SMOOTH_SPEED['v'] else vg,
+                    'w': round(w - copysign(SMOOTH_SPEED['w'], dw), 5) if abs(dw) > SMOOTH_SPEED['w'] else wg,
+                    't': round((t - copysign(SMOOTH_SPEED['t'], dt)) % (2 * pi), 5) if abs(dt) > SMOOTH_SPEED['t'] else tg,
+                    }
+        return {'v': vg, 'w': wg, 't': tg}
 
     def tourelle(self, pos_roue, v, w, t, **kwargs):
         vit_x = v * cos(t) - w * sin(pos_roue)

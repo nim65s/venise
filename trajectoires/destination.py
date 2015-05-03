@@ -18,11 +18,11 @@ class TrajectoireDestination(Trajectoire):
     def go_to_point(self, hote, x, y, a):
         xi, yi = self.destination[hote]
         if x == y == a == 0 or self.distance(hote, x, y) < 0.3 or xi == yi == 0:
-            return {'v': 0, 'w': 0}
+            return {'vg': 0, 'wg': 0}
         return {
-                'v': self.vi[hote],
-                't': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
-                'w': self.wi[hote],
+                'vg': self.vi[hote],
+                'tg': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
+                'wg': self.wi[hote],
                 }
 
 
