@@ -21,14 +21,26 @@ class TrajectoireDestination(Trajectoire):
         xi, yi = self.destination[hote]
         if x == y == a == 0 or self.distance(hote, x, y) < 0.3 or xi == yi == 0:
             return {'vg': 0, 'wg': 0}
-        m = datetime.now().minute + datetime.now().second / 60
         return {
-                'vg': self.vi[hote],
-                #'vg': round(cos(m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
+                'vg': self.get_v(hote),
+                'wg': self.get_w(hote),
                 'tg': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
-                #'wg': self.wi[hote],
-                'wg': round(sin(m / 6 + (pi / 2 if hote == Hote.moro else 0)) / 2, 5),
                 }
+
+    def get_v(self, hote):
+        # 'vg': round(cos(m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
+        return self.vi[hote]
+
+    def get_w(self, hote):
+        m = datetime.now().minute + datetime.now().second / 60
+        # 'wg': self.wi[hote]
+        if hote == Hote.moro:
+            return round(sin(m / 6) / 2, 5)
+        if hote == Hote.ame:
+            return round(sin(m / 6 + 2 * pi / 3) / 2, 5)
+        if hote == Hote.yuki:
+            return round(sin(m / 6 + 4 * pi / 3) / 2, 5)
+
 
 
 trajectoire_destination_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')

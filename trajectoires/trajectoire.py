@@ -22,16 +22,14 @@ class Trajectoire(Puller, Publisher):
 
         self.push = {h: self.context.socket(PUSH) for h in self.hotes}
         for h in self.hotes:
-            if h != Hote.ame:
-                self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
-                self.data[h].update(**self.get_speed(h))
+            self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
+            self.data[h].update(**self.get_speed(h))
 
     def send(self):
         self.data['timestamp'] = datetime.now().timestamp()
         self.pub()
         for h in self.hotes:
-            if h != Hote.ame:
-                self.push[h].send_json([h, self.data[h]])
+            self.push[h].send_json([h, self.data[h]])
 
     def loop(self):
         self.pull()

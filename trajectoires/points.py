@@ -22,7 +22,7 @@ class TrajectoirePoints(TrajectoireDestination):
         return self.go_to_point(hote, x, y, a)
 
     def check_distance(self, hote, x, y):
-        if self.distance(hote, x, y) > 0.5:
+        if self.distance(hote, x, y) > 1:
             return
         self.state[hote] = (self.state[hote] + 1) % len(self.paths[hote])
         print(datetime.now(), hote, self.state[hote], self.paths[hote][self.state[hote]])
