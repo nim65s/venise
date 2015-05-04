@@ -24,10 +24,10 @@ class TrajectoireDestination(Trajectoire):
         m = datetime.now().minute + datetime.now().second / 60
         return {
                 #'vg': self.vi[hote],
-                'vg': round(cos(4 * m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
+                'vg': round(cos(m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
                 'tg': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
                 #'wg': self.wi[hote],
-                'wg': round(sin(m / 4 + (pi / 2 if hote == Hote.moro else 0)) / 3, 5),
+                'wg': round(sin(m / 6 + (pi / 2 if hote == Hote.moro else 0)), 5),
                 }
 
 
