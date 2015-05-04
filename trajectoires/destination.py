@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
-from math import atan2, hypot, pi
+from math import atan2, hypot, pi, sin, cos
+from datetime import datetime
 
+from ..settings import Hote
 from .trajectoire import Trajectoire, trajectoire_parser
 
 
@@ -19,10 +21,13 @@ class TrajectoireDestination(Trajectoire):
         xi, yi = self.destination[hote]
         if x == y == a == 0 or self.distance(hote, x, y) < 0.3 or xi == yi == 0:
             return {'vg': 0, 'wg': 0}
+        m = datetime.now().minute + datetime.now().second / 60
         return {
-                'vg': self.vi[hote],
+                #'vg': self.vi[hote],
+                'vg': round(cos(4 * m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
                 'tg': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
-                'wg': self.wi[hote],
+                #'wg': self.wi[hote],
+                'wg': round(sin(m / 4 + (pi / 2 if hote == Hote.moro else 0)) / 3, 5),
                 }
 
 

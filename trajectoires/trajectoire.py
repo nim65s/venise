@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 from datetime import datetime
 from math import atan2, cos, hypot, pi, sin, copysign
 from time import sleep
+from os.path import expanduser, isfile
 
 from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA, Hote, SMOOTH_SPEED
 from ..utils.dist_angles import dist_angle
@@ -21,14 +22,15 @@ class Trajectoire(Puller, Publisher):
 
         self.push = {h: self.context.socket(PUSH) for h in self.hotes}
         for h in self.hotes:
-            if h != Hote.yuki:
+            if h != Hote.ame:
                 self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
+                self.data[h].update(**self.get_speed(h))
 
     def send(self):
         self.data['timestamp'] = datetime.now().timestamp()
         self.pub()
         for h in self.hotes:
-            if h != Hote.yuki:
+            if h != Hote.ame:
                 self.push[h].send_json([h, self.data[h]])
 
     def loop(self):
@@ -58,6 +60,7 @@ class Trajectoire(Puller, Publisher):
         for hote in self.hotes:
             self.data[hote].update(**self.process_speed(**self.data[hote]))
             self.data[hote].update(**self.smooth_speed(**self.data[hote]))
+            self.save_speed(**self.data[hote])
             self.data[hote].update(**self.process_tourelles(**self.data[hote]))
         self.data['timestamp'] = datetime.now().timestamp()
 
@@ -84,6 +87,20 @@ class Trajectoire(Puller, Publisher):
         if sum(abs(v) < 5 for v in vt) > 1:
             vt = [0, 0, 0]
         return {'tt': tt, 'vt': vt}
+
+    def save_speed(self, hote, v, w, t, **kwargs):
+        with open(expanduser('~/.state_speed_%i' % hote), 'w') as f:
+            print([v, w, t], file=f)
+
+    def get_speed(self, hote):
+        filename = expanduser('~/.state_speed_%i' % hote)
+        if isfile(filename):
+            with open(filename, 'r') as f:
+                v, w, t = eval(f.read())
+        else:
+            v, w, t = 0, 0, 0
+        return {'v': v, 'w': w, 't': t}
+
 
 
 trajectoire_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')

@@ -41,6 +41,10 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'smoothe': True}])
         elif cmd == 'smoothe-ko':
             self.socket.send_json([int(agv), {'smoothe': False}])
+        elif cmd == 'smoothe-speed-ok':
+            self.socket.send_json([int(agv), {'smoothe_speed': True}])
+        elif cmd == 'smoothe-speed-ko':
+            self.socket.send_json([int(agv), {'smoothe_speed': False}])
         request.setResponseCode(200)
         return 'Ok'
 
