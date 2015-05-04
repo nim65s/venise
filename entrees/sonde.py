@@ -12,6 +12,7 @@ class Sonde(Entree):
 
     def loop(self):
         self.check_value(self.process(self.data[self.hote][self.nom]))
+        self.data[self.hote].update(**self.process_granier(**self.data[self.hote]))
         self.send()
         sleep(self.period)
 

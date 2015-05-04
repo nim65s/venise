@@ -22,16 +22,16 @@ class TrajectoireDestination(Trajectoire):
         if x == y == a == 0 or self.distance(hote, x, y) < 0.3 or xi == yi == 0:
             return {'vg': 0, 'wg': 0}
         return {
-                'vg': self.get_v(hote),
-                'wg': self.get_w(hote),
+                'vg': self.get_v(**self.data[hote]),
+                'wg': self.get_w(**self.data[hote]),
                 'tg': round((atan2(y - yi, x - xi) - a) % (2 * pi), 5),
                 }
 
-    def get_v(self, hote):
+    def get_v(self, hote, **kwargs):
         # 'vg': round(cos(m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
         return self.vi[hote]
 
-    def get_w(self, hote):
+    def get_w(self, hote, **kwargs):
         m = datetime.now().minute + datetime.now().second / 60
         # 'wg': self.wi[hote]
         if hote == Hote.moro:
