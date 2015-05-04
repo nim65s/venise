@@ -27,6 +27,7 @@
                         <g id="g2">
                             <polygon points="{% for p in PATHS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
                             <polygon points="{% for p in ALLER_RETOURS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
+                            <polygon points="{% for p in BORDS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path2" />
                             <g id="agv2">
                                 <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
@@ -44,6 +45,7 @@
                         <g id="g3">
                             <polygon points="{% for p in PATHS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
                             <polygon points="{% for p in ALLER_RETOURS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
+                            <polygon points="{% for p in BORDS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path3" />
                             <g id="agv3">
                                 <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
@@ -61,6 +63,7 @@
                         <g id="g4">
                             <polygon points="{% for p in PATHS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
                             <polygon points="{% for p in ALLER_RETOURS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
+                            <polygon points="{% for p in BORDS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path4" />
                             <g id="agv4">
                                 <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
