@@ -5,7 +5,7 @@ from math import atan2, cos, hypot, pi, sin, copysign
 from time import sleep
 from os.path import expanduser, isfile
 
-from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA, Hote, SMOOTH_SPEED
+from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA, Hote, SMOOTH_SPEED, FAILS
 from ..utils.dist_angles import dist_angle
 from ..vmq import Puller, Publisher, vmq_parser
 
@@ -22,14 +22,16 @@ class Trajectoire(Puller, Publisher):
 
         self.push = {h: self.context.socket(PUSH) for h in self.hotes}
         for h in self.hotes:
-            self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
-            self.data[h].update(**self.get_speed(h))
+            if h not in FAILS:
+                self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
+                self.data[h].update(**self.get_speed(h))
 
     def send(self):
         self.data['timestamp'] = datetime.now().timestamp()
         self.pub()
         for h in self.hotes:
-            self.push[h].send_json([h, self.data[h]])
+            if h not in FAILS:
+                self.push[h].send_json([h, self.data[h]])
 
     def loop(self):
         self.pull()

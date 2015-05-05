@@ -12,6 +12,7 @@ try:
 except KeyError:
     CURRENT_HOST = Hote.cerf
 MAIN_HOST = Hote.cerf
+FAILS = []
 
 # Constantes AGV
 RAYON_AGV = 1.180
@@ -56,8 +57,8 @@ ALLER_RETOURS = {
         }
 PATHS = {
         Hote.moro: [[-8, 7], [-11, 7], [-11, 10], [-10, 11], [-8, 11]],
-        Hote.ame: [[11, 10], [19, 10], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 8.5]],
-        Hote.yuki: [[11, 10], [19, 10], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 8.5]],
+        Hote.ame: [[11, 11], [19, 11], [24, 9.5], [25, 7.5], [24, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 9]],
+        Hote.yuki: [[11, 11], [19, 11], [24, 9.5], [25, 7.5], [24, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 9]],
         #Hote.yuki: [[8, 7], [8, 8], [11, 10], [19, 10], [32, 15], [33, 14], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5], [9, 6.5]],
         }
 
@@ -92,3 +93,4 @@ DATA = {
         'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,
         'start': True, 'smoothe': True, 'smoothe_speed': True, 'reverse': True, 'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)),
         }
+
