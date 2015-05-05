@@ -5,6 +5,12 @@ from ..settings import N_SONDES
 
 
 class Granier(Sonde):
+    def loop(self):
+        self.check_value(self.process(self.data[self.hote][self.nom]))
+        self.data[self.hote].update(**self.process_granier(**self.data[self.hote]))
+        self.send()
+        sleep(self.period)
+
     def process_granier(self, granier, gmi, gma, gm, **kwargs):
         for i in range(N_SONDES):
             gmi[i] = min(granier[i], gmi[i])
@@ -13,4 +19,4 @@ class Granier(Sonde):
         return {'gma': gma, 'gmi': gmi, 'gm': gm}
 
 granier_parser = ArgumentParser(parents=[sonde_parser], conflict_handler='resolve')
-granier_parser.set_defaults(nom='granier', period=30, n_values=3, maxi=5, mini=0)
+granier_parser.set_defaults(nom='granier', period=25, n_values=3, maxi=5, mini=0)
