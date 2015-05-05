@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from time import sleep
 
 from .sonde import Sonde, sonde_parser
 from ..settings import N_SONDES
