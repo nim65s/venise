@@ -5,6 +5,10 @@ from ..settings import N_SONDES
 
 
 class Granier(Sonde):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.data[self.hote].update(gmi=[10] * N_SONDES, gma=[-10] * N_SONDES, gm=[0] * N_SONDES)
+
     def loop(self):
         self.check_value(self.process(self.data[self.hote][self.nom]))
         self.data[self.hote].update(**self.process_granier(**self.data[self.hote]))
