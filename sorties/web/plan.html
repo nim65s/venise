@@ -84,7 +84,7 @@
         <table class="table table-striped">
             <tr>
                 <th>Arbre</th><th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>
-                <th>Marche</th><th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th>
+                <th>Marche</th><th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th><th>Boost</th>
             </tr>
             {% for arbre in range(2, 5) %}
             <tr id='a{{ arbre }}'>
@@ -116,6 +116,11 @@
                     <span class="smoothe_speed"></span>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-speed-ko']})" type="button" class="btn btn-warning">✘</button>
                 </td>
+                <td>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'boost-ok']})" type="button" class="btn btn-success">✔</button>
+                    <span class="boost"></span>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'boost-ko']})" type="button" class="btn btn-warning">✘</button>
+                </td>
             </tr>
             {% endfor %}
         </table>
@@ -132,7 +137,7 @@
             var data;
             var sv = ['x', 'y', 'v', 'w'];
             var mv = ['nt'];
-            var bv = ['start', 'reverse', 'smoothe', 'smoothe_speed'];
+            var bv = ['start', 'reverse', 'smoothe', 'smoothe_speed', 'boost'];
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {

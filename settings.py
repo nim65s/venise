@@ -56,9 +56,9 @@ ALLER_RETOURS = {
         Hote.ame: [[13, 14], [18, 14]],
         }
 PATHS = {
-        Hote.moro: [[-8, 7], [-11, 7], [-11, 10], [-10, 11], [-8, 11]],
-        Hote.ame: [[11, 11], [19, 11], [24, 9.5], [25, 7.5], [24, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 9]],
-        Hote.yuki: [[11, 11], [19, 11], [24, 9.5], [25, 7.5], [24, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 9]],
+        Hote.moro: list(reversed([[-8, 7], [-11, 7], [-11, 10], [-10, 11], [-8, 11]])),
+        Hote.ame: list(reversed([[11, 11], [19, 11], [24, 9.5], [25, 7.5], [24, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 9]])),
+        Hote.yuki: list(reversed([[11, 11], [19, 11], [24, 9.5], [25, 7.5], [24, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 9]])),
         #Hote.yuki: [[8, 7], [8, 8], [11, 10], [19, 10], [32, 15], [33, 14], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5], [9, 6.5]],
         }
 
@@ -91,6 +91,6 @@ DATA = {
         'vg': 0, 'wg': 0, 'tg': 0,  # Vitesse
         'vt': [0, 0, 0], 'vc': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne
         'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,
-        'start': True, 'smoothe': True, 'smoothe_speed': True, 'reverse': True, 'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)),
+        'start': True, 'smoothe': True, 'smoothe_speed': True, 'boost': False, 'reverse': True, 'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)),
         }
 
