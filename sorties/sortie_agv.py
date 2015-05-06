@@ -92,9 +92,12 @@ class SortieAGV(Sortie):
         dst = dist_angles(tm, tc)
         return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR else (tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)}
 
-    def send_agv(self, start, vc, tc, **kwargs):
+    def send_agv(self, start, boost, vc, tc, **kwargs):
         if not start or abs(vc).sum() < 10:
             return b'stop()'
+        if boost:
+            template = 'setSpeedAndPositionCalibration({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[2]})'
+            return bytes(template.format(vc=vc * 5, tc=tc).encode('ascii'))
         template = 'setSpeedAndPosition({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[2]})'
         return bytes(template.format(vc=vc, tc=tc).encode('ascii'))
 
