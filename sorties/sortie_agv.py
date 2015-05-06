@@ -101,7 +101,7 @@ class SortieAGV(Sortie):
             vc *= 5
         if arriere:
             vc *= -1
-        return bytes(cmd + template.format(vc=vc, tc=tc).encode('ascii'))
+        return bytes((cmd + template).format(vc=vc, tc=tc).encode('ascii'))
 
     def check_ret(self, ret):
         if not ret.startswith('+'):  # Les erreurs commencent par un +
