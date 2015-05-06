@@ -9,8 +9,9 @@ from jinja2 import Template
 from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
 from twisted.python import log
-from twisted.web import server
 from twisted.web.resource import Resource
+from twisted.web.server import Site, NOT_DONE_YET
+from twisted.web.static import File
 from zmq import Context, PUSH, SUB, SUBSCRIBE
 
 from settings import *  # YOLO
@@ -23,7 +24,7 @@ class Root(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        return Template(open('plan.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+        return Template(open('static/plan.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
 
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
@@ -57,7 +58,7 @@ class Table(Resource):
     isLeaf = True
 
     def render_GET(self, request):
-        return Template(open('table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+        return Template(open('static/table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
 
 
 class Subscribe(Resource):
@@ -78,7 +79,7 @@ class Subscribe(Resource):
         d.addBoth(self.remove_subscriber)
         log.msg("Adding subscriber...")
         request.write("")
-        return server.NOT_DONE_YET
+        return NOT_DONE_YET
 
     def remove_subscriber(self, subscriber):
         if subscriber in self.subscribers:
@@ -99,7 +100,8 @@ if __name__ == '__main__':
     table = Table()
     root.putChild('sub', subscribe)
     root.putChild('table', table)
-    site = server.Site(root)
+    root.putChild('static', File('static'))
+    site = Site(root)
     reactor.listenTCP(8000, site)
     log.startLogging(sys.stdout)
     LoopingCall(subscribe.update).start(0.1)
