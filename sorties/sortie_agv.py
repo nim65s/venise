@@ -12,7 +12,7 @@ from ..utils.dist_angles import dist_angles
 from .sortie import Sortie
 
 now = datetime.now
-per = timedelta(seconds=PERIODE / 2)
+per = timedelta(seconds=PERIODE)
 
 
 class SortieAGV(Sortie):
@@ -24,6 +24,7 @@ class SortieAGV(Sortie):
         self.data[self.hote]['reversed'] = [False, False, False]
 
     def loop(self):
+        start = now()
         self.pull()
         if datetime.now() - self.last_seen > timedelta(seconds=3):
             self.send('déconnecté du serveur')
@@ -37,6 +38,12 @@ class SortieAGV(Sortie):
         for var in self.to_send:
             self.push.send_json([self.hote, {var: self.data[self.hote][var].round(5).tolist()}])
         self.push.send_json([self.hote, {'last_seen_agv': str(now())}])
+        duree = now() - start
+        reste = per - duree
+        if reste < timedelta(0):
+            self.send('La boucle a mis beaucoup trop de temps: %s' % duree)
+        else:
+            sleep(reste.microseconds / 1000000)
 
     def connect(self):
         while True:
