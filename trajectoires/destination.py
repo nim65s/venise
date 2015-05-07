@@ -9,17 +9,16 @@ from .trajectoire import Trajectoire, trajectoire_parser
 class TrajectoireDestination(Trajectoire):
     def __init__(self, v1, v2, v3, w1, w2, w3, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.destination = {h: (0, 0) for h in self.hotes}
         self.wi = {2: w1, 3: w2, 4: w3}
         self.vi = {2: v1, 3: v2, 4: v3}
 
-    def distance(self, hote, x, y):
-        xi, yi = self.destination[hote]
+    def distance(self, destination, x, y):
+        xi, yi = destination
         return hypot(xi - x, yi - y)
 
-    def go_to_point(self, hote, x, y, a):
-        xi, yi = self.destination[hote]
-        if x == y == a == 0 or self.distance(hote, x, y) < 0.3 or xi == yi == 0:
+    def go_to_point(self, hote, destination, x, y, a):
+        xi, yi = destination
+        if x == y == a == 0 or self.distance(destination, x, y) < 0.3 or xi == yi == 0:
             return {'vg': 0, 'wg': 0}
         return {
                 'vg': self.get_v(**self.data[hote]),
@@ -28,7 +27,7 @@ class TrajectoireDestination(Trajectoire):
                 }
 
     def get_v(self, hote, **kwargs):
-        # 'vg': round(cos(m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
+        # return round(cos(m + (pi / 2 if hote == Hote.moro else 0)) / 4 + 0.75, 5),
         return self.vi[hote]
 
     def get_w(self, hote, **kwargs):
