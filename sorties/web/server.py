@@ -54,6 +54,10 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'arriere': True}])
         elif cmd == 'arriere-ko':
             self.socket.send_json([int(agv), {'arriere': False}])
+        elif cmd == 'sens-ok':
+            self.socket.send_json([int(agv), {'sens': True}])
+        elif cmd == 'sens-ko':
+            self.socket.send_json([int(agv), {'sens': False}])
         request.setResponseCode(200)
         return 'Ok'
 

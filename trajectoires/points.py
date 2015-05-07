@@ -17,14 +17,14 @@ class TrajectoirePoints(TrajectoireDestination):
     def get_paths(self):
         return PATHS
 
-    def process_speed(self, x, y, a, w, hote, **kwargs):
-        self.check_distance(hote, x, y)
+    def process_speed(self, x, y, a, w, hote, sens, **kwargs):
+        self.check_distance(hote, x, y, sens)
         return self.go_to_point(hote, x, y, a)
 
-    def check_distance(self, hote, x, y):
+    def check_distance(self, hote, x, y, sens):
         if self.distance(hote, x, y) > 1:
             return
-        self.state[hote] = (self.state[hote] + 1) % len(self.paths[hote])
+        self.state[hote] = (self.state[hote] + (1 if sens else -1)) % len(self.paths[hote])
         print(datetime.now(), hote, self.state[hote], self.paths[hote][self.state[hote]])
         self.destination[hote] = self.paths[hote][self.state[hote]]
         self.save_state(hote)
