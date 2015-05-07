@@ -31,17 +31,19 @@ class TrajectoirePoints(TrajectoireDestination):
 
     def save_state(self, hote):
         with open(expanduser('~/.state_%s_%i' % (self.__class__.__name__, hote)), 'w') as f:
-            print(self.state[hote], file=f)
+            print(self.data[hote]['state'], file=f)
 
     def set_state(self, s1, s2, s3):
-        self.state = {2: s1, 3: s2, 4: s3}
+        self.data[2]['state'] = s1
+        self.data[3]['state'] = s2
+        self.data[4]['state'] = s3
         for i in [2, 3, 4]:
-            if self.state[i] == -1:
+            if self.data[i]['state'] == -1:
                 filename = expanduser('~/.state_%s_%i' % (self.__class__.__name__, i))
                 if isfile(filename):
                     with open(filename, 'r') as f:
-                        self.state[i] = int(f.read().strip())
-        print(self.state)
+                        self.data[i]['state'] = int(f.read().strip())
+        print([self.data[i]['state'] for i in [2, 3, 4]])
 
 trajectoire_points_parser = ArgumentParser(parents=[trajectoire_destination_parser], conflict_handler='resolve')
 trajectoire_points_parser.add_argument('--s1', type=int, default=-1, choices=list(range(len(PATHS[2]))) + [-1])
