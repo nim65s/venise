@@ -12,7 +12,7 @@ from ..utils.dist_angles import dist_angles
 from .sortie import Sortie
 
 now = datetime.now
-per = timedelta(seconds=PERIODE)
+per = timedelta(seconds=PERIODE * 2)
 
 
 class SortieAGV(Sortie):
