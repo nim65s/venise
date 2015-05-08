@@ -14,7 +14,7 @@ class TrajectoireBercail(TrajectoireDestination):
             self.arrive[hote] = True
             if all([self.arrive[h] for h in self.hotes]):
                 self.fini = True
-            return {'start': False}
+            return {'stop': True}
         return self.go_to_point(hote, x, y, a)
 
 

@@ -29,7 +29,7 @@ class SortieAGV(Sortie):
         if datetime.now() - self.last_seen > timedelta(seconds=3):
             self.send('déconnecté du serveur')
         if datetime.now() - self.last_seen > timedelta(seconds=5):
-            self.data[self.hote]['start'] = False
+            self.data[self.hote]['stop'] = True
         try:
             self.process(**self.data[self.hote])
         except (ConnectionResetError, timeout, BrokenPipeError):
@@ -99,8 +99,8 @@ class SortieAGV(Sortie):
         dst = dist_angles(tm, tc)
         return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR else (tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)}
 
-    def send_agv(self, start, boost, arriere, vc, tc, **kwargs):
-        if not start or abs(vc).sum() < 10:
+    def send_agv(self, stop, boost, arriere, vc, tc, **kwargs):
+        if stop or abs(vc).sum() < 10:
             return b'stop()'
         cmd = 'setSpeedAndPositionCalibration' if boost else 'setSpeedAndPosition'
         template = '({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[2]})'

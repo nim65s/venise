@@ -24,16 +24,16 @@ class Root(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        return Template(open('static/plan.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+        return Template(open('static/plan.html').read().decode('utf-8')).render(expert=False, **globals()).encode('utf-8')
 
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
         self.socket.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_PUSH))
         agv, cmd = request.args['cmd[]']
         if cmd == 'stop':
-            self.socket.send_json([int(agv), {'start': False}])
+            self.socket.send_json([int(agv), {'stop': True}])
         elif cmd == 'start':
-            self.socket.send_json([int(agv), {'start': True}])
+            self.socket.send_json([int(agv), {'stop': False}])
         elif cmd == 'reverse-ok':
             self.socket.send_json([int(agv), {'reverse': True}])
         elif cmd == 'reverse-ko':
@@ -60,6 +60,13 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'sens': False}])
         request.setResponseCode(200)
         return 'Ok'
+
+
+class Expert(Resource):
+    isLeaf = True
+
+    def render_GET(self, request):
+        return Template(open('static/plan.html').read().decode('utf-8')).render(expert=True, **globals()).encode('utf-8')
 
 
 class Table(Resource):
@@ -105,9 +112,9 @@ class Subscribe(Resource):
 if __name__ == '__main__':
     root = Root()
     subscribe = Subscribe()
-    table = Table()
     root.putChild('sub', subscribe)
-    root.putChild('table', table)
+    root.putChild('table', Table())
+    root.putChild('expert', Expert())
     root.putChild('static', File('static'))
     site = Site(root)
     reactor.listenTCP(8000, site)
