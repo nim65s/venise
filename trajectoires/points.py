@@ -12,13 +12,13 @@ class TrajectoirePoints(TrajectoireDestination):
         self.set_state(s1, s2, s3)
         self.paths = self.get_paths()
         for hote in self.hotes:
-            self.data[hote]['destination'] = self.paths[hote][self.state[hote]]
+            self.data[hote]['destination'] = self.paths[hote][self.data[hote]['state']]
 
     def get_paths(self):
         return PATHS
 
     def process_speed(self, x, y, a, w, hote, destination, sens, **kwargs):
-        self.check_distance(hote, x, y, sens)
+        self.check_distance(hote, destination, x, y, sens)
         return self.go_to_point(hote, destination, x, y, a)
 
     def check_distance(self, hote, destination, x, y, sens):
