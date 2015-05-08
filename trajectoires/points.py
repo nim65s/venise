@@ -24,9 +24,9 @@ class TrajectoirePoints(TrajectoireDestination):
     def check_distance(self, hote, destination, x, y, sens):
         if self.distance(destination, x, y) > 1:
             return
-        self.state[hote] = (self.state[hote] + (1 if sens else -1)) % len(self.paths[hote])
-        print(datetime.now(), hote, self.state[hote], self.paths[hote][self.state[hote]])
-        self.data[hote]['destination'] = self.paths[hote][self.state[hote]]
+        self.data[hote]['state'] = (self.data[hote]['state'] + (1 if sens else -1)) % len(self.paths[hote])
+        print(datetime.now(), hote, self.data[hote]['state'], self.paths[hote][self.data[hote]['state']])
+        self.data[hote]['destination'] = self.paths[hote][self.data[hote]['state']]
         self.save_state(hote)
 
     def save_state(self, hote):
