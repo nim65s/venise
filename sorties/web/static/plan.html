@@ -17,6 +17,9 @@
             #g2 { stroke: red; }
             #g3 { stroke: green; }
             #g4 { stroke: blue; }
+            #a2 th { color: white; background: red; }
+            #a3 th { color: white; background: green; }
+            #a4 th { color: white; background: blue; }
         </style>
     </head>
     <body>
@@ -86,13 +89,16 @@
         </svg>
         <table class="table table-striped">
             <tr>
-                <th>Arbre</th><th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>
-                <th>Stop</th> <th>Boost</th><th>Arrière</th>
-                {% if expert %}<th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th><th>Changement de sens</th>{% endif %}
+                <th>Arbre</th>
+                {% if expert %}<th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>{% endif %}
+                <th>Stop</th><th>Boost</th><th>Arrière</th>
+                {% if expert %}<th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th><th>Changement de sens</th><th>Erreurs</th>{% endif %}
+                <th>Status</th>
             </tr>
             {% for arbre in range(2, 5) %}
             <tr id='a{{ arbre }}'>
                 <th>{{ arbre - 1}}</th>
+                {% if expert %}
                 <td class="x"></td>
                 <td class="y"></td>
                 <td class="v"></td>
@@ -100,10 +106,11 @@
                 <td class="nt0"></td>
                 <td class="nt1"></td>
                 <td class="nt2"></td>
+                {% endif %}
                 <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'start']})" type="button" class="btn btn-lg btn-warning">✔</button>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop-ok']})" type="button" class="btn btn-lg btn-warning">✔</button>
                     <span class="stop"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop']})" type="button" class="btn btn-lg btn-success">✘</button>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop-ko']})" type="button" class="btn btn-lg btn-success">✘</button>
                 </td>
                 <td>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'boost-ok']})" type="button" class="btn btn-lg btn-warning">✔</button>
@@ -136,16 +143,12 @@
                     <span class="sens"></span>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'sens-ko']})" type="button" class="btn btn-lg btn-warning">✘</button>
                 </td>
+                <td class="erreurs"></td>
                 {% endif %}
+                <td class="status"></td>
             </tr>
             {% endfor %}
         </table>
-
-        <ul>
-            <li class="2" style="color: red;"></li>
-            <li class="3" style="color: green;"></li>
-            <li class="4" style="color: blue;"></li>
-        </ul>
 
         <script>
             var last_seen = new Date();
@@ -195,8 +198,8 @@
                                 cx: data[a]['destination'][0] * {{ PX_PAR_M }},
                                 cy: data[a]['destination'][1] * {{ PX_PAR_M }},
                             });
+                            $('#a' + a + ' .status').html(data[a]['status']);
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
-                            $('li.' + a).html(data[a]['status']);
                         }
                     }
                     last_seen = new Date();

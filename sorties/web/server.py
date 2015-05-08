@@ -30,9 +30,9 @@ class Root(Resource):
         self.socket = Context().socket(PUSH)
         self.socket.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_PUSH))
         agv, cmd = request.args['cmd[]']
-        if cmd == 'stop':
+        if cmd == 'stop-ok':
             self.socket.send_json([int(agv), {'stop': True}])
-        elif cmd == 'start':
+        elif cmd == 'stop-ko':
             self.socket.send_json([int(agv), {'stop': False}])
         elif cmd == 'reverse-ok':
             self.socket.send_json([int(agv), {'reverse': True}])
@@ -58,6 +58,8 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'sens': True}])
         elif cmd == 'sens-ko':
             self.socket.send_json([int(agv), {'sens': False}])
+        else:
+            print(cmd)
         request.setResponseCode(200)
         return 'Ok'
 

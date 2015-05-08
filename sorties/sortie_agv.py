@@ -70,7 +70,12 @@ class SortieAGV(Sortie):
         if smoothe:
             self.data[hote].update(**self.smoothe(**self.data[hote]))
         self.socket.sendall(self.send_agv(**self.data[hote]))
-        self.check_ret(self.socket.recv(1024).decode('ascii'))
+        self.check_ret(self.recv_rep())
+        self.socket.sendall('getErrors()'.encode('ascii'))
+        self.push.send_json([hote, {'erreurs': self.recv_rep()}])
+
+    def recv_rep(self):
+        return self.socket.recv(1024).decode('ascii').replace('\x00', '')
 
     def recv_agv(self):
         self.socket.sendall('getPosition()'.encode('ascii'))
@@ -112,7 +117,7 @@ class SortieAGV(Sortie):
 
     def check_ret(self, ret):
         if not ret.startswith('+'):  # Les erreurs commencent par un +
-            self.send(ret.split(',')[1].replace('\x00', '').strip())
+            self.send(ret.split(',')[1].strip())
             return
         code = int(ret[1:].split(',')[0])
         if code == 2:  # Wrong number or format of arguments
