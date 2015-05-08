@@ -72,7 +72,8 @@ class SortieAGV(Sortie):
         self.socket.sendall(self.send_agv(**self.data[hote]))
         self.check_ret(self.recv_rep())
         self.socket.sendall('getErrors()'.encode('ascii'))
-        self.push.send_json([hote, {'erreurs': self.recv_rep()}])
+        erreurs = self.recv_rep()
+        self.push.send_json([hote, {'erreurs': 'ok' if erreurs.startswith('-') else erreurs}])
 
     def recv_rep(self):
         return self.socket.recv(1024).decode('ascii').replace('\x00', '')

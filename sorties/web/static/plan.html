@@ -199,6 +199,7 @@
                                 cy: data[a]['destination'][1] * {{ PX_PAR_M }},
                             });
                             $('#a' + a + ' .status').html(data[a]['status']);
+                            $('#a' + a + ' .erreurs').html(data[a]['erreurs']);
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
                         }
                     }
