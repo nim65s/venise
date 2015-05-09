@@ -36,7 +36,7 @@ class SortieAGV(Sortie):
             self.send('%s Failed connection !' % now())
             self.connect()
         for var in self.to_send:
-            self.push.send_json([self.hote, {var: self.data[self.hote][var].round(5).tolist()}])
+            self.push.send_json([self.hote, {var: array(self.data[self.hote][var]).round(5).tolist()}])
         self.push.send_json([self.hote, {'last_seen_agv': str(now())}])
         duree = now() - start
         reste = per - duree
