@@ -1,8 +1,9 @@
 from argparse import ArgumentParser
+from math import hypot
 from datetime import datetime
 from os.path import expanduser, isfile
 
-from ..settings import PATHS
+from ..settings import PATHS, Hote
 from .destination import TrajectoireDestination, trajectoire_destination_parser
 
 
@@ -11,11 +12,16 @@ class TrajectoirePoints(TrajectoireDestination):
         super().__init__(*args, **kwargs)
         self.set_state(s1, s2, s3)
         self.paths = self.get_paths()
+        self.length = self.get_length()
         for hote in self.hotes:
             self.data[hote]['destination'] = self.paths[hote][self.data[hote]['state']]
 
     def get_paths(self):
         return PATHS
+
+    def get_length(self):
+        p = self.paths
+        return [hypot(p[i][0] - p[(i + 1) % len(p)][0], p[i][1] - p[(i + 1) % len(p)][1]) for i in range(len(p))]
 
     def process_speed(self, hote, **kwargs):
         self.check_distance(**self.data[hote])
@@ -27,9 +33,7 @@ class TrajectoirePoints(TrajectoireDestination):
         self.change_destination(**self.data[hote])
 
     def change_destination(self, hote, x, y, sens, dest_next, dest_prev, state, **kwargs):
-        nouveau = (-1 if dest_prev else 1)
-        if sens:
-            nouveau *= -1
+        nouveau = (-1 if dest_prev else 1) * (-1 if sens else 1)
         state = (state + nouveau) % len(self.paths[hote])
         destination = self.paths[hote][state]
         print(datetime.now(), hote, state, destination)
@@ -51,6 +55,32 @@ class TrajectoirePoints(TrajectoireDestination):
                     with open(filename, 'r') as f:
                         self.data[i]['state'] = int(f.read().strip())
         print([self.data[i]['state'] for i in [2, 3, 4]])
+
+    def update(self):
+        for hote in self.hotes:
+            self.data[hote].update(avancement=self.avancement(**self.data[hote]))
+        self.check_sens()
+        super().update()
+
+    def check_sens(self):
+        if sum(self.data[Hote.moro]['nt']) > 50:
+            self.data[Hote.moro]['sens'] = True
+        elif sum(self.data[Hote.moro]['nt']) < -50:
+            self.data[Hote.moro]['sens'] = False
+        if self.distance_23() < 10:
+            self.ecarte_23()
+
+    def distance_23(self):
+        a2, a3 = self.avancement(**self.data[Hote.ame]), self.avancement(**self.data[Hote.yuki])
+        return min(abs(a2 - a3), s - abs(a2 - a3))
+
+    def avancement(self, state, length, destination, x, y, **kwargs):
+        return sum(length[:state] if state > 0 else length) - self.distance(destination, x, y)
+
+    def ecarte_23(self):
+        a2, a3 = self.avancement(**self.data[Hote.ame]), self.avancement(**self.data[Hote.yuki])
+        self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'] = (True, False) if abs(a2 - a3) < s - abs(a2 - a3) else (False, True)
+
 
 trajectoire_points_parser = ArgumentParser(parents=[trajectoire_destination_parser], conflict_handler='resolve')
 trajectoire_points_parser.add_argument('--s1', type=int, default=-1, choices=list(range(len(PATHS[2]))) + [-1])
