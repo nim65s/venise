@@ -17,16 +17,23 @@ class TrajectoirePoints(TrajectoireDestination):
     def get_paths(self):
         return PATHS
 
-    def process_speed(self, x, y, a, w, hote, destination, sens, **kwargs):
-        self.check_distance(hote, destination, x, y, sens)
-        return self.go_to_point(hote, destination, x, y, a)
+    def process_speed(self, hote, **kwargs):
+        self.check_distance(**self.data[hote])
+        return self.go_to_point(**self.data[hote])
 
-    def check_distance(self, hote, destination, x, y, sens):
-        if self.distance(destination, x, y) > 1:
+    def check_distance(self, hote, destination, x, y, sens, dest_next, dest_prev, **kwargs):
+        if self.distance(destination, x, y) > 1 and not dest_next and not dest_prev:
             return
-        self.data[hote]['state'] = (self.data[hote]['state'] + (1 if sens else -1)) % len(self.paths[hote])
-        print(datetime.now(), hote, self.data[hote]['state'], self.paths[hote][self.data[hote]['state']])
-        self.data[hote]['destination'] = self.paths[hote][self.data[hote]['state']]
+        self.change_destination(**self.data[hote])
+
+    def change_destination(self, hote, x, y, sens, dest_next, dest_prev, state, **kwargs):
+        nouveau = (-1 if dest_prev else 1)
+        if sens:
+            nouveau *= -1
+        state = (state + nouveau) % len(self.paths[hote])
+        destination = self.paths[hote][state]
+        print(datetime.now(), hote, state, destination)
+        self.data[hote].update(destination=destination, state=state, dest_prev=False, dest_next=False)
         self.save_state(hote)
 
     def save_state(self, hote):

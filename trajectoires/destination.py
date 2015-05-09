@@ -16,7 +16,7 @@ class TrajectoireDestination(Trajectoire):
         xi, yi = destination
         return hypot(xi - x, yi - y)
 
-    def go_to_point(self, hote, destination, x, y, a):
+    def go_to_point(self, hote, destination, x, y, a, **kwargs):
         xi, yi = destination
         if x == y == a == 0 or self.distance(destination, x, y) < 0.3 or xi == yi == 0:
             return {'vg': 0, 'wg': 0}

@@ -128,9 +128,6 @@ class SortieAGV(Sortie):
             self.send('Déconnecte le joystick !')
         elif code == 4:  # Post-démarrage ou arrêt d’urgence
             self.send('Désarme l’arrête d’urgence et Appuie sur le bouton vert !')
-            with open(expanduser('~/logs/code_4'), 'a') as f:
-                self.socket.sendall('getErrors()'.encode('ascii'))
-                print(self.socket.recv(1024).decode('ascii').replace('\x00', ''), file=f)
         elif code == 5:  # Velocity ou angle too high
             pass
         elif code == 6:  # Initialisation ongoing
