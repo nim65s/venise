@@ -17,6 +17,9 @@
             #g2 { stroke: red; }
             #g3 { stroke: green; }
             #g4 { stroke: blue; }
+            #g2 .destination { fill: red; }
+            #g3 .destination { fill: green; }
+            #g4 .destination { fill: blue; }
             #a2 th { color: white; background: red; }
             #a3 th { color: white; background: green; }
             #a4 th { color: white; background: blue; }
@@ -196,12 +199,12 @@
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });
-                            $('#agv' + a + ' .destination').attr({
+                            $('#g' + a + ' .destination').attr({
                                 cx: data[a]['destination'][0] * {{ PX_PAR_M }},
                                 cy: data[a]['destination'][1] * {{ PX_PAR_M }},
                             });
                             $('#a' + a + ' .status').html(data[a]['status']);
-                            $('#a' + a + ' .erreurs').html(data[a]['erreurs']);
+                            {% if expert %}$('#a' + a + ' .erreurs').html(data[a]['erreurs']);{% endif %}
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
                         }
                     }
