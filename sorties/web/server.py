@@ -42,9 +42,9 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'smoothe': True}])
         elif cmd == 'smoothe-ko':
             self.socket.send_json([int(agv), {'smoothe': False}])
-        elif cmd == 'smoothe-speed-ok':
+        elif cmd == 'smoothe_speed-ok':
             self.socket.send_json([int(agv), {'smoothe_speed': True}])
-        elif cmd == 'smoothe-speed-ko':
+        elif cmd == 'smoothe_speed-ko':
             self.socket.send_json([int(agv), {'smoothe_speed': False}])
         elif cmd == 'boost-ok':
             self.socket.send_json([int(agv), {'boost': True}])

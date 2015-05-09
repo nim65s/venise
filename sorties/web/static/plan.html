@@ -95,8 +95,8 @@
                 <th>Arbre</th>
                 {% if expert %}<th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>{% endif %}
                 <th>Stop</th><th>Boost</th><th>Arrière</th>
-                {% if expert %}<th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th><th>Changement de sens</th><th>Erreurs</th>{% endif %}
-                <th>Destination</th><th>Status</th>
+                {% if expert %}<th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th>{% endif %}
+                <th>Sens</th><th>Destination</th><th>Status</th>
             </tr>
             {% for arbre in range(2, 5) %}
             <tr id='a{{ arbre }}'>
@@ -110,44 +110,24 @@
                 <td class="nt1"></td>
                 <td class="nt2"></td>
                 {% endif %}
-                <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop-ok']})" type="button" class="btn btn-lg btn-warning">✔</button>
-                    <span class="stop"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'stop-ko']})" type="button" class="btn btn-lg btn-success">✘</button>
-                </td>
-                <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'boost-ok']})" type="button" class="btn btn-lg btn-warning">✔</button>
-                    <span class="boost"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'boost-ko']})" type="button" class="btn btn-lg btn-success">✘</button>
-                </td>
-                <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'arriere-ok']})" type="button" class="btn btn-lg btn-warning">✔</button>
-                    <span class="arriere"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'arriere-ko']})" type="button" class="btn btn-lg btn-success">✘</button>
-                </td>
+                {% for var in ['stop', 'boost', 'arriere'] %}
+                    <td>
+                        <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ko']})" type="button" class="btn btn-lg btn-warning {{ var }}-ok hidden">✔</button>
+                        <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ok']})" type="button" class="btn btn-lg btn-success {{ var }}-ko hidden">✘</button>
+                    </td>
+                {% endfor %}
                 {% if expert %}
-                <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'reverse-ok']})" type="button" class="btn btn-lg btn-success">✔</button>
-                    <span class="reverse"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'reverse-ko']})" type="button" class="btn btn-lg btn-warning">✘</button>
-                </td>
-                <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-ok']})" type="button" class="btn btn-lg btn-success">✔</button>
-                    <span class="smoothe"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-ko']})" type="button" class="btn btn-lg btn-warning">✘</button>
-                </td>
-                <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-speed-ok']})" type="button" class="btn btn-lg btn-success">✔</button>
-                    <span class="smoothe_speed"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'smoothe-speed-ko']})" type="button" class="btn btn-lg btn-warning">✘</button>
-                </td>
-                <td>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'sens-ok']})" type="button" class="btn btn-lg btn-success">✔</button>
-                    <span class="sens"></span>
-                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'sens-ko']})" type="button" class="btn btn-lg btn-warning">✘</button>
-                </td>
-                <td class="erreurs"></td>
+                {% for var in ['reverse', 'smoothe', 'smoothe_speed'] %}
+                    <td>
+                        <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ko']})" type="button" class="btn btn-lg btn-success {{ var }}-ok hidden">✔</button>
+                        <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ok']})" type="button" class="btn btn-lg btn-warning {{ var }}-ko hidden">✘</button>
+                    </td>
+                {% endfor %}
                 {% endif %}
+                <td>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'sens-ko']})" type="button" class="btn btn-lg sens-ok hidden">↺</button>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'sens-ok']})" type="button" class="btn btn-lg sens-ko hidden">↻</button>
+                </td>
                 <td>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'dest-']})" type="button" class="btn btn-lg">←</button>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'dest+']})" type="button" class="btn btn-lg">→</button>
@@ -157,13 +137,19 @@
             {% endfor %}
         </table>
 
+        <ul>
+            <li class="2"></li>
+            <li class="3"></li>
+            <li class="4"></li>
+        </ul>
+
         <script>
             var last_seen = new Date();
             var size_coef = 2;
             var data;
             var sv = ['x', 'y', 'v', 'w'];
             var mv = ['nt'];
-            var bv = ['stop', 'reverse', 'smoothe', 'smoothe_speed', 'boost', 'arriere', 'sens'];
+            var uv = ['stop', 'sens', 'boost', 'arriere', 'reverse', 'smoothe', 'smoothe_speed'];
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {
@@ -176,7 +162,15 @@
                                     $('#a' + a + ' .' + mv[v] + [i]).html(data[a][mv[v]][i]);
                                 }
                             }
-                            for (v in bv) $('#a' + a + ' .' + bv[v]).html(data[a][bv[v]] ? '✔' : '✘');
+                            for (v in uv) {
+                                if (data[a][uv[v]]){
+                                    $('#a' + a + ' .' + uv[v] + '-ok').removeClass('hidden');
+                                    $('#a' + a + ' .' + uv[v] + '-ko').addClass('hidden');
+                                } else {
+                                    $('#a' + a + ' .' + uv[v] + '-ko').removeClass('hidden');
+                                    $('#a' + a + ' .' + uv[v] + '-ok').addClass('hidden');
+                                }
+                            }
                             {% if expert %}
                             if (data[a]['x'] != 0) {
                                 d = $('#path' + a).attr('d');
@@ -208,7 +202,7 @@
                                 cy: data[a]['destination'][1] * {{ PX_PAR_M }},
                             });
                             $('#a' + a + ' .status').html(data[a]['status']);
-                            {% if expert %}$('#a' + a + ' .erreurs').html(data[a]['erreurs']);{% endif %}
+                            {% if expert %}$('li.' + a).html(data[a]['erreurs']);{% endif %}
                             $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
                         }
                     }
@@ -219,7 +213,13 @@
             now = new Date();
             diff = now - last_seen;
             diff = new Date(diff);
-            $('svg').css("background-color", diff.getSeconds() >= 1 ? "orange" : "white");
+            if (diff.getSeconds() >= 1) {
+                $('svg').css("background-color", "orange");
+                $('button').addClass('disabled');
+            } else {
+                $('svg').css("background-color", "white");
+                $('button').removeClass('disabled');
+            }
         }, 500);
         </script>
     </body>

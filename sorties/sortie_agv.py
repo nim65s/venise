@@ -41,7 +41,7 @@ class SortieAGV(Sortie):
         duree = now() - start
         reste = per - duree
         if reste < timedelta(0):
-            self.send('La boucle a mis beaucoup trop de temps: %s' % duree)
+            self.send('Délai anormal…' % duree)
         else:
             sleep(reste.microseconds / 1000000)
 
