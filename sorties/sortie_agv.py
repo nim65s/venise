@@ -41,7 +41,7 @@ class SortieAGV(Sortie):
         duree = now() - start
         reste = per - duree
         if reste < timedelta(0):
-            self.send('Délai anormal...' % duree)
+            self.send('Délai anormal…' % duree)
         else:
             sleep(reste.microseconds / 1000000)
 
@@ -56,11 +56,11 @@ class SortieAGV(Sortie):
                 self.send('%s connected' % now())
                 break
             except timeout:
-                self.send('%s timeout...' % now())
+                self.send('%s timeout…' % now())
             except ConnectionRefusedError:
-                self.send('%s Connection Refused...' % now())
+                self.send('%s Connection Refused…' % now())
             except BrokenPipeError:
-                self.send('%s Broken pipe...' % now())
+                self.send('%s Broken pipe…' % now())
 
     def process(self, reverse, smoothe, hote, **kwargs):
         self.data[hote].update(**self.recv_agv())
@@ -131,7 +131,7 @@ class SortieAGV(Sortie):
         elif code == 5:  # Velocity ou angle too high
             pass
         elif code == 6:  # Initialisation ongoing
-            self.send('Initialisation en cours...')
+            self.send('Initialisation en cours…')
         elif code == 7:  # Trop de tours
             self.send('Trop de tours !')
         else:
