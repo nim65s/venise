@@ -62,13 +62,17 @@ class SortieAGV(Sortie):
             except BrokenPipeError:
                 self.send('%s Broken pipe…' % now())
 
-    def process(self, reverse, smoothe, hote, **kwargs):
+    def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
         self.data[hote].update(**self.recv_agv())
         self.data[hote].update(**self.copy_consignes(**self.data[hote]))
         if reverse:
             self.data[hote].update(**self.reverse(**self.data[hote]))
         if smoothe:
             self.data[hote].update(**self.smoothe(**self.data[hote]))
+        if boost:
+            self.data[hote].update(**self.boost(**self.data[hote]))
+        if arriere:
+            self.data[hote].update(**self.arriere(**self.data[hote]))
         self.socket.sendall(self.send_agv(**self.data[hote]))
         self.check_ret(self.recv_rep())
         self.socket.sendall('getErrors()'.encode('ascii'))
@@ -106,15 +110,17 @@ class SortieAGV(Sortie):
         dst = dist_angles(tm, tc)
         return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR else (tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)}
 
-    def send_agv(self, stop, boost, arriere, vc, tc, **kwargs):
+    def boost(self, tg, **kwargs):
+        return {'vc': array([80, 80, 80]), 'tc': array([tg, tg, tg])}
+
+    def arriere(self, vc, **kwargs):
+        return {'vc': -vc}
+
+    def send_agv(self, stop, boost, vc, tc, **kwargs):
         if stop or abs(vc).sum() < 10:
             return b'stop()'
         cmd = 'setSpeedAndPositionCalibration' if boost else 'setSpeedAndPosition'
         template = '({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[2]})'
-        if boost:
-            vc *= 5
-        if arriere:
-            vc *= -1
         return bytes((cmd + template).format(vc=vc, tc=tc).encode('ascii'))
 
     def check_ret(self, ret):

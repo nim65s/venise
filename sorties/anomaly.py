@@ -2,12 +2,14 @@ from numpy import array
 from datetime import datetime, timedelta
 
 from ..vmq import vmq_parser, Subscriber, Pusher
+from ..settings import Hote
 
 
 class Anomaly(Subscriber, Pusher):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.anomaly = {h: None for h in self.hotes}
+        self.is_boosting = {h: None for h in self.hotes}
 
     def loop(self):
         self.sub(block=0)
@@ -18,15 +20,26 @@ class Anomaly(Subscriber, Pusher):
         vc, vm = array(vc), array(vm)
         new_anomaly = bool(abs((vc - vm) / vc).sum() > 1)
         if not new_anomaly:
+            if self.anomaly[hote]:
+                self.printe('Fin de l’anomalie sur %s' % hote)
+                self.anomaly[hote] = None
+            if self.is_boosting[hote]:
+                self.printe('Fin du boost sur %s' % hote)
+                self.push.send_json([h, {'boost': False}])
+                self.is_boosting[hote] = False
             return False
         if anomaly:
-            if datetime.now() - self.anomaly[hote] > timedelta(seconds=13):
+            if datetime.now() - self.anomaly[hote] > timedelta(seconds=13) and self.is_boosting[hote]:
+                self.printe('Le BOOST sur %s a duré plus de 3s…' % hote)
                 self.push.send_json([h, {'boost': False}])
                 return False
-            elif datetime.now() - self.anomaly[hote] > timedelta(seconds=10):
+            elif datetime.now() - self.anomaly[hote] > timedelta(seconds=10) and hote != Hote.moro:
+                self.printe('L’anomalie sur %s a duré plus de 10s… BOOST !' % hote)
+                self.is_boosting[hote] = True
                 self.push.send_json([h, {'boost': True}])
         else:
             self.anomaly[hote] = datetime.now()
+            self.printe('Nouvelle anomalie sur %s' % hote)
         return True
 
 
