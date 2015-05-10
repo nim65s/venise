@@ -16,9 +16,9 @@ class Anomaly(Subscriber, Pusher):
         for h in self.hotes:
             self.push.send_json([h, {'anomaly': self.check_anomaly(**self.data[h])}])
 
-    def check_anomaly(self, vc, vm, hote, anomaly, **kwargs):
+    def check_anomaly(self, vc, vm, hote, anomaly, stop, **kwargs):
         vc, vm = array(vc), array(vm)
-        new_anomaly = bool(abs((vc - vm) / vc).sum() > 1)
+        new_anomaly = bool(abs((vc - vm) / vc).sum() > 1) and not stop
         if not new_anomaly:
             if self.anomaly[hote]:
                 print('Fin de l’anomalie sur %s' % hote.name)
@@ -29,6 +29,9 @@ class Anomaly(Subscriber, Pusher):
                 self.is_boosting[hote] = False
             return False
         if anomaly:
+            if self.anomaly[hote] is None:
+                self.anomaly[hote] = datetime.now()
+                print('Ancienne anomalie récupérée sur %s' % hote.name)
             if datetime.now() - self.anomaly[hote] > timedelta(seconds=11) and self.is_boosting[hote]:
                 print('Le BOOST sur %s a duré plus de 1s…' % hote.name)
                 self.push.send_json([hote, {'boost': False}])
