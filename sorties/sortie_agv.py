@@ -83,7 +83,7 @@ class SortieAGV(Sortie):
         pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
         v1, t1, v2, t2, v3, t3 = [float(i.strip()) for i in pos[1:]]
         return {
-                'vm': array([v1, v2, v3])
+                'vm': array([v1, v2, v3]),
                 'tm': array([a % (2 * pi) for a in [t1, t2, t3]]),
                 'nt': array([a // (2 * pi) for a in [t1, t2, t3]]).astype(int),
                 }
