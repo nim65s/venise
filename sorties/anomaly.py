@@ -21,25 +21,25 @@ class Anomaly(Subscriber, Pusher):
         new_anomaly = bool(abs((vc - vm) / vc).sum() > 1)
         if not new_anomaly:
             if self.anomaly[hote]:
-                self.printe('Fin de l’anomalie sur %s' % hote)
+                print('Fin de l’anomalie sur %s' % hote)
                 self.anomaly[hote] = None
             if self.is_boosting[hote]:
-                self.printe('Fin du boost sur %s' % hote)
+                print('Fin du boost sur %s' % hote)
                 self.push.send_json([h, {'boost': False}])
                 self.is_boosting[hote] = False
             return False
         if anomaly:
             if datetime.now() - self.anomaly[hote] > timedelta(seconds=13) and self.is_boosting[hote]:
-                self.printe('Le BOOST sur %s a duré plus de 3s…' % hote)
+                print('Le BOOST sur %s a duré plus de 3s…' % hote)
                 self.push.send_json([h, {'boost': False}])
                 return False
             elif datetime.now() - self.anomaly[hote] > timedelta(seconds=10) and hote != Hote.moro:
-                self.printe('L’anomalie sur %s a duré plus de 10s… BOOST !' % hote)
+                print('L’anomalie sur %s a duré plus de 10s… BOOST !' % hote)
                 self.is_boosting[hote] = True
                 self.push.send_json([h, {'boost': True}])
         else:
             self.anomaly[hote] = datetime.now()
-            self.printe('Nouvelle anomalie sur %s' % hote)
+            print('Nouvelle anomalie sur %s' % hote)
         return True
 
 
