@@ -20,7 +20,7 @@ class SortieAGV(Sortie):
         super().__init__(*args, **kwargs)
         self.socket = socket()
         self.connect()
-        self.to_send = ['vc', 'tc', 'tm', 'nt', 'reversed']
+        self.to_send = ['vc', 'tc', 'vm', 'tm', 'nt', 'reversed']
         self.data[self.hote]['reversed'] = [False, False, False]
 
     def loop(self):
@@ -79,12 +79,13 @@ class SortieAGV(Sortie):
         return self.socket.recv(1024).decode('ascii').replace('\x00', '')
 
     def recv_agv(self):
-        self.socket.sendall('getPosition()'.encode('ascii'))
+        self.socket.sendall('getSpeedAndPosition()'.encode('ascii'))
         pos = self.socket.recv(1024).decode('ascii').replace('\x00', '').split(',')
-        angles = [float(i.strip()) for i in pos[1:]]
+        v1, t1, v2, t2, v3, t3 = [float(i.strip()) for i in pos[1:]]
         return {
-                'tm': array([a % (2 * pi) for a in angles]),
-                'nt': array([a // (2 * pi) for a in angles]).astype(int),
+                'vm': array([v1, v2, v3])
+                'tm': array([a % (2 * pi) for a in [t1, t2, t3]]),
+                'nt': array([a // (2 * pi) for a in [t1, t2, t3]]).astype(int),
                 }
 
     def copy_consignes(self, vt, tt, reversed, **kwargs):
