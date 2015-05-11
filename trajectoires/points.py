@@ -73,7 +73,7 @@ class TrajectoirePoints(TrajectoireDestination):
             self.data[Hote.moro]['sens'] = False
         if self.distance_23() < 10:
             print('Moins de 10m entre ame et yuki')
-            self.ecarte_23()
+            #self.ecarte_23()
 
     def distance_23(self):
         a2, a3 = self.avancement(**self.data[Hote.ame]), self.avancement(**self.data[Hote.yuki])

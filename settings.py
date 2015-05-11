@@ -40,7 +40,7 @@ N_SONDES = 3  # par arbre
 
 # On veut faire faire pi/2 en 10 cm, si on est à vitesse max
 SMOOTH_FACTOR = {
-        Hote.moro: pi / 2 / (60 * 0.3 / PERIODE),
+        Hote.moro: pi / 2 / (60 * 0.2 / PERIODE),
         Hote.ame: pi / 2 / (60 * 0.1 / PERIODE),
         Hote.yuki: pi / 2 / (60 * 0.1 / PERIODE),
         }
