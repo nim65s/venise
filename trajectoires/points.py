@@ -25,14 +25,11 @@ class TrajectoirePoints(TrajectoireDestination):
             p = self.paths[h]
             self.length[h] = [hypot(p[i][0] - p[(i + 1) % len(p)][0], p[i][1] - p[(i + 1) % len(p)][1]) for i in range(len(p))]
 
-    def process_speed(self, hote, **kwargs):
-        self.check_distance(**self.data[hote])
+    def process_speed(self, hote, destination, x, y, dest_next, dest_prev, **kwargs):
+        if self.distance(destination, x, y) < 1 or dest_next or dest_prev:
+            self.change_destination(**self.data[hote])
+        self.check_sens()
         return self.go_to_point(**self.data[hote])
-
-    def check_distance(self, hote, destination, x, y, sens, dest_next, dest_prev, **kwargs):
-        if self.distance(destination, x, y) > 1 and not dest_next and not dest_prev:
-            return
-        self.change_destination(**self.data[hote])
 
     def change_destination(self, hote, x, y, sens, dest_next, dest_prev, state, **kwargs):
         nouveau = (-1 if dest_prev else 1) * (-1 if sens else 1)
@@ -58,12 +55,6 @@ class TrajectoirePoints(TrajectoireDestination):
                         self.data[i]['state'] = int(f.read().strip())
         print([self.data[i]['state'] for i in [2, 3, 4]])
 
-    def update(self):
-        super().update()
-        for hote in self.hotes:
-            self.data[hote].update(avancement=self.avancement(**self.data[hote]))
-        self.check_sens()
-
     def check_sens(self):
         if sum(self.data[Hote.moro]['nt']) < -50:
             #print('Moro a trop tourné dans le sens direct, on passe à l’indirect')
@@ -71,10 +62,10 @@ class TrajectoirePoints(TrajectoireDestination):
         elif sum(self.data[Hote.moro]['nt']) > 50:
             #print('Moro a trop tourné dans le sens indirect, on passe au direct')
             self.data[Hote.moro]['sens'] = False
-        a2, a3 = [self.data[h]['avancement'] for h in [Hote.ame, Hote.yuki]]
-        if self.distance_23(a2, a3) < 9:
-            print('Moins de 9m entre ame et yuki: %f - %f' % (a2, a3))
-            self.ecarte_23(a2, a3)
+        #a2, a3 = [self.data[h]['avancement'] for h in [Hote.ame, Hote.yuki]]
+        #if self.distance_23(a2, a3) < 9:
+            #print('Moins de 9m entre ame et yuki: (%i) %.2f - (%i) %.2f' % (a2, a3))
+            #self.ecarte_23(a2, a3)
 
     def distance_23(self, a2, a3):
         return min(abs(a2 - a3), sum(self.length[Hote.ame]) - abs(a2 - a3))
