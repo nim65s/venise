@@ -108,9 +108,9 @@ class SortieAGV(Sortie):
         reversed ^= rev
         return {'vc': vc, 'reversed': reversed}
 
-    def smoothe(self, tm, tc, **kwargs):
+    def smoothe(self, tm, tc, hote, **kwargs):
         dst = dist_angles(tm, tc)
-        return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR else (tm - SMOOTH_FACTOR * dst / abs(dst).max()) % (2 * pi)}
+        return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR[hote] else (tm - SMOOTH_FACTOR[hote] * dst / abs(dst).max()) % (2 * pi)}
 
     def boost(self, tg, **kwargs):
         return {'vc': array([80, 80, 80]), 'tc': array([tg, tg, tg])}

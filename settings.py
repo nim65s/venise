@@ -39,7 +39,12 @@ PORT_TIM = 2112  # TODO: y’en aura deux sur les AGV, et pour les tests y’a u
 N_SONDES = 3  # par arbre
 
 # On veut faire faire pi/2 en 10 cm, si on est à vitesse max
-SMOOTH_FACTOR = pi / 2 / (60 * 0.1 / PERIODE)
+SMOOTH_FACTOR = {
+        Hote.moro: pi / 2 / (60 * 0.3 / PERIODE),
+        Hote.ame: pi / 2 / (60 * 0.1 / PERIODE),
+        Hote.yuki: pi / 2 / (60 * 0.1 / PERIODE),
+        }
+
 SMOOTH_SPEED = {
         'v': 0.003 / PERIODE,
         'w': 0.00001 / PERIODE,
