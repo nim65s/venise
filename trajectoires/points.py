@@ -62,30 +62,22 @@ class TrajectoirePoints(TrajectoireDestination):
         elif sum(self.data[Hote.moro]['nt']) > 50:
             #print('Moro a trop tourné dans le sens indirect, on passe au direct')
             self.data[Hote.moro]['sens'] = False
-        #a2, a3 = [self.data[h]['avancement'] for h in [Hote.ame, Hote.yuki]]
-        #if self.distance_23(a2, a3) < 9:
-            #print('Moins de 9m entre ame et yuki: (%i) %.2f - (%i) %.2f' % (a2, a3))
-            #self.ecarte_23(a2, a3)
+        e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
+        e = len(self.paths[Hote.ame])
+        if min(abs(e2 - e3), e - abs(e2 - e3)) < 9:
+            self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
-    def distance_23(self, a2, a3):
-        return min(abs(a2 - a3), sum(self.length[Hote.ame]) - abs(a2 - a3))
-
-    def avancement(self, state, destination, x, y, hote, **kwargs):
-        return round(sum(self.length[hote][:state] if state > 0 else self.length[hote]) - self.distance(destination, x, y), 2)
-
-    def ecarte_23(self, a2, a3):
-        s2, s3 = [self.data[h]['sens'] for h in [Hote.ame, Hote.yuki]]
-        s = sum(self.length[Hote.ame])
-        if s2 and min(s3 - s2, s - s2 + s3) < 7:
+    def ecarte_23(self, e, e2, e3, s2, s3):
+        if s2 and (e3 - e2 if e3 > e2 else e - e2 + e3) < 7:
             print('Ame est trop près de Yuki, et part donc dans le sens négatif')
             self.data[Hote.ame].update(sens=False, dest_next=True)
-        elif (not s2) and min(s2 - s3, s - s3 + s2) < 7:
+        elif (not e2) and (e2 - e3 if e2 > e3 else e - e3 + e2) < 7:
             print('Ame est trop près de Yuki, et part donc dans le sens positif')
             self.data[Hote.ame].update(sens=True, dest_next=True)
-        if s3 and min(s2 - s3, s - s3 + s2) < 8:
+        if s3 and (e2 - e3 if e2 > e3 else e - e3 + e2) < 9:
             print('Yuki est trop près de Ame, et part donc dans le sens négatif')
             self.data[Hote.yuki].update(sens=False, dest_next=True)
-        elif (not s3) and min(s3 - s2, s - s2 + s3) < 8:
+        elif (not s3) and (e3 - e2 if e3 > e2 else e - e2 + e3) < 9:
             print('Yuki est trop près de Ame, et part donc dans le sens positif')
             self.data[Hote.yuki].update(sens=True, dest_next=True)
 
