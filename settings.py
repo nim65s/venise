@@ -96,6 +96,11 @@ BERCAIL = {
         Hote.yuki: (8, 6),
         Hote.ame: (9, 11),
         }
+MORNING = {
+        Hote.moro: (-8, 7),
+        Hote.ame: (23, 9.5),
+        Hote.yuki: (12, 7.5),
+        }
 
 DATA = {
         'status': 'Pas connecté', 'erreurs': 'Pas connecté', 'anomaly': False,
