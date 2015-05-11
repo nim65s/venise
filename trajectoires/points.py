@@ -59,35 +59,44 @@ class TrajectoirePoints(TrajectoireDestination):
         print([self.data[i]['state'] for i in [2, 3, 4]])
 
     def update(self):
+        super().update()
         for hote in self.hotes:
             self.data[hote].update(avancement=self.avancement(**self.data[hote]))
         self.check_sens()
-        super().update()
 
     def check_sens(self):
         if sum(self.data[Hote.moro]['nt']) < -50:
-            print('Moro a trop tourné dans le sens direct, on passe à l’indirect')
+            #print('Moro a trop tourné dans le sens direct, on passe à l’indirect')
             self.data[Hote.moro]['sens'] = True
         elif sum(self.data[Hote.moro]['nt']) > 50:
-            print('Moro a trop tourné dans le sens indirect, on passe au direct')
+            #print('Moro a trop tourné dans le sens indirect, on passe au direct')
             self.data[Hote.moro]['sens'] = False
-        if self.distance_23() < 10:
-            print('Moins de 10m entre ame et yuki')
-            #self.ecarte_23()
+        a2, a3 = [self.data[h]['avancement'] for h in [Hote.ame, Hote.yuki]]
+        if self.distance_23(a2, a3) < 9:
+            print('Moins de 9m entre ame et yuki: %f - %f' % (a2, a3))
+            self.ecarte_23(a2, a3)
 
-    def distance_23(self):
-        a2, a3 = self.avancement(**self.data[Hote.ame]), self.avancement(**self.data[Hote.yuki])
+    def distance_23(self, a2, a3):
         return min(abs(a2 - a3), sum(self.length[Hote.ame]) - abs(a2 - a3))
 
     def avancement(self, state, destination, x, y, hote, **kwargs):
-        return sum(self.length[hote][:state] if state > 0 else self.length[hote]) - self.distance(destination, x, y)
+        return round(sum(self.length[hote][:state] if state > 0 else self.length[hote]) - self.distance(destination, x, y), 2)
 
-    def ecarte_23(self):
-        a2, a3 = self.avancement(**self.data[Hote.ame]), self.avancement(**self.data[Hote.yuki])
-        print('avancement d’ame et yuki: %.2f & %.2f' % (a2, a3))
-        sens = (True, False) if abs(a2 - a3) < sum(self.length[Hote.ame]) - abs(a2 - a3) else (False, True)
-        print('nouveaux sens: %s & %s' % sens)
-        self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'] = sens
+    def ecarte_23(self, a2, a3):
+        s2, s3 = [self.data[h]['sens'] for h in [Hote.ame, Hote.yuki]]
+        s = sum(self.length[Hote.ame])
+        if s2 and min(s3 - s2, s - s2 + s3) < 7:
+            print('Ame est trop près de Yuki, et part donc dans le sens négatif')
+            self.data[Hote.ame].update(sens=False, dest_next=True)
+        elif (not s2) and min(s2 - s3, s - s3 + s2) < 7:
+            print('Ame est trop près de Yuki, et part donc dans le sens positif')
+            self.data[Hote.ame].update(sens=True, dest_next=True)
+        if s3 and min(s2 - s3, s - s3 + s2) < 8:
+            print('Yuki est trop près de Ame, et part donc dans le sens négatif')
+            self.data[Hote.yuki].update(sens=False, dest_next=True)
+        elif (not s3) and min(s3 - s2, s - s2 + s3) < 8:
+            print('Yuki est trop près de Ame, et part donc dans le sens positif')
+            self.data[Hote.yuki].update(sens=True, dest_next=True)
 
 
 trajectoire_points_parser = ArgumentParser(parents=[trajectoire_destination_parser], conflict_handler='resolve')
