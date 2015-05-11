@@ -68,18 +68,18 @@ class TrajectoirePoints(TrajectoireDestination):
             self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
     def ecarte_23(self, e, e2, e3, s2, s3):
-        if s2 and (e3 - e2 if e3 > e2 else e - e2 + e3) < 7:
+        if (not s2) and (e3 - e2 if e3 > e2 else e - e2 + e3) < 7:
             print('Ame est trop près de Yuki, et part donc dans le sens négatif')
-            self.data[Hote.ame].update(sens=False, dest_next=True)
-        elif (not e2) and (e2 - e3 if e2 > e3 else e - e3 + e2) < 7:
-            print('Ame est trop près de Yuki, et part donc dans le sens positif')
             self.data[Hote.ame].update(sens=True, dest_next=True)
-        if s3 and (e2 - e3 if e2 > e3 else e - e3 + e2) < 9:
+        elif e2 and (e2 - e3 if e2 > e3 else e - e3 + e2) < 7:
+            print('Ame est trop près de Yuki, et part donc dans le sens positif')
+            self.data[Hote.ame].update(sens=False, dest_next=True)
+        if (not s3) and (e2 - e3 if e2 > e3 else e - e3 + e2) < 9:
             print('Yuki est trop près de Ame, et part donc dans le sens négatif')
-            self.data[Hote.yuki].update(sens=False, dest_next=True)
-        elif (not s3) and (e3 - e2 if e3 > e2 else e - e2 + e3) < 9:
-            print('Yuki est trop près de Ame, et part donc dans le sens positif')
             self.data[Hote.yuki].update(sens=True, dest_next=True)
+        elif s3 and (e3 - e2 if e3 > e2 else e - e2 + e3) < 9:
+            print('Yuki est trop près de Ame, et part donc dans le sens positif')
+            self.data[Hote.yuki].update(sens=False, dest_next=True)
 
 
 trajectoire_points_parser = ArgumentParser(parents=[trajectoire_destination_parser], conflict_handler='resolve')
