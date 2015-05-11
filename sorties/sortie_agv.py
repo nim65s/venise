@@ -61,6 +61,8 @@ class SortieAGV(Sortie):
                 self.send('%s Connection Refused…' % now())
             except BrokenPipeError:
                 self.send('%s Broken pipe…' % now())
+            except OSError:
+                self.send('%s L’AGV ne répond pas…' % now())
 
     def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
         self.data[hote].update(**self.recv_agv())
