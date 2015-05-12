@@ -64,20 +64,20 @@ class TrajectoirePoints(TrajectoireDestination):
             self.data[Hote.moro]['sens'] = False
         e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
         e = len(self.paths[Hote.ame])
-        if min(abs(e2 - e3), e - abs(e2 - e3)) < 9:
+        if min(abs(e2 - e3), e - abs(e2 - e3)) < 10:
             self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
     def ecarte_23(self, e, e2, e3, s2, s3):
-        if (not s2) and (e3 - e2 if e3 > e2 else e - e2 + e3) < 7:
+        if (not s2) and (e3 - e2 if e3 > e2 else e - e2 + e3) < 10:
             print('Ame est trop près de Yuki, et part donc dans le sens négatif')
             self.data[Hote.ame].update(sens=True, dest_next=True)
-        elif e2 and (e2 - e3 if e2 > e3 else e - e3 + e2) < 7:
+        elif s2 and (e2 - e3 if e2 > e3 else e - e3 + e2) < 10:
             print('Ame est trop près de Yuki, et part donc dans le sens positif')
             self.data[Hote.ame].update(sens=False, dest_next=True)
-        if (not s3) and (e2 - e3 if e2 > e3 else e - e3 + e2) < 9:
+        if (not s3) and (e2 - e3 if e2 > e3 else e - e3 + e2) < 8:
             print('Yuki est trop près de Ame, et part donc dans le sens négatif')
             self.data[Hote.yuki].update(sens=True, dest_next=True)
-        elif s3 and (e3 - e2 if e3 > e2 else e - e2 + e3) < 9:
+        elif s3 and (e3 - e2 if e3 > e2 else e - e2 + e3) < 8:
             print('Yuki est trop près de Ame, et part donc dans le sens positif')
             self.data[Hote.yuki].update(sens=False, dest_next=True)
 
