@@ -93,13 +93,13 @@ BORDS_SVG = {h: array(BORDS[h]) * PX_PAR_M for h in [2, 3, 4]}
 
 BERCAIL = {
         Hote.moro: (-10, 9),
-        Hote.yuki: (8, 6),
-        Hote.ame: (9, 11),
+        Hote.ame: (6.5, 6),
+        Hote.yuki: (7, 11),
         }
 MORNING = {
         Hote.moro: (-8, 7),
-        Hote.ame: (23, 9.5),
-        Hote.yuki: (12, 7.5),
+        Hote.ame: (12, 7.5),
+        Hote.yuki: (23, 9.5),
         }
 
 DATA = {
@@ -113,3 +113,4 @@ DATA = {
         'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)),  'destination': [[0, 0], [0, 0], [0, 0]], 'state': -1,  # Détails d’implémentation…
         }
 
+Phase = IntEnum('Phase', 'parking sort_yuki sort_ame tourne rentre_ame rentre_yuki auto')
