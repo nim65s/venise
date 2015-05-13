@@ -10,6 +10,7 @@ from ..settings import Hote, Phase, BERCAIL, MORNING
 class TrajectoirePhases(TrajectoireGranier):
     def __init__(self, phase, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        phase = Phase[phase]
         if phase == Phase.auto:
             phase = Phase.tourne if 10 <= datetime.now().hour <= 17 else Phase.parking
         self.phase = phase

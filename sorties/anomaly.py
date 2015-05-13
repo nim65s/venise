@@ -32,8 +32,8 @@ class Anomaly(Subscriber, Pusher):
             if self.anomaly[hote] is None:
                 self.anomaly[hote] = datetime.now()
                 print('Ancienne anomalie récupérée sur %s' % hote.name)
-            if datetime.now() - self.anomaly[hote] > timedelta(seconds=11) and self.is_boosting[hote]:
-                print('Le BOOST sur %s a duré plus de 1s…' % hote.name)
+            if datetime.now() - self.anomaly[hote] > timedelta(seconds=12) and self.is_boosting[hote]:
+                print('Le BOOST sur %s a duré plus de 2s…' % hote.name)
                 self.push.send_json([hote, {'boost': False}])
                 return False
             elif datetime.now() - self.anomaly[hote] > timedelta(seconds=10) and hote != Hote.moro:
