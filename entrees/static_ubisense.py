@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-from ..settings import Hote, MAIN_HOST, PORT_UBISENS
+from ..settings import Hote, MAIN_HOST
 from .entree import Entree, entree_parser
 
 

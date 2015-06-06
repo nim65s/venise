@@ -1,10 +1,10 @@
 from argparse import ArgumentParser
-from math import hypot
 from datetime import datetime
+from math import hypot
 from os.path import expanduser, isfile
 
-from ..settings import PATHS, Hote, FAILS
-from .destination import TrajectoireDestination, trajectoire_destination_parser
+from ..settings import FAILS, Hote, PATHS
+from .destination import trajectoire_destination_parser, TrajectoireDestination
 
 
 class TrajectoirePoints(TrajectoireDestination):
@@ -57,10 +57,8 @@ class TrajectoirePoints(TrajectoireDestination):
 
     def check_sens(self):
         if sum(self.data[Hote.moro]['nt']) < -50:
-            #print('Moro a trop tourné dans le sens direct, on passe à l’indirect')
             self.data[Hote.moro]['sens'] = True
         elif sum(self.data[Hote.moro]['nt']) > 50:
-            #print('Moro a trop tourné dans le sens indirect, on passe au direct')
             self.data[Hote.moro]['sens'] = False
         e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
         e = len(self.paths[Hote.ame])

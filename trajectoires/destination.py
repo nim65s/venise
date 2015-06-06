@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
-from math import atan2, hypot, pi, sin, cos
 from datetime import datetime
+from math import atan2, hypot, pi, sin
 
 from ..settings import Hote
 from .trajectoire import Trajectoire, trajectoire_parser
@@ -39,7 +39,6 @@ class TrajectoireDestination(Trajectoire):
             return round(sin(m / 6 + 2 * pi / 3) / 2, 5)
         if hote == Hote.yuki:
             return round(sin(m / 6 + 4 * pi / 3) / 2, 5)
-
 
 
 trajectoire_destination_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')

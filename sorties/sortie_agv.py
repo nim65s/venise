@@ -2,13 +2,12 @@ from datetime import datetime, timedelta
 from math import pi
 from socket import socket, timeout
 from time import sleep
-from os.path import expanduser
 
-from numpy import array, where, logical_and
+from numpy import array, where
 
-from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR, VIT_LIM_REV
-from ..vmq import vmq_parser
+from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR
 from ..utils.dist_angles import dist_angles
+from ..vmq import vmq_parser
 from .sortie import Sortie
 
 now = datetime.now

@@ -1,10 +1,9 @@
 from argparse import ArgumentParser
 from datetime import datetime
 
-from .points import trajectoire_points_parser
+from ..settings import BERCAIL, Hote, MORNING, Phase
 from .granier import TrajectoireGranier
-
-from ..settings import Hote, Phase, BERCAIL, MORNING
+from .points import trajectoire_points_parser
 
 
 class TrajectoirePhases(TrajectoireGranier):
@@ -68,19 +67,19 @@ class TrajectoirePhases(TrajectoireGranier):
 
     def sort_yuki(self):
         self.data[Hote.yuki].update(destination=MORNING[Hote.yuki], boost=True, state=12)
-        return self.go_to_point(**self.data[hote])
+        return self.go_to_point(**self.data[Hote.yuki])
 
     def rentre_yuki(self):
         self.data[Hote.yuki].update(destination=BERCAIL[Hote.yuki])
-        return self.go_to_point(**self.data[hote])
+        return self.go_to_point(**self.data[Hote.yuki])
 
     def sort_ame(self):
         self.data[Hote.ame].update(destination=MORNING[Hote.ame], boost=True, state=32)
-        return self.go_to_point(**self.data[hote])
+        return self.go_to_point(**self.data[Hote.ame])
 
     def rentre_ame(self):
         self.data[Hote.ame].update(destination=BERCAIL[Hote.ame])
-        return self.go_to_point(**self.data[hote])
+        return self.go_to_point(**self.data[Hote.ame])
 
 
 trajectoire_phases_parser = ArgumentParser(parents=[trajectoire_points_parser], conflict_handler='resolve')

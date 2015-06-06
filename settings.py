@@ -65,16 +65,18 @@ ALLER_RETOURS = {
 _PATHS = {
         Hote.moro: [[-8, 7], [-11, 7], [-11, 10], [-10, 11], [-8, 11]],
         Hote.ame: [[11, 13], [19, 13], [23, 9.5], [24, 7.5], [23, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 10]],
-        #Hote.yuki: [[11, 13], [19, 13], [23, 9.5], [24, 7.5], [23, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 10]],
+        # Hote.yuki: [[11, 13], [19, 13], [23, 9.5], [24, 7.5], [23, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 10]],
         Hote.yuki: [[11, 13], [14, 15], [15, 15], [17, 13], [17, 12], [16, 10], [15, 7.5], [12, 7.5], [10, 10]],
         }
+
 
 def echelonne_path(dep, ari):
     dep, ari = array(dep), array(ari)
     d = sqrt(sum((dep - ari) ** 2))
     return [(dep + i * (ari - dep) / d).round(2).tolist() for i in range(int(d))]
 
-PATHS = {h: sum([echelonne_path(_PATHS[h][i], _PATHS[h][(i + 1) % len(_PATHS[h])]) for i in range(len(_PATHS[h])) ], []) for h in [Hote.moro, Hote.ame, Hote.yuki]}
+PATHS = {h: sum([echelonne_path(_PATHS[h][i], _PATHS[h][(i + 1) % len(_PATHS[h])])
+    for i in range(len(_PATHS[h]))], []) for h in [Hote.moro, Hote.ame, Hote.yuki]}
 
 
 BORDS = {
@@ -109,10 +111,12 @@ DATA = {
         'x': 0, 'y': 0, 'a': 0,  # Position
         'v': 0, 'w': 0, 't': 0,  # Vitesse
         'vg': 0, 'wg': 0, 'tg': 0,  # Vitesse
-        'vt': [0, 0, 0], 'vm': [0, 0, 0], 'vc': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],  # Tourelles vitesse, target, mesuree, consigne, nombre de tours, nombre de tours
+        'vt': [0, 0, 0], 'vm': [0, 0, 0], 'vc': [0, 0, 0], 'tt': [0, 0, 0], 'tm': [0, 0, 0], 'tc': [0, 0, 0], 'nt': [0, 0, 0],
+        # Tourelles vitesse, target, mesuree, consigne, nombre de tours, nombre de tours
         'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,  # Sondes granier
-        'stop': False, 'smoothe': True, 'smoothe_speed': True, 'boost': False, 'arriere': False, 'reverse': True, 'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False,  # Boutons
-        'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)),  'destination': [[0, 0], [0, 0], [0, 0]], 'state': -1,  # Détails d’implémentation…
+        'stop': False, 'smoothe': True, 'smoothe_speed': True, 'boost': False, 'arriere': False, 'reverse': True,
+        'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False,  # Boutons
+        'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)), 'destination': [[0, 0], [0, 0], [0, 0]], 'state': -1,
         }
 
 Phase = IntEnum('Phase', 'parking sort_yuki sort_ame tourne rentre_ame rentre_yuki auto')

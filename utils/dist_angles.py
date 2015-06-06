@@ -1,5 +1,7 @@
 from math import pi
+
 from numpy import array, where
+
 
 def dist_angles(actuel, cible):
     dst = array(actuel) - array(cible)
@@ -8,6 +10,7 @@ def dist_angles(actuel, cible):
     while (dst > pi).any():
         dst[where(dst > pi)] -= 2 * pi
     return dst
+
 
 def dist_angle(actuel, cible):
     dst = actuel - cible

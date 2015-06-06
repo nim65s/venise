@@ -1,13 +1,14 @@
-from zmq import PUSH
 from argparse import ArgumentParser
 from datetime import datetime
-from math import atan2, cos, hypot, pi, sin, copysign
-from time import sleep
+from math import atan2, copysign, cos, hypot, pi, sin
 from os.path import expanduser, isfile
+from time import sleep
 
-from ..settings import PERIODE, POS_ROUES, VIT_MOY_MAX, PORT_PUSH, N_SONDES, DATA, Hote, SMOOTH_SPEED, FAILS
+from zmq import PUSH
+
+from ..settings import DATA, FAILS, PERIODE, PORT_PUSH, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
 from ..utils.dist_angles import dist_angle
-from ..vmq import Puller, Publisher, vmq_parser
+from ..vmq import Publisher, Puller, vmq_parser
 
 
 class Trajectoire(Puller, Publisher):
@@ -100,7 +101,6 @@ class Trajectoire(Puller, Publisher):
         else:
             v, w, t = 0, 0, 0
         return {'v': v, 'w': w, 't': t}
-
 
 
 trajectoire_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
