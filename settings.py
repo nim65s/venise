@@ -6,12 +6,14 @@ from socket import gethostname
 
 from numpy import array
 
-Hote = IntEnum('Hôte', 'cerf moro ame yuki')
+PROD = False
+
+Hote = IntEnum('Hôte', 'cerf moro ame yuki nausicaa')
 try:
     CURRENT_HOST = Hote[gethostname().split('.')[0].lower()]
 except KeyError:
-    CURRENT_HOST = Hote.cerf
-MAIN_HOST = Hote.cerf
+    CURRENT_HOST = Hote.cerf if PROD else Hote.nausicaa
+MAIN_HOST = Hote.cerf if PROD else Hote.nausicaa
 FAILS = [Hote.ame]
 
 # Constantes AGV

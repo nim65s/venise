@@ -1,0 +1,12 @@
+[Unit]
+Description=Venise: Fake Ubisense
+After=network.target
+
+[Service]
+User=nim
+Group=nim
+ExecStart=/usr/bin/env python3 -m venise.entrees.static_ubisense
+WorkingDirectory=/home/nim/LAAS
+
+[Install]
+WantedBy=multi-user.target
