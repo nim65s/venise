@@ -4,7 +4,7 @@ from math import atan2, copysign, cos, hypot, pi, sin
 from os.path import expanduser, isfile
 from time import sleep
 
-from ..settings import DATA, FAILS, PERIODE, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
+from ..settings import DATA, PERIODE, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
 from ..utils.dist_angles import dist_angle
 from ..vmq import Publisher, Puller, vmq_parser
 

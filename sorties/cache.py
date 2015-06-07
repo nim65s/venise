@@ -1,8 +1,4 @@
-from datetime import datetime, timedelta
-
-from numpy import array
-
-from ..settings import Hote, MAIN_HOST, PORT_PUSH, PROD
+from ..settings import MAIN_HOST, PORT_PUSH, PROD
 from ..vmq import Pusher, Subscriber, vmq_parser
 
 
