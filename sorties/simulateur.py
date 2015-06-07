@@ -6,7 +6,7 @@ from numpy import array, where
 
 from ..settings import PERIODE, SMOOTH_FACTOR
 from ..utils.dist_angles import dist_angles
-from ..vmq import vmq_parser
+from ..vmq import puller_parser
 from .sortie import Sortie
 
 now = datetime.now
@@ -52,10 +52,7 @@ class Simulateur(Sortie):
             self.data[hote].update(**self.boost(**self.data[hote]))
         if arriere:
             self.data[hote].update(**self.arriere(**self.data[hote]))
-        self.check_ret(self.recv_rep())
-        self.socket.sendall('getErrors()'.encode('ascii'))
-        erreurs = self.recv_rep()
-        self.push.send_json([hote, {'erreurs': 'ok' if erreurs.startswith('-') else erreurs}])
+        self.push.send_json([hote, {'erreurs': 'ok'}])
 
     def recv_agv(self, vc, tc, nt, **kwargs):
         return {
@@ -90,4 +87,5 @@ class Simulateur(Sortie):
 
 
 if __name__ == '__main__':
-    Simulateur(**vars(vmq_parser.parse_args())).run()
+    puller_parser.set_defaults(port_push=True)
+    Simulateur(**vars(puller_parser.parse_args())).run()

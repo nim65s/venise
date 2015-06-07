@@ -1,18 +1,19 @@
+from argparse import ArgumentParser
 from datetime import datetime
 
 from zmq import NOBLOCK, PULL
 from zmq.error import Again
 
 from ..settings import PORT_PUSH
-from .vmq import VMQ
+from .vmq import VMQ, vmq_parser
 
 
 class Puller(VMQ):
-    def __init__(self, wait=True, *args, **kwargs):
+    def __init__(self, wait=True, port_push=False, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.puller = self.context.socket(PULL)
-        self.puller.bind("tcp://*:%i" % PORT_PUSH)
+        self.puller.bind("tcp://*:%i" % (PORT_PUSH + port_push * 10 * self.hote))
         self.last_seen = datetime(1970, 1, 1)
         if wait:
             print('Attente de connexion')
@@ -29,3 +30,6 @@ class Puller(VMQ):
                 break
             if block != NOBLOCK:
                 break
+
+puller_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
+puller_parser.add_argument('--port_push', action='store_true')

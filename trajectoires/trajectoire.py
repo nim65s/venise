@@ -4,9 +4,7 @@ from math import atan2, copysign, cos, hypot, pi, sin
 from os.path import expanduser, isfile
 from time import sleep
 
-from zmq import PUSH
-
-from ..settings import DATA, FAILS, PERIODE, PORT_PUSH, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
+from ..settings import DATA, FAILS, PERIODE, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
 from ..utils.dist_angles import dist_angle
 from ..vmq import Publisher, Puller, vmq_parser
 
@@ -21,18 +19,9 @@ class Trajectoire(Puller, Publisher):
         self.data['timestamp'] = datetime.now().timestamp()
         self.data['trajectoire'] = self.__class__.__name__
 
-        self.push = {h: self.context.socket(PUSH) for h in self.hotes}
-        for h in self.hotes:
-            if h not in FAILS:
-                self.push[h].connect('tcp://%s:%i' % (h.name, PORT_PUSH))
-                self.data[h].update(**self.get_speed(h))
-
     def send(self):
         self.data['timestamp'] = datetime.now().timestamp()
         self.pub()
-        for h in self.hotes:
-            if h not in FAILS:
-                self.push[h].send_json([h, self.data[h]])
 
     def loop(self):
         self.pull()
