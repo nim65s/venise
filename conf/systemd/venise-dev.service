@@ -1,0 +1,23 @@
+[Unit]
+Description=Venise: Meta
+After=network.target
+
+Requires=venise-ubisense.service
+Requires=venise-trajectoire-granier.service
+Requires=venise-cache@moro.service
+Requires=venise-cache@ame.service
+Requires=venise-cache@yuki.service
+Requires=venise-simulateur@moro.service
+Requires=venise-simulateur@ame.service
+Requires=venise-simulateur@yuki.service
+Requires=venise-web.service
+
+[Service]
+User=nim
+Group=nim
+ExecStart=/usr/bin/echo ok
+WorkingDirectory=/home/nim/LAAS
+
+
+[Install]
+WantedBy=multi-user.target
