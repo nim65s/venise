@@ -1,0 +1,12 @@
+[Unit]
+Description=Venise: Venise - Serveur principal (Trajectoire): Granier (fonctionnement nominal)
+After=network.target
+
+[Service]
+User=nim
+Group=nim
+ExecStart=/usr/bin/env python2 server.py
+WorkingDirectory=/home/nim/LAAS/venise/sorties/web
+
+[Install]
+WantedBy=multi-user.target

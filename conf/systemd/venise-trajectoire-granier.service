@@ -1,0 +1,12 @@
+[Unit]
+Description=Venise: Venise - Serveur principal (Trajectoire): Granier (fonctionnement nominal)
+After=network.target
+
+[Service]
+User=nim
+Group=nim
+ExecStart=/usr/bin/env python3 -m venise.trajectoires.granier --s3 0
+WorkingDirectory=/home/nim/LAAS
+
+[Install]
+WantedBy=multi-user.target

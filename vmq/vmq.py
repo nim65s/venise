@@ -9,7 +9,7 @@ from ..settings import CURRENT_HOST, Hote
 class VMQ(object):
     def __init__(self, hote, verbosite, *args, **kwargs):
         self.hote, self.verbosite = Hote[hote], verbosite
-        self.hotes = [self.hote] if self.hote > 1 else [h for h in Hote if h > 1]
+        self.hotes = [self.hote] if 5 > self.hote > 1 else [h for h in Hote if 5 > h > 1]
         self.printe(self.hotes)
         self.context = Context()
         self.data = {h: {} for h in self.hotes}
