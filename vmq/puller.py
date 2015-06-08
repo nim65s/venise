@@ -13,7 +13,9 @@ class Puller(VMQ):
         super().__init__(*args, **kwargs)
 
         self.puller = self.context.socket(PULL)
-        self.puller.bind("tcp://*:%i" % (PORT_PUSH + port_push * 10 * self.hote))
+        url = "tcp://*:%i" % (PORT_PUSH + port_push * 10 * self.hote)
+        self.printe(url)
+        self.puller.bind(url)
         self.last_seen = datetime(1970, 1, 1)
         if wait:
             print('Attente de connexion')
