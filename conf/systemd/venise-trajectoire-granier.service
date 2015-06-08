@@ -1,6 +1,7 @@
 [Unit]
 Description=Venise: Venise - Serveur principal (Trajectoire): Granier (fonctionnement nominal)
 After=network.target
+After=venise-ubisense.service
 
 [Service]
 User=nim

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from math import pi
 from time import sleep
 
@@ -10,7 +10,6 @@ from ..vmq import puller_parser
 from .sortie import Sortie
 
 now = datetime.now
-per = timedelta(seconds=PERIODE * 2)
 
 
 class Simulateur(Sortie):
@@ -20,26 +19,12 @@ class Simulateur(Sortie):
         self.data[self.hote]['reversed'] = [False, False, False]
 
     def loop(self):
-        start = now()
         self.pull()
-        if datetime.now() - self.last_seen > timedelta(seconds=3):
-            self.send('déconnecté du serveur')
-        if datetime.now() - self.last_seen > timedelta(seconds=5):
-            self.data[self.hote]['stop'] = True
-        try:
-            self.process(**self.data[self.hote])
-        except (ConnectionResetError, BrokenPipeError):
-            self.send('%s Failed connection !' % now())
-            self.connect()
+        self.process(**self.data[self.hote])
         for var in self.to_send:
             self.push.send_json([self.hote, {var: array(self.data[self.hote][var]).round(5).tolist()}])
         self.push.send_json([self.hote, {'last_seen_agv': str(now())}])
-        duree = now() - start
-        reste = per - duree
-        if reste < timedelta(0):
-            self.send('Délai anormal…')
-        else:
-            sleep(reste.microseconds / 1000000)
+        sleep(PERIODE)
 
     def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
         self.data[hote].update(**self.recv_agv(**self.data[hote]))
