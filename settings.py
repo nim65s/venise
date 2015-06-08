@@ -106,7 +106,7 @@ MORNING = {
         }
 
 DATA = {
-        'status': 'Pas connecté', 'erreurs': 'Pas connecté', 'anomaly': False,
+        'status': 'Pas connecté', 'erreurs': 'Pas connecté', 'anomaly': False, 'is_up': [False, False, False],
         'x': 0, 'y': 0, 'a': 0,  # Position
         'v': 0, 'w': 0, 't': 0,  # Vitesse
         'vg': 0, 'wg': 0, 'tg': 0,  # Vitesse

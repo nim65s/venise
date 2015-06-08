@@ -1,5 +1,6 @@
 from datetime import datetime
-from zmq import SUB, SUBSCRIBE, NOBLOCK
+
+from zmq import NOBLOCK, SUB, SUBSCRIBE
 from zmq.error import Again
 
 from ..settings import MAIN_HOST, PORT_PUB
@@ -26,7 +27,7 @@ class Subscriber(VMQ):
                     if str(h.value) in data:
                         self.data[h].update(**data[str(h.value)])
                 self.last_seen = datetime.now()
-                self.printe([self.hote, data[str(self.hote.value)] if self.hote > 1 else data])
+                self.printe([self.hote, data[str(self.hote.value)] if 5 > self.hote > 1 else data])
             except Again:
                 break
             if not block:
