@@ -1,8 +1,5 @@
 from datetime import datetime, timedelta
 
-from numpy import array
-
-from ..settings import Hote
 from ..vmq import Pusher, Subscriber, vmq_parser
 
 
