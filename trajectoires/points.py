@@ -3,7 +3,7 @@ from datetime import datetime
 from math import hypot
 from os.path import expanduser, isfile
 
-from ..settings import FAILS, Hote, PATHS
+from ..settings import Hote, PATHS
 from .destination import trajectoire_destination_parser, TrajectoireDestination
 
 
@@ -62,7 +62,7 @@ class TrajectoirePoints(TrajectoireDestination):
             self.data[Hote.moro]['sens'] = False
         e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
         e = len(self.paths[Hote.ame])
-        if min(abs(e2 - e3), e - abs(e2 - e3)) < 10 and FAILS != []:
+        if min(abs(e2 - e3), e - abs(e2 - e3)) < 10:
             self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
     def ecarte_23(self, e, e2, e3, s2, s3):

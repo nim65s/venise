@@ -6,7 +6,7 @@ from socket import gethostname
 
 from numpy import array
 
-PROD = False
+PROD = True
 
 Hote = IntEnum('Hôte', 'cerf moro ame yuki nausicaa')
 try:
@@ -14,7 +14,6 @@ try:
 except KeyError:
     CURRENT_HOST = Hote.cerf if PROD else Hote.nausicaa
 MAIN_HOST = Hote.cerf if PROD else Hote.nausicaa
-FAILS = [Hote.ame]
 
 # Constantes AGV
 RAYON_AGV = 1.180

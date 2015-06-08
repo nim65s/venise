@@ -24,8 +24,9 @@ class Puller(VMQ):
         while True:
             try:
                 num, data = self.puller.recv_json(block)
-                self.data[num].update(**data)
-                self.last_seen = datetime.now()
+                if num in self.hotes:
+                    self.data[num].update(**data)
+                    self.last_seen = datetime.now()
             except Again:
                 break
             if block != NOBLOCK:
