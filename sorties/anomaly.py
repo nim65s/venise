@@ -1,8 +1,9 @@
-from numpy import array
 from datetime import datetime, timedelta
 
-from ..vmq import vmq_parser, Subscriber, Pusher
+from numpy import array
+
 from ..settings import Hote
+from ..vmq import Pusher, Subscriber, vmq_parser
 
 
 class Anomaly(Subscriber, Pusher):
@@ -18,6 +19,8 @@ class Anomaly(Subscriber, Pusher):
 
     def check_anomaly(self, vc, vm, hote, anomaly, stop, **kwargs):
         vc, vm, hote = array(vc), array(vm), Hote(hote)
+        if 0 in vc:
+            return False
         new_anomaly = bool(abs((vc - vm) / vc).sum() > 1) and not stop
         if not new_anomaly:
             if self.anomaly[hote]:
