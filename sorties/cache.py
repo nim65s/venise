@@ -8,7 +8,7 @@ class Cache(Subscriber, Pusher):
         self.push.connect('tcp://%s:%i' % (self.hote.name if PROD else MAIN_HOST.name, PORT_PUSH + 10 * self.hote))
 
     def loop(self):
-        self.sub()
+        self.sub(block=0)
         self.push.send_json([self.hote, self.data[self.hote]])
 
 
