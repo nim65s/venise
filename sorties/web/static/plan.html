@@ -94,7 +94,7 @@
             <tr>
                 <th>Arbre</th>
                 {% if expert %}<th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>{% endif %}
-                <th>Stop</th><th>Boost</th><th>Arrière</th><th>Online</th>
+                <th>Stop</th><th>Boost</th><th>Arrière</th>
                 {% if expert %}<th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th><th>Anomaly</th><th>État</th><th>Sens</th>{% endif %}
                 <th>Destination</th><th>Status</th>
             </tr>
@@ -116,7 +116,6 @@
                         <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ok']})" type="button" class="btn btn-lg btn-success {{ var }}-ko hidden">✘</button>
                     </td>
                 {% endfor %}
-                <td class="is_up"></td>
                 {% if expert %}
                 {% for var in ['reverse', 'smoothe', 'smoothe_speed'] %}
                     <td>
@@ -207,13 +206,12 @@
                                 cy: data[a]['destination'][1] * {{ PX_PAR_M }},
                             });
                             $('#a' + a + ' .status').html(data[a]['status']);
-                            $('#a' + a + ' .is_up').html(data[a]['is_up'] ? '✔' : '✘');
                             {% if expert %}
                             $('#a' + a + ' .anomaly').html(data[a]['anomaly'] ? '✔' : '✘');
                             $('#a' + a + ' .state').html(data[a]['state']);
                             $('li.' + a).html(data[a]['erreurs']);
                             {% endif %}
-                            $('#agv' + a).css('fill', data[a]['stop'] ? 'yellow' : 'none');
+                            $('#agv' + a).css('fill', data[a]['is_up'] ? data[a]['stop'] ? 'yellow' : 'none' : 'orange');
                         }
                     }
                     last_seen = new Date();
