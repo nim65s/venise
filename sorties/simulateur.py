@@ -71,6 +71,9 @@ class Simulateur(Sortie):
         return {'vc': -vc}
 
     def tourelles_to_movement(self, **kwargs):
+        # V(O) = V(P) + ω × PO
+        # V(A) - V(B) = ω × BA
+        # Boarf Featherman, toussa toussa
         pass  # TODO
 
 
