@@ -16,7 +16,8 @@ class TrajectoirePoints(TrajectoireDestination):
         self.length = {}
         self.get_length()
         for h in self.hotes:
-            self.data[h]['destination'] = self.paths[h][self.data[h]['choosen_path']][self.data[h]['state']]
+            cp, s = [self.data[h][t] for t in ['choosen_path', 'state']]
+            self.data[h]['destination'] = self.paths[h][cp][s]
 
     def get_paths(self):
         return PATHS
@@ -26,11 +27,19 @@ class TrajectoirePoints(TrajectoireDestination):
             p = self.paths[h][self.data[h]['choosen_path']]
             self.length[h] = [hypot(p[i][0] - p[(i + 1) % len(p)][0], p[i][1] - p[(i + 1) % len(p)][1]) for i in range(len(p))]
 
-    def process_speed(self, hote, destination, x, y, dest_next, dest_prev, **kwargs):
-        if self.distance(destination, x, y) < 1 or dest_next or dest_prev:
+    def process_speed(self, hote, destination, x, y, dest_next, dest_prev, path_next, path_prev, choosen_path, **kwargs):
+        if path_next or path_prev:
+            self.change_path(hote, choosen_path, path_next, path_prev, x, y)
+        if self.distance(destination, x, y) < 1 or dest_next or dest_prev or path_next or path_prev:
             self.change_destination(**self.data[hote])
         self.check_sens()
         return self.go_to_point(**self.data[hote])
+
+    def change_path(self, hote, choosen_path, path_next, path_prev, x, y):
+        choosen_path += 1 if path_next else -1 if path_prev else 0
+        choosen_path %= len(self.paths[hote])
+        self.data[hote].update(choosen_path=choosen_path, path_next=False, path_prev=False)
+        self.save_choosen_path(hote, choosen_path)
 
     def change_destination(self, hote, x, y, sens, dest_next, dest_prev, state, choosen_path, **kwargs):
         nouveau = (-1 if dest_prev else 1) * (-1 if sens else 1)
@@ -38,11 +47,15 @@ class TrajectoirePoints(TrajectoireDestination):
         destination = self.paths[hote][choosen_path][state]
         print(datetime.now(), hote, state, destination)
         self.data[hote].update(destination=destination, state=state, dest_prev=False, dest_next=False)
-        self.save_state(hote)
+        self.save_state(hote, state)
 
-    def save_state(self, hote):
+    def save_choosen_path(self, hote, choosen_path):
+        with open(expanduser('~/.choosen_path_%s_%i' % (self.__class__.__name__, hote)), 'w') as f:
+            print(choosen_path, file=f)
+
+    def save_state(self, hote, state):
         with open(expanduser('~/.state_%s_%i' % (self.__class__.__name__, hote)), 'w') as f:
-            print(self.data[hote]['state'], file=f)
+            print(state, file=f)
 
     def set_choosen_path(self, cp1, cp2, cp3):
         self.data[Hote.moro]['choosen_path'] = cp1
@@ -54,7 +67,9 @@ class TrajectoirePoints(TrajectoireDestination):
                 if isfile(filename):
                     with open(filename, 'r') as f:
                         self.data[h]['choosen_path'] = int(f.read().strip())
-        print([self.data[h]['state'] for h in self.hotes])
+                else:
+                    self.data[h]['choosen_path'] = 0
+        print('choosen_path', [self.data[h]['choosen_path'] for h in self.hotes])
 
     def set_state(self, s1, s2, s3):
         self.data[Hote.moro]['state'] = s1
@@ -62,11 +77,11 @@ class TrajectoirePoints(TrajectoireDestination):
         self.data[Hote.yuki]['state'] = s3
         for h in self.hotes:
             if self.data[h]['state'] == -1:
-                filename = expanduser('~/.state_%s_%i_%i' % (self.__class__.__name__, self.data[h]['choosen_path'], h))
+                filename = expanduser('~/.state_%s_%i' % (self.__class__.__name__, h))
                 if isfile(filename):
                     with open(filename, 'r') as f:
                         self.data[h]['state'] = int(f.read().strip())
-        print([self.data[h]['state'] for h in self.hotes])
+        print('state', [self.data[h]['state'] for h in self.hotes])
 
     def check_sens(self):
         if sum(self.data[Hote.moro]['nt']) < -50:

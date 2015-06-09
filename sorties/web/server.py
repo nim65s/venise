@@ -62,6 +62,10 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'dest_next': True}])
         elif cmd == 'dest-':
             self.socket.send_json([int(agv), {'dest_prev': True}])
+        elif cmd == 'path+':
+            self.socket.send_json([int(agv), {'path_next': True}])
+        elif cmd == 'path-':
+            self.socket.send_json([int(agv), {'path_prev': True}])
         else:
             print(cmd)
         request.setResponseCode(200)

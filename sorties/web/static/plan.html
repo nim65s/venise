@@ -95,7 +95,7 @@
                 <th>Arbre</th>
                 {% if expert %}<th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>{% endif %}
                 <th>Stop</th><th>Boost</th><th>Arrière</th>
-                {% if expert %}<th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th><th>Anomaly</th><th>État</th><th>Sens</th><th>Destination</th>{% endif %}
+                {% if expert %}<th>Reverse</th><th>Lissage</th><th>Lissage vitesse</th><th>Anomaly</th><th>État</th><th>Sens</th><th>Destination</th><th>Chemin</th><th>Chemin</th>{% endif %}
                 <th>Status</th>
             </tr>
             {% for arbre in range(2, 5) %}
@@ -132,6 +132,11 @@
                 <td>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'dest-']})" type="button" class="btn btn-lg">←</button>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'dest+']})" type="button" class="btn btn-lg">→</button>
+                </td>
+                <td class="choosen_path"></td>
+                <td>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'path-']})" type="button" class="btn btn-lg">←</button>
+                    <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'path+']})" type="button" class="btn btn-lg">→</button>
                 </td>
                 {% endif %}
                 <td class="status"></td>
@@ -209,6 +214,7 @@
                             {% if expert %}
                             $('#a' + a + ' .anomaly').html(data[a]['anomaly'] ? '✔' : '✘');
                             $('#a' + a + ' .state').html(data[a]['state']);
+                            $('#a' + a + ' .choosen_path').html(data[a]['choosen_path']);
                             $('li.' + a).html(data[a]['erreurs']);
                             {% endif %}
                             $('#agv' + a).css('fill', data[a]['is_up'] ? data[a]['stop'] ? 'yellow' : 'none' : 'orange');
