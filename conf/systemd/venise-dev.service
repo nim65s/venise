@@ -10,6 +10,9 @@ Requires=venise-cache@yuki.service
 Requires=venise-simulateur@moro.service
 Requires=venise-simulateur@ame.service
 Requires=venise-simulateur@yuki.service
+Requires=venise-granier@moro.service
+Requires=venise-granier@ame.service
+Requires=venise-granier@yuki.service
 Requires=venise-web.service
 
 [Service]

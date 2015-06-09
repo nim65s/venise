@@ -1,0 +1,13 @@
+[Unit]
+Description=Venise: Venise: Fake Granier %I
+After=network.target
+After=venise-trajectoire-granier.service
+
+[Service]
+User=nim
+Group=nim
+ExecStart=/usr/bin/env python3 -m venise.entrees.granier_random -H %i
+WorkingDirectory=/home/nim/LAAS
+
+[Install]
+WantedBy=multi-user.target

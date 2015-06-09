@@ -1,5 +1,5 @@
 [Unit]
-Description=Venise: Venise - Serveur principal (Trajectoire): Granier (fonctionnement nominal)
+Description=Venise: Venise - Serveur web
 After=network.target
 After=venise-trajectoire-granier.service
 

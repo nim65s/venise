@@ -70,6 +70,9 @@ class Simulateur(Sortie):
     def arriere(self, vc, **kwargs):
         return {'vc': -vc}
 
+    def tourelles_to_movement(self, **kwargs):
+        pass  # TODO
+
 
 if __name__ == '__main__':
     puller_parser.set_defaults(port_push=True)

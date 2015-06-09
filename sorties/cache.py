@@ -15,4 +15,5 @@ class Cache(Subscriber, Pusher):
 
 
 if __name__ == '__main__':
+    puller_parser.set_defaults(port_push=True)
     Cache(**vars(puller_parser.parse_args())).run()
