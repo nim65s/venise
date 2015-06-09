@@ -62,11 +62,11 @@ ALLER_RETOURS = {
         Hote.ame: [[13, 14], [18, 14]],
         }
 _PATHS = {
-        Hote.moro: [[-8, 7], [-11, 7], [-11, 10], [-10, 11], [-8, 11]],
-        Hote.ame: [[11, 13], [19, 13], [23, 9.5], [24, 7.5], [23, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 10]],
-        # Hote.yuki: [[11, 13], [19, 13], [23, 9.5], [24, 7.5], [23, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 10]],
-        Hote.yuki: [[11, 13], [14, 15], [15, 15], [17, 13], [17, 12], [16, 10], [15, 7.5], [12, 7.5], [10, 10]],
+        Hote.moro: [[[-8, 7], [-11, 7], [-11, 10], [-10, 11], [-8, 11]]],
+        Hote.yuki: [[[11, 13], [19, 13], [23, 9.5], [24, 7.5], [23, 4.5], [20, 4.5], [15, 7.5], [12, 7.5], [10, 10]],
+            [[11, 13], [14, 15], [15, 15], [17, 13], [17, 12], [16, 10], [15, 7.5], [12, 7.5], [10, 10]]],
         }
+_PATHS[Hote.ame] = _PATHS[Hote.yuki]
 
 
 def echelonne_path(dep, ari):
@@ -74,8 +74,8 @@ def echelonne_path(dep, ari):
     d = sqrt(sum((dep - ari) ** 2))
     return [(dep + i * (ari - dep) / d).round(2).tolist() for i in range(int(d))]
 
-PATHS = {h: sum([echelonne_path(_PATHS[h][i], _PATHS[h][(i + 1) % len(_PATHS[h])])
-    for i in range(len(_PATHS[h]))], []) for h in [Hote.moro, Hote.ame, Hote.yuki]}
+PATHS = {h: [sum([echelonne_path(p[i], p[(i + 1) % len(p)])
+    for i in range(len(p))], []) for p in _PATHS[h]] for h in [Hote.moro, Hote.ame, Hote.yuki]}
 
 
 BORDS = {

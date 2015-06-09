@@ -8,8 +8,9 @@ from .destination import trajectoire_destination_parser, TrajectoireDestination
 
 
 class TrajectoirePoints(TrajectoireDestination):
-    def __init__(self, s1, s2, s3, *args, **kwargs):
+    def __init__(self, s1, s2, s3, cp1, cp2, cp3, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.set_choosen_path(cp1, cp2, cp3)
         self.set_state(s1, s2, s3)
         self.paths = self.get_paths()
         self.length = {}
@@ -43,17 +44,29 @@ class TrajectoirePoints(TrajectoireDestination):
         with open(expanduser('~/.state_%s_%i' % (self.__class__.__name__, hote)), 'w') as f:
             print(self.data[hote]['state'], file=f)
 
-    def set_state(self, s1, s2, s3):
-        self.data[2]['state'] = s1
-        self.data[3]['state'] = s2
-        self.data[4]['state'] = s3
-        for i in [2, 3, 4]:
-            if self.data[i]['state'] == -1:
-                filename = expanduser('~/.state_%s_%i' % (self.__class__.__name__, i))
+    def set_choosen_path(self, cp1, cp2, cp3):
+        self.data[Hote.moro]['choosen_path'] = cp1
+        self.data[Hote.ame]['choosen_path'] = cp2
+        self.data[Hote.yuki]['choosen_path'] = cp3
+        for h in self.hotes:
+            if self.data[h]['choosen_path'] == -1:
+                filename = expanduser('~/.choosen_path_%s_%i' % (self.__class__.__name__, h))
                 if isfile(filename):
                     with open(filename, 'r') as f:
-                        self.data[i]['state'] = int(f.read().strip())
-        print([self.data[i]['state'] for i in [2, 3, 4]])
+                        self.data[h]['choosen_path'] = int(f.read().strip())
+        print([self.data[h]['state'] for h in self.hotes])
+
+    def set_state(self, s1, s2, s3):
+        self.data[Hote.moro]['state'] = s1
+        self.data[Hote.ame]['state'] = s2
+        self.data[Hote.yuki]['state'] = s3
+        for h in self.hotes:
+            if self.data[h]['state'] == -1:
+                filename = expanduser('~/.state_%s_%i_%i' % (self.__class__.__name__, self.data[h]['choosen_path'], h))
+                if isfile(filename):
+                    with open(filename, 'r') as f:
+                        self.data[h]['state'] = int(f.read().strip())
+        print([self.data[h]['state'] for h in self.hotes])
 
     def check_sens(self):
         if sum(self.data[Hote.moro]['nt']) < -50:
@@ -82,9 +95,12 @@ class TrajectoirePoints(TrajectoireDestination):
 
 
 trajectoire_points_parser = ArgumentParser(parents=[trajectoire_destination_parser], conflict_handler='resolve')
-trajectoire_points_parser.add_argument('--s1', type=int, default=-1, choices=list(range(len(PATHS[2]))) + [-1])
-trajectoire_points_parser.add_argument('--s2', type=int, default=-1, choices=list(range(len(PATHS[3]))) + [-1])
-trajectoire_points_parser.add_argument('--s3', type=int, default=-1, choices=list(range(len(PATHS[4]))) + [-1])
+trajectoire_points_parser.add_argument('--s1', type=int, default=-1)
+trajectoire_points_parser.add_argument('--s2', type=int, default=-1)
+trajectoire_points_parser.add_argument('--s3', type=int, default=-1)
+trajectoire_points_parser.add_argument('--cp1', type=int, default=-1, choices=list(range(len(PATHS[Hote.moro]))) + [-1])
+trajectoire_points_parser.add_argument('--cp2', type=int, default=-1, choices=list(range(len(PATHS[Hote.ame]))) + [-1])
+trajectoire_points_parser.add_argument('--cp3', type=int, default=-1, choices=list(range(len(PATHS[Hote.yuki]))) + [-1])
 
 if __name__ == '__main__':
     TrajectoirePoints(**vars(trajectoire_points_parser.parse_args())).run()
