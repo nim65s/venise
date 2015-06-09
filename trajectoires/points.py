@@ -15,15 +15,15 @@ class TrajectoirePoints(TrajectoireDestination):
         self.paths = self.get_paths()
         self.length = {}
         self.get_length()
-        for hote in self.hotes:
-            self.data[hote]['destination'] = self.paths[hote][self.data[hote]['state']]
+        for h in self.hotes:
+            self.data[h]['destination'] = self.paths[h][self.data[h]['choosen_path']][self.data[h]['state']]
 
     def get_paths(self):
         return PATHS
 
     def get_length(self):
         for h in self.hotes:
-            p = self.paths[h]
+            p = self.paths[h][self.data[h]['choosen_path']]
             self.length[h] = [hypot(p[i][0] - p[(i + 1) % len(p)][0], p[i][1] - p[(i + 1) % len(p)][1]) for i in range(len(p))]
 
     def process_speed(self, hote, destination, x, y, dest_next, dest_prev, **kwargs):
@@ -32,10 +32,10 @@ class TrajectoirePoints(TrajectoireDestination):
         self.check_sens()
         return self.go_to_point(**self.data[hote])
 
-    def change_destination(self, hote, x, y, sens, dest_next, dest_prev, state, **kwargs):
+    def change_destination(self, hote, x, y, sens, dest_next, dest_prev, state, choosen_path, **kwargs):
         nouveau = (-1 if dest_prev else 1) * (-1 if sens else 1)
-        state = (state + nouveau) % len(self.paths[hote])
-        destination = self.paths[hote][state]
+        state = (state + nouveau) % len(self.paths[hote][choosen_path])
+        destination = self.paths[hote][choosen_path][state]
         print(datetime.now(), hote, state, destination)
         self.data[hote].update(destination=destination, state=state, dest_prev=False, dest_next=False)
         self.save_state(hote)
@@ -75,7 +75,7 @@ class TrajectoirePoints(TrajectoireDestination):
             self.data[Hote.moro]['sens'] = False
         e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
         u2, u3 = [self.data[h]['is_up'] for h in [Hote.ame, Hote.yuki]]
-        e = len(self.paths[Hote.ame])
+        e = len(self.paths[Hote.ame][self.data[Hote.ame]['choosen_path']])
         if min(abs(e2 - e3), e - abs(e2 - e3)) < 10 and u2 and u3:
             self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
