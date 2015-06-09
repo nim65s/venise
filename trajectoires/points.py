@@ -61,8 +61,9 @@ class TrajectoirePoints(TrajectoireDestination):
         elif sum(self.data[Hote.moro]['nt']) > 50:
             self.data[Hote.moro]['sens'] = False
         e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
+        u2, u3 = [self.data[h]['is_up'] for h in [Hote.ame, Hote.yuki]]
         e = len(self.paths[Hote.ame])
-        if min(abs(e2 - e3), e - abs(e2 - e3)) < 10:
+        if min(abs(e2 - e3), e - abs(e2 - e3)) < 10 and u2 and u3:
             self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
     def ecarte_23(self, e, e2, e3, s2, s3):
