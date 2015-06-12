@@ -1,7 +1,6 @@
 [Unit]
 Description=Venise: Venise - Trajectoire Granier
 After=network.target
-After=venise-ubisense.service
 
 [Service]
 User=nim
