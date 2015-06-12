@@ -90,7 +90,6 @@
                 </g>
             </g>
         </svg>
-        {% if not public %}
         <table class="table table-striped">
             <tr>
                 <th>Arbre</th>
@@ -144,7 +143,6 @@
             </tr>
             {% endfor %}
         </table>
-        {% endif %}
 
         {% if expert %}
         <ul>
@@ -208,8 +206,6 @@
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
                             });
-                            $('#agv' + a).css('fill', data[a]['is_up'] ? data[a]['stop'] ? 'yellow' : 'none' : 'orange');
-                            {% if not public %}
                             $('#g' + a + ' .destination').attr({
                                 cx: data[a]['destination'][0] * {{ PX_PAR_M }},
                                 cy: data[a]['destination'][1] * {{ PX_PAR_M }},
@@ -221,7 +217,7 @@
                             $('#a' + a + ' .choosen_path').html(data[a]['choosen_path']);
                             $('li.' + a).html(data[a]['erreurs']);
                             {% endif %}
-                            {% endif %}
+                            $('#agv' + a).css('fill', data[a]['is_up'] ? data[a]['stop'] ? 'yellow' : 'none' : 'orange');
                         }
                     }
                     last_seen = new Date();

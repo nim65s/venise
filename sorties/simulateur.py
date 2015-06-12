@@ -1,10 +1,10 @@
 from datetime import datetime
-from math import pi
+from math import cos, pi, sin
 from time import sleep
 
 from numpy import array, where
 
-from ..settings import PERIODE, SMOOTH_FACTOR
+from ..settings import PERIODE, SMOOTH_FACTOR, VIT_MOY_MAX
 from ..utils.dist_angles import dist_angles
 from ..vmq import puller_parser
 from .sortie import Sortie
@@ -15,7 +15,7 @@ now = datetime.now
 class Simulateur(Sortie):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.to_send = ['vc', 'tc', 'vm', 'tm', 'nt', 'reversed']
+        self.to_send = ['vc', 'tc', 'vm', 'tm', 'nt', 'reversed', 'x', 'y', 'a']
         self.data[self.hote]['reversed'] = [False, False, False]
 
     def loop(self):
@@ -37,6 +37,7 @@ class Simulateur(Sortie):
             self.data[hote].update(**self.boost(**self.data[hote]))
         if arriere:
             self.data[hote].update(**self.arriere(**self.data[hote]))
+        self.data[hote].update(**self.v_to_m(**self.data[hote]))
         self.push.send_json([hote, {'erreurs': 'ok'}])
 
     def recv_agv(self, vc, tc, nt, **kwargs):
@@ -75,6 +76,11 @@ class Simulateur(Sortie):
         # V(A) - V(B) = ω × BA
         # Boarf Featherman, toussa toussa
         pass  # TODO
+
+    def v_to_m(self, hote, x, y, a, v, w, t, **kwargs):
+        x -= (v * cos(t + a)) * VIT_MOY_MAX / 1000
+        y -= (v * sin(t + a)) * VIT_MOY_MAX / 1000
+        return {'x': x, 'y': y}
 
 
 if __name__ == '__main__':

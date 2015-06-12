@@ -12,7 +12,7 @@ from twisted.python import log
 from twisted.web.resource import Resource
 from twisted.web.server import NOT_DONE_YET, Site
 from twisted.web.static import File
-from zmq import Context, PUSH, SUB, SUBSCRIBE
+from zmq import PUSH, SUB, SUBSCRIBE, Context
 
 from settings import *  # YOLO
 
@@ -24,7 +24,7 @@ class Root(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        return Template(open('static/plan.html').read().decode('utf-8')).render(public=True, expert=False, **globals()).encode('utf-8')
+        return Template(open('static/plan.html').read().decode('utf-8')).render(expert=False, **globals()).encode('utf-8')
 
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
@@ -76,7 +76,7 @@ class Expert(Resource):
     isLeaf = True
 
     def render_GET(self, request):
-        return Template(open('static/plan.html').read().decode('utf-8')).render(public=True, expert=True, **globals()).encode('utf-8')
+        return Template(open('static/plan.html').read().decode('utf-8')).render(expert=True, **globals()).encode('utf-8')
 
 
 class Table(Resource):
@@ -93,7 +93,7 @@ class Subscribe(Resource):
         self.subscribers = set()
         self.context = Context()
         self.socket = self.context.socket(SUB)
-        self.socket.connect("tcp://%s:%i" % ('10.9.8.10', PORT_PUB))
+        self.socket.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_PUB))
         self.socket.setsockopt_string(SUBSCRIBE, u'')  # TODO: les sorties devraient pouvoir override ça
 
     def render_GET(self, request):

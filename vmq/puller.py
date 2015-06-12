@@ -4,7 +4,7 @@ from datetime import datetime
 from zmq import NOBLOCK, PULL
 from zmq.error import Again
 
-from ..settings import PORT_PUSH
+from ..settings import PORT_PUSH, PROD
 from .vmq import VMQ, vmq_parser
 
 
@@ -13,7 +13,7 @@ class Puller(VMQ):
         super().__init__(*args, **kwargs)
 
         self.puller = self.context.socket(PULL)
-        url = "tcp://*:%i" % (PORT_PUSH + port_push * 10 * self.hote)
+        url = "tcp://*:%i" % (PORT_PUSH + (port_push and not PROD) * 10 * self.hote)
         self.printe(url)
         self.puller.bind(url)
         self.last_seen = datetime(1970, 1, 1)
