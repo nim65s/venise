@@ -1,15 +1,15 @@
 from datetime import datetime
-from math import cos, pi, sin
 from time import sleep
 
-from numpy import array, where
+from numpy import array, cos, cross, dot, pi, sin, where
 
-from ..settings import PERIODE, SMOOTH_FACTOR, VIT_MOY_MAX
+from ..settings import PERIODE, POS_ROUES, RAYON_AGV, SMOOTH_FACTOR
 from ..utils.dist_angles import dist_angles
 from ..vmq import puller_parser
 from .sortie import Sortie
 
 now = datetime.now
+A, B, C = X, Y, Z = range(3)
 
 
 class Simulateur(Sortie):
@@ -27,8 +27,8 @@ class Simulateur(Sortie):
         sleep(PERIODE)
 
     def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
-        self.data[hote].update(**self.recv_agv(**self.data[hote]))
         self.data[hote].update(**self.copy_consignes(**self.data[hote]))
+        self.data[hote].update(**self.recv_agv(**self.data[hote]))
         if reverse:
             self.data[hote].update(**self.reverse(**self.data[hote]))
         if smoothe:
@@ -37,15 +37,11 @@ class Simulateur(Sortie):
             self.data[hote].update(**self.boost(**self.data[hote]))
         if arriere:
             self.data[hote].update(**self.arriere(**self.data[hote]))
-        self.data[hote].update(**self.v_to_m(**self.data[hote]))
+        self.data[hote].update(**self.tourelles_to_movement(**self.data[hote]))
         self.push.send_json([hote, {'erreurs': 'ok'}])
 
     def recv_agv(self, vc, tc, nt, **kwargs):
-        return {
-                'vm': vc,
-                'tm': tc,
-                'nt': nt,
-                }
+        return {'vm': vc, 'tm': tc, 'nt': nt}
 
     def copy_consignes(self, vt, tt, reversed, **kwargs):
         return {'vc': array(vt), 'tc': array(tt), 'reversed': array(reversed)}
@@ -71,16 +67,18 @@ class Simulateur(Sortie):
     def arriere(self, vc, **kwargs):
         return {'vc': -vc}
 
-    def tourelles_to_movement(self, **kwargs):
-        # V(O) = V(P) + ω × PO
-        # V(A) - V(B) = ω × BA
-        # Boarf Featherman, toussa toussa
-        pass  # TODO
+    def tourelles_to_movement(self, vm, tm, x, y, a, **kwargs):
+        v_r = (vm * array([cos(tm), sin(tm), [0, 0, 0]])).transpose()
+        p_r = RAYON_AGV * 1000 * array([cos(POS_ROUES), sin(POS_ROUES), [0, 0, 0]]).transpose()
+        w = array([0, 0, (v_r[C][Y] - v_r[A][Y]) / (p_r[C][X] - p_r[A][X])])
+        v_o = dot(self.rot(a), (v_r[A] + cross(w, -p_r[A]))[:2])
+        x -= v_o[X] / 1000
+        y -= v_o[Y] / 1000
+        a += w[Z]
+        return {'x': x, 'y': y, 'a': a}
 
-    def v_to_m(self, hote, x, y, a, v, w, t, **kwargs):
-        x -= (v * cos(t + a)) * VIT_MOY_MAX / 1000
-        y -= (v * sin(t + a)) * VIT_MOY_MAX / 1000
-        return {'x': x, 'y': y}
+    def rot(self, a):
+        return array([[cos(a), -sin(a)], [sin(a), cos(a)]])
 
 
 if __name__ == '__main__':

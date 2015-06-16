@@ -1,0 +1,12 @@
+[Unit]
+Description=Venise: Venise - Trajectoire Granier
+After=network.target
+
+[Service]
+User=nim
+Group=nim
+ExecStart=/usr/bin/env python3 -m venise.trajectoires.demo
+WorkingDirectory=/home/nim/LAAS
+
+[Install]
+WantedBy=multi-user.target

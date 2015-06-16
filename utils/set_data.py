@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from zmq import Context, PUSH
+from zmq import PUSH, Context
 
 
-def set_data(h, var, val):
+def set_data(h, var, val, main_host='nausicaa'):
     c = Context()
     s = c.socket(PUSH)
-    s.connect('tcp://cerf:1337')
+    s.connect('tcp://%s:1337' % main_host)
     s.send_json([h, {var: val}])
 
 

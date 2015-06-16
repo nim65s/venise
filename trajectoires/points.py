@@ -3,13 +3,14 @@ from datetime import datetime
 from math import hypot
 from os.path import expanduser, isfile
 
-from ..settings import Hote, PATHS
-from .destination import trajectoire_destination_parser, TrajectoireDestination
+from ..settings import PATHS, Hote
+from .destination import TrajectoireDestination, trajectoire_destination_parser
 
 
 class TrajectoirePoints(TrajectoireDestination):
-    def __init__(self, s1, s2, s3, cp1, cp2, cp3, *args, **kwargs):
+    def __init__(self, s1, s2, s3, cp1, cp2, cp3, sens1, sens2, sens3, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.set_truc('sens', sens1, sens2, sens3)
         self.set_choosen_path(cp1, cp2, cp3)
         self.set_state(s1, s2, s3)
         self.paths = self.get_paths()
@@ -57,10 +58,13 @@ class TrajectoirePoints(TrajectoireDestination):
         with open(expanduser('~/.state_%s_%i' % (self.__class__.__name__, hote)), 'w') as f:
             print(state, file=f)
 
+    def set_truc(self, truc, moro, ame, yuki):
+        self.data[Hote.moro][truc] = moro
+        self.data[Hote.ame][truc] = ame
+        self.data[Hote.yuki][truc] = yuki
+
     def set_choosen_path(self, cp1, cp2, cp3):
-        self.data[Hote.moro]['choosen_path'] = cp1
-        self.data[Hote.ame]['choosen_path'] = cp2
-        self.data[Hote.yuki]['choosen_path'] = cp3
+        self.set_truc('choosen_path', cp1, cp2, cp3)
         for h in self.hotes:
             if self.data[h]['choosen_path'] == -1:
                 filename = expanduser('~/.choosen_path_%s_%i' % (self.__class__.__name__, h))
@@ -72,9 +76,7 @@ class TrajectoirePoints(TrajectoireDestination):
         print('choosen_path', [self.data[h]['choosen_path'] for h in self.hotes])
 
     def set_state(self, s1, s2, s3):
-        self.data[Hote.moro]['state'] = s1
-        self.data[Hote.ame]['state'] = s2
-        self.data[Hote.yuki]['state'] = s3
+        self.set_truc('state', s1, s2, s3)
         for h in self.hotes:
             if self.data[h]['state'] == -1:
                 filename = expanduser('~/.state_%s_%i' % (self.__class__.__name__, h))
@@ -91,7 +93,7 @@ class TrajectoirePoints(TrajectoireDestination):
         e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
         u2, u3 = [self.data[h]['is_up'] for h in [Hote.ame, Hote.yuki]]
         e = len(self.paths[Hote.ame][self.data[Hote.ame]['choosen_path']])
-        if min(abs(e2 - e3), e - abs(e2 - e3)) < 10 and u2 and u3:
+        if False and min(abs(e2 - e3), e - abs(e2 - e3)) < 10 and u2 and u3:
             self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
     def ecarte_23(self, e, e2, e3, s2, s3):
@@ -116,6 +118,9 @@ trajectoire_points_parser.add_argument('--s3', type=int, default=-1)
 trajectoire_points_parser.add_argument('--cp1', type=int, default=-1, choices=list(range(len(PATHS[Hote.moro]))) + [-1])
 trajectoire_points_parser.add_argument('--cp2', type=int, default=-1, choices=list(range(len(PATHS[Hote.ame]))) + [-1])
 trajectoire_points_parser.add_argument('--cp3', type=int, default=-1, choices=list(range(len(PATHS[Hote.yuki]))) + [-1])
+trajectoire_points_parser.add_argument('--sens1', type=bool, default=bool((datetime.now()).day % 2))
+trajectoire_points_parser.add_argument('--sens2', type=bool, default=not bool((datetime.now()).day % 2))
+trajectoire_points_parser.add_argument('--sens3', type=bool, default=bool((datetime.now()).day % 2))
 
 if __name__ == '__main__':
     TrajectoirePoints(**vars(trajectoire_points_parser.parse_args())).run()
