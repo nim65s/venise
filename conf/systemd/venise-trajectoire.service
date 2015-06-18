@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=nim
 Group=nim
-ExecStart=/usr/bin/env python3 -m venise.trajectoires.granier --s3 0
+ExecStart=/usr/bin/env python3 -m venise.trajectoires
 WorkingDirectory=/home/nim/LAAS
 
 [Install]

@@ -2,7 +2,7 @@
 Description=Venise: Meta
 After=network.target
 
-Requires=venise-trajectoire-demo.service
+Requires=venise-trajectoire.service
 Requires=venise-cache@moro.service
 Requires=venise-cache@ame.service
 Requires=venise-cache@yuki.service
