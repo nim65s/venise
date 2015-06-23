@@ -26,9 +26,8 @@ class Simulateur(Sortie):
         self.push.send_json([self.hote, {'last_seen_agv': str(now()), 'status': 'Simulateur'}])
         sleep(PERIODE)
 
-    def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
+    def process(self, reverse, smoothe, hote, boost, arriere, stop, **kwargs):
         self.data[hote].update(**self.copy_consignes(**self.data[hote]))
-        self.data[hote].update(**self.recv_agv(**self.data[hote]))
         if reverse:
             self.data[hote].update(**self.reverse(**self.data[hote]))
         if smoothe:
@@ -37,6 +36,9 @@ class Simulateur(Sortie):
             self.data[hote].update(**self.boost(**self.data[hote]))
         if arriere:
             self.data[hote].update(**self.arriere(**self.data[hote]))
+        if stop:
+            self.data[hote].update(vc=array([0, 0, 0]))
+        self.data[hote].update(**self.recv_agv(**self.data[hote]))
         self.data[hote].update(**self.tourelles_to_movement(**self.data[hote]))
         self.push.send_json([hote, {'erreurs': 'ok'}])
 
