@@ -3,6 +3,8 @@ from datetime import datetime
 from math import hypot
 from os.path import expanduser, isfile
 
+from numpy import array, where
+
 from ..settings import PATHS, Hote
 from .destination import TrajectoireDestination, trajectoire_destination_parser
 
@@ -17,8 +19,11 @@ class TrajectoirePoints(TrajectoireDestination):
         self.length = {}
         self.get_length()
         for h in self.hotes:
-            cp, s = [self.data[h][t] for t in ['choosen_path', 'state']]
-            self.data[h]['destination'] = self.paths[h][cp][s]
+            cp, s, x, y = [self.data[h][t] for t in ['choosen_path', 'state', 'x', 'y']]
+            try:
+                self.data[h]['destination'] = self.paths[h][cp][s]
+            except IndexError:
+                self.find_nearest_destination(h, cp, x, y)
 
     def get_paths(self):
         return PATHS
@@ -27,6 +32,13 @@ class TrajectoirePoints(TrajectoireDestination):
         for h in self.hotes:
             p = self.paths[h][self.data[h]['choosen_path']]
             self.length[h] = [hypot(p[i][0] - p[(i + 1) % len(p)][0], p[i][1] - p[(i + 1) % len(p)][1]) for i in range(len(p))]
+
+    def find_nearest_destination(self, hote, choosen_path, x, y):
+        path = self.paths[hote][choosen_path]
+        dists = ((array(path) - array([x, y])) ** 2).sum(axis=1)
+        state = int(where(dists == dists.min())[0][0])
+        print(x, y, path[state])
+        self.data[hote].update(state=state, destination=path[state])
 
     def process_speed(self, hote, destination, x, y, dest_next, dest_prev, path_next, path_prev, choosen_path, **kwargs):
         if path_next or path_prev:
@@ -41,6 +53,7 @@ class TrajectoirePoints(TrajectoireDestination):
         choosen_path %= len(self.paths[hote])
         self.data[hote].update(choosen_path=choosen_path, path_next=False, path_prev=False)
         self.save_choosen_path(hote, choosen_path)
+        self.find_nearest_destination(hote, choosen_path, x, y)
 
     def change_destination(self, hote, x, y, sens, dest_next, dest_prev, state, choosen_path, **kwargs):
         nouveau = (-1 if dest_prev else 1) * (-1 if sens else 1)
