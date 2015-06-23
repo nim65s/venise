@@ -23,7 +23,7 @@ class Simulateur(Sortie):
         self.process(**self.data[self.hote])
         for var in self.to_send:
             self.push.send_json([self.hote, {var: array(self.data[self.hote][var]).round(5).tolist()}])
-        self.push.send_json([self.hote, {'last_seen_agv': str(now())}])
+        self.push.send_json([self.hote, {'last_seen_agv': str(now()), 'status': 'Simulateur'}])
         sleep(PERIODE)
 
     def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
