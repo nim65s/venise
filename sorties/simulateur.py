@@ -23,7 +23,7 @@ class Simulateur(Sortie):
         self.process(**self.data[self.hote])
         for var in self.to_send:
             self.push.send_json([self.hote, {var: array(self.data[self.hote][var]).round(5).tolist()}])
-        self.push.send_json([self.hote, {'last_seen_agv': str(now()), 'status': 'Simulateur'}])
+        self.push.send_json([self.hote, {'last_seen_agv': str(now()), 'status': 'Simulateur', 'erreurs': 'ok'}])
         sleep(PERIODE)
 
     def process(self, reverse, smoothe, hote, boost, arriere, stop, **kwargs):
@@ -40,7 +40,6 @@ class Simulateur(Sortie):
             self.data[hote].update(vc=array([0, 0, 0]))
         self.data[hote].update(**self.recv_agv(**self.data[hote]))
         self.data[hote].update(**self.tourelles_to_movement(**self.data[hote]))
-        self.push.send_json([hote, {'erreurs': 'ok'}])
 
     def recv_agv(self, vc, tc, nt, **kwargs):
         return {'vm': vc, 'tm': tc, 'nt': nt}
