@@ -6,7 +6,7 @@ from socket import gethostname
 
 from numpy import array
 
-PROD = gethostname() == 'cerf'
+PROD = gethostname() in ['cerf', 'moro', 'ame', 'yuki']
 
 Hote = IntEnum('Hôte', 'cerf moro ame yuki nausicaa')
 try:
