@@ -42,7 +42,7 @@ class Simulateur(Sortie):
         self.data[hote].update(**self.tourelles_to_movement(**self.data[hote]))
 
     def recv_agv(self, vc, tc, nt, **kwargs):
-        return {'vm': vc, 'tm': tc, 'nt': nt}
+        return {'vm': vc * 0.5, 'tm': tc, 'nt': nt}
 
     def copy_consignes(self, vt, tt, reversed, **kwargs):
         return {'vc': array(vt), 'tc': array(tt), 'reversed': array(reversed)}
