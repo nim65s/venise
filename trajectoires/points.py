@@ -10,7 +10,7 @@ from .destination import TrajectoireDestination, trajectoire_destination_parser
 
 
 class TrajectoirePoints(TrajectoireDestination):
-    def __init__(self, s1, s2, s3, cp1, cp2, cp3, sens1, sens2, sens3, *args, **kwargs):
+    def __init__(self, s1, s2, s3, cp1, cp2, cp3, sens1, sens2, sens3, evite, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.set_truc('sens', sens1, sens2, sens3)
         self.set_choosen_path(cp1, cp2, cp3)
@@ -18,6 +18,7 @@ class TrajectoirePoints(TrajectoireDestination):
         self.paths = self.get_paths()
         self.length = {}
         self.get_length()
+        self.evite = evite
         for h in self.hotes:
             cp, s, x, y = [self.data[h][t] for t in ['choosen_path', 'state', 'x', 'y']]
             try:
@@ -106,7 +107,7 @@ class TrajectoirePoints(TrajectoireDestination):
         e2, e3 = [self.data[h]['state'] for h in [Hote.ame, Hote.yuki]]
         u2, u3 = [self.data[h]['is_up'] for h in [Hote.ame, Hote.yuki]]
         e = len(self.paths[Hote.ame][self.data[Hote.ame]['choosen_path']])
-        if False and min(abs(e2 - e3), e - abs(e2 - e3)) < 10 and u2 and u3:
+        if self.evite and min(abs(e2 - e3), e - abs(e2 - e3)) < 10 and u2 and u3:
             self.ecarte_23(e, e2, e3, self.data[Hote.ame]['sens'], self.data[Hote.yuki]['sens'])
 
     def ecarte_23(self, e, e2, e3, s2, s3):
@@ -134,6 +135,7 @@ trajectoire_points_parser.add_argument('--cp3', type=int, default=-1, choices=li
 trajectoire_points_parser.add_argument('--sens1', type=bool, default=bool((datetime.now()).day % 2))
 trajectoire_points_parser.add_argument('--sens2', type=bool, default=not bool((datetime.now()).day % 2))
 trajectoire_points_parser.add_argument('--sens3', type=bool, default=bool((datetime.now()).day % 2))
+trajectoire_points_parser.add_argument('--evite', action='store_true')
 
 if __name__ == '__main__':
     TrajectoirePoints(**vars(trajectoire_points_parser.parse_args())).run()
