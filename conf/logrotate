@@ -1,0 +1,7 @@
+/home/gsaurel/logs/*.log {
+    daily
+    compress
+    delaycompress
+    create 644 gsaurel gsaurel
+    su gsaurel
+}
