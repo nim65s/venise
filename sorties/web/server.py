@@ -4,6 +4,7 @@
 from __future__ import division
 
 import sys
+from os.path import expanduser
 
 from jinja2 import Template
 from twisted.internet import reactor
@@ -24,7 +25,7 @@ class Root(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        return Template(open('static/plan.html').read().decode('utf-8')).render(expert=False, **globals()).encode('utf-8')
+        return Template(open('templates/plan.html').read().decode('utf-8')).render(expert=False, **globals()).encode('utf-8')
 
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
@@ -76,14 +77,14 @@ class Expert(Resource):
     isLeaf = True
 
     def render_GET(self, request):
-        return Template(open('static/plan.html').read().decode('utf-8')).render(expert=True, **globals()).encode('utf-8')
+        return Template(open('templates/plan.html').read().decode('utf-8')).render(expert=True, **globals()).encode('utf-8')
 
 
 class Table(Resource):
     isLeaf = True
 
     def render_GET(self, request):
-        return Template(open('static/table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
+        return Template(open('templates/table.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
 
 
 class Subscribe(Resource):
@@ -126,6 +127,7 @@ if __name__ == '__main__':
     root.putChild('table', Table())
     root.putChild('expert', Expert())
     root.putChild('static', File('static'))
+    root.putChild('logs', File(expanduser('~/logs')))
     site = Site(root)
     reactor.listenTCP(8000, site)
     log.startLogging(sys.stdout)

@@ -22,3 +22,9 @@
 =======
 
 * 9h-11h: Nouvelle trajectoire pour le 3, optimisation du changement de trajectoire
+* 17h: 3 embourbé, 1 arrêté, envoi des logs à BA
+
+24 juin
+=======
+
+* 9h-11h: 1 reparti, envoi de logs, 3 désembourbé, mise en ligne des logs

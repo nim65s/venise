@@ -14,7 +14,7 @@ class LogErreur(Subscriber):
         for h in self.hotes:
             if self.erreurs[h] != self.data[h]['erreurs']:
                 self.erreurs[h] = self.data[h]['erreurs']
-                with open(expanduser('~/log_erreurs_agv_%i' % (h - 1)), 'a') as f:
+                with open(expanduser('~/logs/%i.log' % (h - 1)), 'a') as f:
                     print('%s: %s' % (datetime.now().strftime('%Y/%m/%d %H:%M:%S'), self.erreurs[h]), file=f)
 
 
