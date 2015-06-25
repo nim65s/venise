@@ -146,9 +146,9 @@
 
         {% if expert %}
         <ul>
-            <li class="2"></li>
-            <li class="3"></li>
-            <li class="4"></li>
+            <li><a href="/logs/1.log">logs</a> – <span class="2"></span></li>
+            <li><a href="/logs/2.log">logs</a> – <span class="3"></span></li>
+            <li><a href="/logs/3.log">logs</a> – <span class="4"></span></li>
         </ul>
         {% endif %}
 
@@ -215,7 +215,7 @@
                             $('#a' + a + ' .anomaly').html(data[a]['anomaly'] ? '✔' : '✘');
                             $('#a' + a + ' .state').html(data[a]['state']);
                             $('#a' + a + ' .choosen_path').html(data[a]['choosen_path']);
-                            $('li.' + a).html(data[a]['erreurs']);
+                            $('li .' + a).html(data[a]['erreurs']);
                             {% endif %}
                             $('#agv' + a).css('fill', data[a]['is_up'] ? data[a]['stop'] ? 'yellow' : 'none' : 'orange');
                         }
