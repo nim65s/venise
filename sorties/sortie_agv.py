@@ -118,7 +118,7 @@ class SortieAGV(Sortie):
         return {'vc': -vc}
 
     def send_agv(self, stop, boost, vc, tc, **kwargs):
-        if stop or abs(vc).sum() < 10:
+        if stop or abs(vc).sum() < 15:
             return b'stop()'
         cmd = 'setSpeedAndPositionCalibration' if boost else 'setSpeedAndPosition'
         template = '({vc[0]}, {tc[0]}, {vc[1]}, {tc[1]}, {vc[2]}, {tc[2]})'
