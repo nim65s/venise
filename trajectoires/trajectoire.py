@@ -4,6 +4,8 @@ from math import atan2, copysign, cos, hypot, pi, sin
 from os.path import expanduser, isfile
 from time import sleep
 
+from numpy import array
+
 from ..settings import DATA, PERIODE, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
 from ..utils.dist_angles import dist_angle
 from ..vmq import Publisher, Puller, vmq_parser
@@ -74,9 +76,8 @@ class Trajectoire(Puller, Publisher):
 
     def process_tourelles(self, **kwargs):
         tt, vt = zip(*[self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)])
-        if sum(abs(v) < 5 for v in vt) > 1:
-            vt = [0, 0, 0]
-        return {'tt': tt, 'vt': vt}
+        vt = array(vt)
+        return {'tt': tt, 'vt': (vt * 2 * VIT_MOY_MAX / abs(vt).max()).tolist()}
 
     def save_speed(self, hote, v, w, t, **kwargs):
         with open(expanduser('~/.state_speed_%i' % hote), 'w') as f:

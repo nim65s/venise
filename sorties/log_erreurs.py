@@ -15,7 +15,8 @@ class LogErreur(Subscriber):
             if self.erreurs[h] != self.data[h]['erreurs']:
                 self.erreurs[h] = self.data[h]['erreurs']
                 with open(expanduser('~/logs/%i.log' % (h - 1)), 'a') as f:
-                    print('%s: %s' % (datetime.now().strftime('%Y/%m/%d %H:%M:%S'), self.erreurs[h]), file=f)
+                    state = 'vt: {vt}, vc: {vc}, vm: {vm}'.format(**self.data[h])
+                    print('%s: %s -- %s' % (datetime.now().strftime('%Y/%m/%d %H:%M:%S'), self.erreurs[h], state), file=f)
 
 
 if __name__ == '__main__':
