@@ -77,7 +77,7 @@ class Trajectoire(Puller, Publisher):
     def process_tourelles(self, **kwargs):
         tt, vt = zip(*[self.tourelle(POS_ROUES[i], **kwargs) for i in range(3)])
         vt = array(vt)
-        return {'tt': tt, 'vt': (vt * 2 * VIT_MOY_MAX / abs(vt).max()).tolist()}
+        return {'tt': tt, 'vt': (vt * 2 * VIT_MOY_MAX / abs(vt).max()).tolist() if abs(vt).max() != 0 else [0, 0, 0]}
 
     def save_speed(self, hote, v, w, t, **kwargs):
         with open(expanduser('~/.state_speed_%i' % hote), 'w') as f:
