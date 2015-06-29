@@ -28,3 +28,16 @@
 =======
 
 * 9h-11h: 1 reparti, envoi de logs, 3 désembourbé, mise en ligne des logs
+
+25 juin
+=======
+* 9h-11h: discussions avec GP, PZ, TP, ML, la vitesse est en cause, vérification, homotéthie
+* 16h-17h: GP & PZ: panic ; VM dans les choux, redémarrage
+
+26 juin
+=======
+* 9h-11h: mail, discussions avec TP, JC, sur le récapitulatif des évènements & la suite
+
+27 juin
+=======
+* 12h: Changements sur les rotations, appel de PZ

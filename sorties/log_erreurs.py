@@ -1,10 +1,7 @@
-from datetime import datetime
-from os.path import expanduser
-
-from ..vmq import Subscriber, vmq_parser
+from log import SortieLog, logger_parser
 
 
-class LogErreur(Subscriber):
+class LogErreur(SortieLog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.erreurs = {h: '' for h in self.hotes}
@@ -20,4 +17,5 @@ class LogErreur(Subscriber):
 
 
 if __name__ == '__main__':
-    LogErreur(**vars(vmq_parser.parse_args())).run()
+    logger_parser.set_defaults(logger='erreurs_agv', period=0)
+    LogErreur(**vars(logger_parser.parse_args())).run()
