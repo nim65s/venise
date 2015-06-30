@@ -1,19 +1,17 @@
-from log import SortieLog, logger_parser
+from .log import SortieLog, logger_parser
 
 
 class LogErreur(SortieLog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.erreurs = {h: '' for h in self.hotes}
+        self.erreurs = ''
 
-    def loop(self):
-        self.sub(block=0)
-        for h in self.hotes:
-            if self.erreurs[h] != self.data[h]['erreurs']:
-                self.erreurs[h] = self.data[h]['erreurs']
-                with open(expanduser('~/logs/%i.log' % (h - 1)), 'a') as f:
-                    state = 'vt: {vt}, vc: {vc}, vm: {vm}'.format(**self.data[h])
-                    print('%s: %s -- %s' % (datetime.now().strftime('%Y/%m/%d %H:%M:%S'), self.erreurs[h], state), file=f)
+    def log(self, logger, erreurs, **kwargs):
+        if self.erreurs != erreurs:
+            state = 'vt: {vt}, vc: {vc}, vm: {vm}'.format(**kwargs)
+            log = logger.warning if erreurs.startswith('+') else logger.info
+            log('%s -- %s' % (erreurs, state))
+            self.erreurs = erreurs
 
 
 if __name__ == '__main__':

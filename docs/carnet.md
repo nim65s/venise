@@ -41,3 +41,7 @@
 27 juin
 =======
 * 12h: Changements sur les rotations, appel de PZ
+
+29 juin
+=======
+* 13h: modification de la trajectoire du 3 suite au mail de PZ
