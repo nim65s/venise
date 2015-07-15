@@ -121,7 +121,7 @@ DATA = {
         # Tourelles vitesse, target, mesuree, consigne, nombre de tours, nombre de tours
         'granier': [0] * N_SONDES, 'gmi': [10] * N_SONDES, 'gma': [-10] * N_SONDES, 'gm': [0] * N_SONDES,  # Sondes granier
         'stop': False, 'smoothe': True, 'smoothe_speed': True, 'boost': False, 'arriere': False, 'reverse': True,
-        'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False, 'path_next': False, 'path_prev': False,  # Boutons
+        'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False, 'path_next': False, 'path_prev': False, 'rotation': True,  # Boutons
         'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)), 'destination': [0, 0], 'state': -1, 'choosen_path': -1,
         }
 

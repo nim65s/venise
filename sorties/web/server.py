@@ -39,6 +39,10 @@ class Root(Resource):
             self.socket.send_json([int(agv), {'reverse': True}])
         elif cmd == 'reverse-ko':
             self.socket.send_json([int(agv), {'reverse': False}])
+        elif cmd == 'rotation-ok':
+            self.socket.send_json([int(agv), {'rotation': True}])
+        elif cmd == 'rotation-ko':
+            self.socket.send_json([int(agv), {'rotation': False}])
         elif cmd == 'smoothe-ok':
             self.socket.send_json([int(agv), {'smoothe': True}])
         elif cmd == 'smoothe-ko':
