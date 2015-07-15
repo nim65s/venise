@@ -45,3 +45,26 @@
 29 juin
 =======
 * 13h: modification de la trajectoire du 3 suite au mail de PZ
+
+7 juillet
+=========
+* 10h-11h: Rien ne marche, relancement de la VM Windows, qui avait pas ses modules noyau chargés
+* 15h30: investigation sur la panne, mises à jour
+
+8 juillet
+=========
+* 9h: changement des sens pour éviter butées
+* 11h: PZ: le 3descend dans l’allée à tous les tours → changements des sesn…
+
+11 juillet
+==========
+* 11h: Appel de PZ, gestion des butées…
+
+15 juillet
+==========
+* journée: Appels PZ, TP, BA
+    3 dans les choux, 2 perd geoloc, nouvelles trajectoires
+    graphes
+    ubisense
+    galère windows
+    VBox perdu

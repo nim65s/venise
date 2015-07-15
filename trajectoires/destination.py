@@ -18,7 +18,7 @@ class TrajectoireDestination(Trajectoire):
 
     def go_to_point(self, hote, destination, x, y, a, **kwargs):
         xi, yi = destination
-        if PROD and x == y == a == 0 or self.distance(destination, x, y) < 0.3 or xi == yi == 0:
+        if PROD and (x == y == a == 0 or self.distance(destination, x, y) < 0.3 or xi == yi == 0):
             return {'vg': 0, 'wg': 0}
         return {
                 'vg': self.get_v(**self.data[hote]),
