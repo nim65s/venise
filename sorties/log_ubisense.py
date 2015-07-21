@@ -11,7 +11,7 @@ class LogUbisense(SortieLog):
     def log(self, logger, x, y, a, **kwargs):
         if self.pos != (x, y, a):
             log = logger.warning if hypot(x - self.pos[0], y - self.pos[1]) > 0.1 else logger.info
-            log('%f\t%f\t%f' % (x, y, a))
+            log('\t%.2f\t%.2f\t%.2f' % (x, y, a))
             self.pos = x, y, a
 
 
