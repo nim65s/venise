@@ -17,11 +17,11 @@ class Anomaly(Subscriber, Pusher):
         for h in self.hotes:
             self.push.send_json([h, {'anomaly': self.check_anomaly(**self.data[h])}])
 
-    def check_anomaly(self, vc, vm, hote, anomaly, stop, **kwargs):
+    def check_anomaly(self, vc, vm, hote, anomaly, stop, is_up, **kwargs):
         vc, vm, hote = array(vc), array(vm), Hote(hote)
         if 0 in vc:
             return False
-        new_anomaly = bool(abs((vc - vm) / vc).sum() > 1) and not stop
+        new_anomaly = bool(abs((vc - vm) / vc).sum() > 1) and not stop and is_up
         if not new_anomaly:
             if self.anomaly[hote]:
                 print('Fin de l’anomalie sur %s' % hote.name)

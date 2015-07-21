@@ -68,3 +68,17 @@
     ubisense
     galère windows
     VBox perdu
+    rotation disable
+
+16 juillet
+==========
+* journée: Windows, ubisense…
+
+17 juillet
+==========
+* 9h-12h: ubisense
+
+20 juillet
+==========
+* 11h: appels TP, ML
+* 14h-17h: Ubisense
