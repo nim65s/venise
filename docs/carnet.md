@@ -82,3 +82,22 @@
 ==========
 * 11h: appels TP, ML
 * 14h-17h: Ubisense
+
+21 juillet
+==========
+* 10h-11h: logs ubisense w/ WARNINGS
+* 11h-17h: icinga, tinc
+
+22 juillet
+==========
+* 14h-19h: Ubisense: traitement des données, teamviewer
+
+23 juillet
+==========
+* 14h-16h: tinc, munin
+* 16h: réunion BA / Ubisense
+* 18h-21h: DirectX
+
+24 juillet
+=========
+* journée: tinc, munin, pavillon allemand, trajectoire du 3

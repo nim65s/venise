@@ -47,7 +47,7 @@ Photos
 
 * sondes granier
 * AGV désossé
-* moi dans l’arbre
+* photo de pose des balises dans l’arbre
 * arbre en acheminement
 
 
