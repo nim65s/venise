@@ -5,7 +5,11 @@ from numpy import array
 from ..settings import Hote
 from ..vmq import Pusher, Subscriber, vmq_parser
 
-AU = 'Désarme l’arrête d’urgence et Appuie sur le bouton vert !'
+STATUS_IGNORE = [
+        'Désarme l’arrête d’urgence et Appuie sur le bouton vert !',
+        'Déconnecte le joystick !',
+        ]
+
 
 
 class Anomaly(Subscriber, Pusher):
@@ -23,7 +27,7 @@ class Anomaly(Subscriber, Pusher):
         vc, vm, hote = array(vc), array(vm), Hote(hote)
         if 0 in vc:
             return False
-        new_anomaly = bool(abs((vc - vm) / vc).sum() > 1) and not stop and is_up and status != AU
+        new_anomaly = bool(abs((vc - vm) / vc).sum() > 1) and not stop and is_up and status not in STATUS_IGNORE
         if not new_anomaly:
             if self.anomaly[hote]:
                 print('Fin de l’anomalie sur %s' % hote.name)
