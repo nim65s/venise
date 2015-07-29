@@ -101,3 +101,15 @@
 24 juillet
 =========
 * journée: tinc, munin, pavillon allemand, trajectoire du 3
+
+27 juillet
+==========
+* matinée: inversion des trajectoires, pavillon allemand done, métriques, appels JC, améliorations anomaly
+
+28 juillet
+==========
+* matinée: test inversion des trajectoires, appels JC, métriques, améliorations anomaly
+
+29 juillet
+==========
+* matinée: retex inversion trajectoires, appels JC, métriques
