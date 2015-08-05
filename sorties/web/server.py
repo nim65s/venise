@@ -25,7 +25,7 @@ class Root(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        return Template(open('templates/plan.html').read().decode('utf-8')).render(expert=False, **globals()).encode('utf-8')
+        return Template(open('templates/plan.html').read().decode('utf-8')).render(public=False, expert=False, **globals()).encode('utf-8')
 
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
@@ -81,7 +81,14 @@ class Expert(Resource):
     isLeaf = True
 
     def render_GET(self, request):
-        return Template(open('templates/plan.html').read().decode('utf-8')).render(expert=True, **globals()).encode('utf-8')
+        return Template(open('templates/plan.html').read().decode('utf-8')).render(public=False, expert=True, **globals()).encode('utf-8')
+
+
+class Public(Resource):
+    isLeaf = True
+
+    def render_GET(self, request):
+        return Template(open('templates/plan.html').read().decode('utf-8')).render(public=True, expert=False, **globals()).encode('utf-8')
 
 
 class Table(Resource):
@@ -130,6 +137,7 @@ if __name__ == '__main__':
     root.putChild('sub', subscribe)
     root.putChild('table', Table())
     root.putChild('expert', Expert())
+    root.putChild('public', Public())
     root.putChild('static', File('static'))
     root.putChild('logs', File(expanduser('~/logs'), defaultType='text/plain'))
     site = Site(root)

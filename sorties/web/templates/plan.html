@@ -90,6 +90,7 @@
                 </g>
             </g>
         </svg>
+        {% if not public %}
         <table class="table table-striped">
             <tr>
                 <th>Arbre</th>
@@ -143,6 +144,7 @@
             </tr>
             {% endfor %}
         </table>
+        {% endif %}
 
         {% if expert %}
         <ul>
