@@ -7,9 +7,9 @@ def dist_seg(A, B, P):
     A, B, P = map(array, [A, B, P])
     if all(A == P) or all(B == P):
         return 0
-    if arccos(dot((P - A) / norm(P - A), (B - A) / norm(B - A))) > pi / 2:
+    if arccos(min(dot((P - A) / norm(P - A), (B - A) / norm(B - A)), 1)) > pi / 2:
         return norm(P - A)
-    if arccos(dot((P - B) / norm(P - B), (A - B) / norm(A - B))) > pi / 2:
+    if arccos(min(dot((P - B) / norm(P - B), (A - B) / norm(A - B)), 1)) > pi / 2:
         return norm(P - B)
     return abs(dot(A - B, P[::-1]) + det([A, B])) / norm(A - B)
 
