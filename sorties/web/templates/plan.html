@@ -3,14 +3,9 @@
     <head>
         <meta charset="utf-8">
         <title>Transhumus</title>
-        <!--
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-        -->
-        <link rel="stylesheet" href="static/bootstrap.min.css">
-        <script src="static/jquery.min.js"></script>
-        <script src="static/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="/{% if public %}/maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css{% else %}static{% endif %}/bootstrap.min.css">
+        <script src="/{% if public %}/ajax.googleapis.com/ajax/libs/jquery/2.1.1{% else %}static{% endif %}/jquery.min.js"></script>
+        <script src="/{% if public %}/maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js{% else %}static{% endif %}/bootstrap.min.js"></script>
         <style>
             svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; fill-opacity: 0.5; background-color: 'orange'; }
             svg { background-image: url("static/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
