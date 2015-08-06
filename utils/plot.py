@@ -34,7 +34,7 @@ for day in ubi.iterdir():
         print(date.strftime('%m-%d'), i)
         _x = _y = 0
         if (day / ('%i.pickle' % i)).is_file():
-            with (day / '%i.pickle' % i).open('rb') as f:
+            with (day / ('%i.pickle' % i)).open('rb') as f:
                 [X[i], Y[i], Z[i], U[i], D[i], E[i]] = load(f)
         else:
             with (day / str(i)).open() as f:
@@ -57,8 +57,8 @@ for day in ubi.iterdir():
 
         # for j, d in enumerate(U[i]):
             # V[i].append(hypot(X[i][j] - X[i][j + 1], Y[i][j] - Y[i][j + 1]))
-        title(date.strftime('%A %m/%d'))
-        subplot(311)
+        ax = subplot(311)
+        ax.set_title(date.strftime('%A %m/%d'))
         plot(X[i], Y[i])
         subplot(312)
         plot(U[i], D[i])
