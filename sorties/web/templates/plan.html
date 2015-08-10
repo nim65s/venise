@@ -7,7 +7,7 @@
         <script src="/{% if public %}/ajax.googleapis.com/ajax/libs/jquery/2.1.1{% else %}static{% endif %}/jquery.min.js"></script>
         <script src="/{% if public %}/maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js{% else %}static{% endif %}/bootstrap.min.js"></script>
         <style>
-            svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; fill-opacity: 0.5; background-color: 'orange'; }
+svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; fill-opacity: 0.5; {% if not replay %}background-color: 'orange'; {% endif %} }
             svg { background-image: url("static/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
             #g2 { stroke: red; }
             #g3 { stroke: green; }
@@ -85,7 +85,7 @@
                 </g>
             </g>
         </svg>
-        {% if not public %}
+        {% if not public and not replay %}
         <table class="table table-striped">
             <tr>
                 <th>Arbre</th>
@@ -149,14 +149,24 @@
         </ul>
         {% endif %}
 
+        {% if replay %}
+        <p>Timestamp: <span id="timestamp"></span></p>
+        {% endif %}
+
         <script>
             var last_seen = new Date();
             var size_coef = 2;
             var data;
             var roues = [0, -Math.PI / 4, Math.PI / 4, Math.PI];
+            {% if replay %}
+            var sv = ['x', 'y'];
+            var mv = [];
+            var uv = [];
+            {% else %}
             var sv = ['x', 'y', 'v', 'w'];
             var mv = ['nt'];
             var uv = ['stop', 'sens', 'boost', 'arriere', 'reverse', 'rotation', 'smoothe', 'smoothe_speed'];
+            {% endif %}
             $(document).ready(function() {
                 var source = new EventSource("/sub");
                 source.onmessage = function(e) {
@@ -181,6 +191,7 @@
                                     $('#a' + a + ' .' + uv[v] + '-ok').addClass('hidden');
                                 }
                             }
+                            {% if not replay %}
                             $('#agv' + a + ' .v').attr({
                                 x2: data[a]['v'] * Math.cos(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                                 y2: data[a]['v'] * Math.sin(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
@@ -202,6 +213,7 @@
                                 cy: data[a]['destination'][1] * {{ PX_PAR_M }},
                             });
                             $('#a' + a + ' .status').html(data[a]['status']);
+                            {% endif %}
                             {% if expert %}
                             $('#a' + a + ' .anomaly').html(data[a]['anomaly'] ? '✔' : '✘');
                             $('#a' + a + ' .state').html(data[a]['state']);
@@ -213,12 +225,16 @@
                                 $('#agv' + a + ' polygon').attr({d: d});
                             }
                             {% endif %}
+                            {% if replay %}
+                            $('#timestamp').html(data['timestamp']);
+                            {% endif %}
                             $('#agv' + a).css('fill', data[a]['is_up'] ? data[a]['stop'] ? 'yellow' : 'none' : 'orange');
                         }
                     }
                     last_seen = new Date();
                 };
             });
+        {% if not replay %}
         setInterval(function(){
             now = new Date();
             diff = now - last_seen;
@@ -231,6 +247,7 @@
                 $('button').removeClass('disabled');
             }
         }, 500);
+        {% endif %}
         </script>
     </body>
 </html>

@@ -94,7 +94,9 @@ BORDS = {
         }
 
 # SVG
-WIDTH = 35 + 15
+LEFT_WIDTH = 15
+RIGHT_WIDTH = 35
+WIDTH = LEFT_WIDTH + RIGHT_WIDTH
 HEIGHT = 20
 PX_PAR_M = 35
 PATHS_SVG = {h: [array(p) * PX_PAR_M for p in _PATHS[h]] for h in [2, 3, 4]}
