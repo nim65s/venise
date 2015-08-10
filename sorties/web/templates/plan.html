@@ -26,7 +26,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                 <g transform="scale(1,-1)">
                     <g transform="translate({{ PX_PAR_M * 15 }},0)">
                         <g id="g2">
-                            {% if not public %}{% for path in PATHS_SVG[2] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
+                            {% if not public and not partout %}{% for path in PATHS_SVG[2] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
                             {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[2] %}{{p|join(',')}} {% endfor %}" />{% endif %}
                             <polygon points="{% for p in BORDS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path2" />
@@ -46,7 +46,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
 
                         <g id="g3">
                             <circle class="destination" r="{{ PX_PAR_M / 2 }}" />
-                            {% if not public %}{% for path in PATHS_SVG[3] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
+                            {% if not public and not partout %}{% for path in PATHS_SVG[3] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
                             {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[3] %}{{p|join(',')}} {% endfor %}" />{% endif %}
                             <polygon points="{% for p in BORDS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path3" />
@@ -65,7 +65,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
 
                         <g id="g4">
                             <circle class="destination" r="{{ PX_PAR_M / 2 }}" />
-                            {% if not public %}{% for path in PATHS_SVG[4] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
+                            {% if not public and not partout %}{% for path in PATHS_SVG[4] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
                             {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[4] %}{{p|join(',')}} {% endfor %}" />{% endif %}
                             <polygon points="{% for p in BORDS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path4" />
@@ -219,6 +219,8 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                             $('#a' + a + ' .state').html(data[a]['state']);
                             $('#a' + a + ' .choosen_path').html(data[a]['choosen_path']);
                             $('li .' + a).html(data[a]['erreurs']);
+                            {% endif %}
+                            {% if expert or partout %}
                             if (data[a]['x'] != 0) {
                                 d = $('#path' + a).attr('d');
                                 $('#path' + a).attr({d: (d ? d + " L " : "M ") + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }})});
