@@ -113,3 +113,39 @@
 29 juillet
 ==========
 * matinée: retex inversion trajectoires, appels JC, métriques
+
+30 juillet
+==========
+* matinée: métriques
+
+31 juillet
+==========
+* matinée: métriques
+
+1 aout
+======
+* temps libre: métriques
+
+4 aout
+======
+* journée: ubisense (mails/tel HP, tel JC)
+
+5 aout
+======
+* journée: métriques, ubisense, appel de PZ, panique, revert travail de HP, mails HGK / JC
+
+6 aout
+======
+* journée: replay, ubisense, mails HGK / JC
+
+7 aout
+======
+* journée: replay, ubisense, callconf JC/PZ, mails JC / HGK
+
+8 aout
+======
+* temps libre: mail PZ: tout va bien → mails JC/PZ/HGK
+
+10 aout
+======
+* matinée: nouveau mail PZ tout va bien, métriques (logs disparus ?)
