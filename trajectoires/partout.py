@@ -4,8 +4,8 @@ from random import randrange
 from numpy import array, where, zeros
 
 from ..settings import BORDS, GRID_COEF, Hote
-from ..utils.point_in_polygon import wn_PnPoly
-from .destination import TrajectoireDestination, trajectoire_destination_parser
+from ..utils.point_in_polygon import wn_pn_poly
+from .destination import TrajectoireDestination
 
 
 class TrajectoirePartout(TrajectoireDestination):
@@ -19,7 +19,7 @@ class TrajectoirePartout(TrajectoireDestination):
             g = zeros(self.grid_size[h])
             b = abs(array(BORDS[h])) * GRID_COEF
             for i, j in product(*[range(int(x)) for x in self.grid_size[h]]):
-                g[i, j] = abs(wn_PnPoly((i, j), b)) - 1
+                g[i, j] = abs(wn_pn_poly((i, j), b)) - 1
             self.grid[h] = g
             self.change_destination(**self.data[h])
 

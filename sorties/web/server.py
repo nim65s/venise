@@ -17,6 +17,11 @@ from zmq import PUSH, SUB, SUBSCRIBE, Context
 
 from settings import *  # YOLO
 
+public = False
+expert = False
+replay = False
+partout = False
+
 
 class Root(Resource):
     def getChild(self, name, request):
@@ -25,7 +30,7 @@ class Root(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        return Template(open('templates/plan.html').read().decode('utf-8')).render(public=False, expert=False, replay=False, **globals()).encode('utf-8')
+        return Template(open('templates/plan.html').read().decode('utf-8')).render(**globals()).encode('utf-8')
 
     def render_POST(self, request):
         self.socket = Context().socket(PUSH)
@@ -77,25 +82,17 @@ class Root(Resource):
         return 'Ok'
 
 
-class Expert(Resource):
+class Vue(Resource):
     isLeaf = True
 
-    def render_GET(self, request):
-        return Template(open('templates/plan.html').read().decode('utf-8')).render(public=False, expert=True, replay=False, **globals()).encode('utf-8')
-
-
-class Public(Resource):
-    isLeaf = True
+    def __init__(self, vue):
+        self.children = {}
+        self.vue = vue
 
     def render_GET(self, request):
-        return Template(open('templates/plan.html').read().decode('utf-8')).render(public=True, expert=False, replay=False, **globals()).encode('utf-8')
-
-
-class Replay(Resource):
-    isLeaf = True
-
-    def render_GET(self, request):
-        return Template(open('templates/plan.html').read().decode('utf-8')).render(public=False, expert=False, replay=True, **globals()).encode('utf-8')
+        ctx = globals().copy()
+        ctx[self.vue] = True
+        return Template(open('templates/plan.html').read().decode('utf-8')).render(**ctx).encode('utf-8')
 
 
 class Table(Resource):
@@ -143,9 +140,10 @@ if __name__ == '__main__':
     subscribe = Subscribe()
     root.putChild('sub', subscribe)
     root.putChild('table', Table())
-    root.putChild('expert', Expert())
-    root.putChild('public', Public())
-    root.putChild('replay', Replay())
+    root.putChild('expert', Vue('expert'))
+    root.putChild('public', Vue('public'))
+    root.putChild('replay', Vue('replay'))
+    root.putChild('partout', Vue('partout'))
     root.putChild('static', File('static'))
     root.putChild('logs', File(expanduser('~/logs'), defaultType='text/plain'))
     site = Site(root)
