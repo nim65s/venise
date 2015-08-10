@@ -7,10 +7,11 @@ from .trajectoire import Trajectoire, trajectoire_parser
 
 
 class TrajectoireDestination(Trajectoire):
-    def __init__(self, v1, v2, v3, w1, w2, w3, *args, **kwargs):
+    def __init__(self, v1, v2, v3, w1, w2, w3, vw, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.wi = {2: w1, 3: w2, 4: w3}
         self.vi = {2: v1, 3: v2, 4: v3}
+        self.vw = vw
 
     def distance(self, destination, x, y):
         xi, yi = destination
@@ -34,11 +35,11 @@ class TrajectoireDestination(Trajectoire):
         m = datetime.now().minute + datetime.now().second / 60
         # 'wg': self.wi[hote]
         if hote == Hote.moro:
-            return round(sin(m / 6) / 2, 5)
+            return round(sin(m / 6) / self.vw, 5)
         if hote == Hote.ame:
-            return round(sin(m / 6 + 2 * pi / 3) / 2, 5)
+            return round(sin(m / 6 + 2 * pi / 3) / self.vw, 5)
         if hote == Hote.yuki:
-            return round(sin(m / 6 + 4 * pi / 3) / 2, 5)
+            return round(sin(m / 6 + 4 * pi / 3) / self.vw, 5)
 
 
 trajectoire_destination_parser = ArgumentParser(parents=[trajectoire_parser], conflict_handler='resolve')
@@ -48,3 +49,4 @@ trajectoire_destination_parser.add_argument('--w3', type=float, default=0)
 trajectoire_destination_parser.add_argument('--v1', type=float, default=1)
 trajectoire_destination_parser.add_argument('--v2', type=float, default=1)
 trajectoire_destination_parser.add_argument('--v3', type=float, default=1)
+trajectoire_destination_parser.add_argument('--vw', type=float, default=2, help='ratio v / w')

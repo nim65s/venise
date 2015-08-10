@@ -5,7 +5,7 @@ from numpy import array, where, zeros
 
 from ..settings import BORDS, GRID_COEF, Hote
 from ..utils.point_in_polygon import wn_pn_poly
-from .destination import TrajectoireDestination
+from .destination import TrajectoireDestination, trajectoire_destination_parser
 
 
 class TrajectoirePartout(TrajectoireDestination):
@@ -15,6 +15,7 @@ class TrajectoirePartout(TrajectoireDestination):
         self.grid_size = {}
         self.grid = {}
         for h in self.hotes:
+            self.data[h]['smoothe'] = False
             self.grid_size[h] = (abs(array(BORDS[h])) * GRID_COEF + 1).max(axis=0)
             g = zeros(self.grid_size[h])
             b = abs(array(BORDS[h])) * GRID_COEF
@@ -50,3 +51,5 @@ class TrajectoirePartout(TrajectoireDestination):
         x, y = x / GRID_COEF * (-1 if hote == Hote.moro else 1), y / GRID_COEF
         print(hote, x, y)
         self.data[hote].update(state=state, destination=(x, y), dest_next=False, dest_prev=False)
+
+trajectoire_destination_parser.set_defaults(vw=1)
