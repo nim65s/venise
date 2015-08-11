@@ -1,4 +1,5 @@
 from itertools import product
+from pickle import dump
 from random import randrange
 
 from numpy import array, where, zeros
@@ -25,8 +26,10 @@ class TrajectoirePartout(TrajectoireDestination):
             self.change_destination(**self.data[h])
 
     def set_grid(self, hote, x, y, granier, **kwargs):
-        if self.grid[hote][x, y] >= 0:
+        if self.grid[hote][x * GRID_COEF, y * GRID_COEF] >= 0:
             self.grid[hote][x * GRID_COEF, y * GRID_COEF] = array(granier).mean()
+            with open('/tmp/grid_%i.pickle' % hote, 'wb') as f:
+                dump(self.grid[hote], f)
 
     def process_speed(self, hote, destination, x, y, dest_next, dest_prev, **kwargs):
         self.set_grid(**self.data[hote])

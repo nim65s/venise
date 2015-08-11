@@ -16,8 +16,11 @@ class Diff(Subscriber):
             for k in self.data[h]:
                 if k not in self._data[h] or self._data[h][k] != self.data[h][k]:
                     self._data[h][k] = self.data[h][k]
-                    print(k, self._data[h][k])
+                    self.diff(h, k, self._data[h][k])
         sleep(PERIODE)
+
+    def diff(self, hote, key, data):
+        print(hote, '\t', key, '\t', data)
 
 
 if __name__ == '__main__':

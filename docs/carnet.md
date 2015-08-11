@@ -149,3 +149,8 @@
 10 aout
 ======
 * matinée: nouveau mail PZ tout va bien, métriques (logs disparus ?)
+
+11 aout
+=======
+* 9h: sens des AGV / nb de tours. revert by venice's staff
+* après-midi: corrections α du 3
