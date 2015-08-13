@@ -4,7 +4,7 @@ from ..vmq import Pusher, Subscriber, puller_parser
 
 class Cache(Subscriber, Pusher):
     def __init__(self, port_push, *args, **kwargs):
-        super().__init__(*args, port_push=port_push, **kwargs)
+        super().__init__(*args, main=MAIN_HOST.name, port_push=port_push, **kwargs)
         url = 'tcp://%s:%i' % (self.hote.name if PROD else MAIN_HOST.name, PORT_PUSH + (not PROD and port_push) * 10 * self.hote)
         self.printe(url)
         self.push.connect(url)
