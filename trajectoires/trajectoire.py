@@ -6,8 +6,9 @@ from time import sleep
 
 from numpy import array
 
-from ..settings import DATA, PERIODE, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
+from ..settings import BORDS, DATA, PERIODE, POS_ROUES, SMOOTH_SPEED, VIT_MOY_MAX
 from ..utils.dist_angles import dist_angle
+from ..utils.point_in_polygon import wn_pn_poly
 from ..vmq import Publisher, Puller, vmq_parser
 
 
@@ -50,6 +51,7 @@ class Trajectoire(Puller, Publisher):
 
     def update(self):
         for hote in self.hotes:
+            self.data[hote].update(**self.inside(**self.data[hote]))
             self.data[hote].update(**self.process_speed(**self.data[hote]))
             self.data[hote].update(**self.smooth_speed(**self.data[hote]))
             self.save_speed(**self.data[hote])
@@ -91,6 +93,9 @@ class Trajectoire(Puller, Publisher):
         else:
             v, w, t = 0, 0, 0
         return {'v': v, 'w': w, 't': t}
+
+    def inside(self, hote, x, y, **kwargs):
+        return {'inside': wn_pn_poly((x, y), BORDS[hote]) != 0}
 
 
 trajectoire_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
