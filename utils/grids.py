@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from numpy import *
 
-from point_in_polygon import wn_PnPoly
+from point_in_polygon import wn_pn_poly
 from settings import *
 
 grid = {h: zeros((abs(array(BORDS[h])) * GRID_COEF + 1).max(axis=0)) for h in [2, 3, 4]}
@@ -19,7 +19,7 @@ for h in [2, 3, 4]:
 
     for i, row in enumerate(g):
         for j, cell in enumerate(row):
-            g[i, j] = abs(wn_PnPoly((i, j), b))
+            g[i, j] = abs(wn_pn_poly((i, j), b))
 
     g -= 1
     nprint(g)
