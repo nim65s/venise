@@ -6,6 +6,7 @@ from numpy import array, where, zeros
 
 from ..settings import BORDS, GRID_COEF, Hote
 from ..utils.point_in_polygon import wn_pn_poly
+from ..utils.stay_in_poly import stay_in_poly
 from .destination import TrajectoireDestination, trajectoire_destination_parser
 
 
@@ -37,22 +38,30 @@ class TrajectoirePartout(TrajectoireDestination):
             self.change_destination(**self.data[hote])
         return self.go_to_point(**self.data[hote])
 
-    def change_destination(self, hote, state, dest_next, dest_prev, **kwargs):
-        x = y = -1
+    def change_destination(self, hote, x, y, state, dest_next, dest_prev, inside, **kwargs):
+        xd = yd = -1
         if not dest_next and not dest_prev:
             state += 1
             state %= 3
-        if state == 0:
-            while True:
-                x, y = (randrange(z) for z in self.grid_size[hote])
-                if self.grid[hote][x, y] >= 0:
-                    break
-        else:
-            maxima = where(self.grid[hote] == self.grid[hote].max()) if state == 1 else where(self.grid[hote] == abs(self.grid[hote]).min())
-            i = randrange(len(maxima[0]))
-            x, y = (int(z[i]) for z in maxima)
-        x, y = x / GRID_COEF * (-1 if hote == Hote.moro else 1), y / GRID_COEF
-        print(hote, x, y)
-        self.data[hote].update(state=state, destination=(x, y), dest_next=False, dest_prev=False)
+        failcount = 0
+        while xd == yd == -1:
+            if state == 0:
+                while True:
+                    xd, yd = (randrange(z) for z in self.grid_size[hote])
+                    if self.grid[hote][xd, yd] >= 0:
+                        break
+            else:
+                maxima = where(self.grid[hote] == (self.grid[hote].max() if state == 1 else abs(self.grid[hote]).min()))
+                i = randrange(len(maxima[0]))
+                xd, yd = (int(z[i]) for z in maxima)
+            xd, yd = xd / GRID_COEF * (-1 if hote == Hote.moro else 1), yd / GRID_COEF
+            if inside and not stay_in_poly((x, y), (xd, yd), BORDS[hote]):
+                failcount += 1
+                if failcount > 5:
+                    state += 1
+                    state %= 3
+                    failcount = 0
+                xd = yd = -1
+        self.data[hote].update(state=state, destination=(xd, yd), dest_next=False, dest_prev=False)
 
 trajectoire_destination_parser.set_defaults(vw=1)
