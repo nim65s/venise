@@ -154,3 +154,16 @@
 =======
 * 9h: sens des AGV / nb de tours. revert by venice's staff
 * après-midi: corrections α du 3
+
+12 aout
+=======
+* 9h: sens des AGV / nb de tours. revert by venice's staff
+
+13 aout
+=======
+* 9h: sens des AGV / nb de tours. revert by venice's staff
+
+14 aout
+=======
+* 9h: sens des AGV / nb de tours. revert by venice's staff
+* après-midi: discussions avec Giulia & Laura, nouvelle trajectoire, changements de sens
