@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
+from pylab import *  # isort:skip
+
 from datetime import datetime
 from os.path import expanduser
 from pathlib import Path
 from pickle import dump, load
-
-from pylab import *
 
 from dist_path import dist_path
 from settings import _PATHS
