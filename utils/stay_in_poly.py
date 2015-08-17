@@ -1,4 +1,8 @@
+from math import atan2, cos, pi, sin
+
 from numpy import array, cross
+
+from .point_in_polygon import wn_pn_poly
 
 
 def inter(a, b, ap, bp):
@@ -13,6 +17,17 @@ def inter(a, b, ap, bp):
     return True
 
 
-def stay_in_poly(pos, dest, bord):
+def stay_in_poly(pos, dest, bord, marge=0.5):
     """ ne sort (*ou rentre*) pas dans le polygone """
-    return all([not inter(pos, dest, bord[i], bord[(i + 1) % len(bord)]) for i in range(len(bord))])
+    if not all([not inter(pos, dest, bord[i], bord[(i + 1) % len(bord)]) for i in range(len(bord))]):
+        return False
+    a = atan2(dest[1] - pos[1], dest[0] - pos[0])
+    pos_p = pos[0] + marge * cos(a + pi / 2), pos[1] + marge * sin(a + pi / 2)
+    dest_p = dest[0] + marge * cos(a + pi / 2), dest[1] + marge * sin(a + pi / 2)
+    if not all([not inter(pos_p, dest_p, bord[i], bord[(i + 1) % len(bord)]) for i in range(len(bord))]):
+        return False
+    pos_m = pos[0] + marge * cos(a - pi / 2), pos[1] + marge * sin(a - pi / 2)
+    dest_m = dest[0] + marge * cos(a - pi / 2), dest[1] + marge * sin(a - pi / 2)
+    if not all([not inter(pos_m, dest_m, bord[i], bord[(i + 1) % len(bord)]) for i in range(len(bord))]):
+        return False
+    return all([wn_pn_poly(p, bord) for p in [pos, pos_p, pos_m, dest, dest_p, dest_m]])
