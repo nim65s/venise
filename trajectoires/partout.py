@@ -33,8 +33,8 @@ class TrajectoirePartout(TrajectoireDestination):
             self.change_destination(**self.data[h])
 
     def set_grid(self, hote, x, y, granier, inside, **kwargs):
-        if inside and self.grid[hote][x * GRID_COEF, y * GRID_COEF] >= 0:
-            self.grid[hote][x * GRID_COEF, y * GRID_COEF] = array(granier).mean()
+        if inside and self.grid[hote][abs(x) * GRID_COEF, abs(y) * GRID_COEF] >= 0:
+            self.grid[hote][abs(x) * GRID_COEF, abs(y) * GRID_COEF] = array(granier).mean()
             with open('/tmp/grid_%i.pickle' % hote, 'wb') as f:
                 dump(self.grid[hote], f)
 
@@ -75,8 +75,14 @@ class TrajectoirePartout(TrajectoireDestination):
     def invert_direction(self, hote, t, x, y, a, destination, **kwargs):
         xd, yd = destination
         tg = round((atan2(y - yd, x - xd) - a) % (2 * pi), 5)
-        if abs(dist_angle(t, tg)) > pi / 2:
+        if abs(dist_angle(t, tg)) > 2 * pi / 3:
             t = (t + pi) % (2 * pi)
             self.data[hote].update(t=t)
+
+    def get_v(self, gm, **kwargs):
+        return gm[0]
+
+    def get_w(self, gm, **kwargs):
+        return gm[1] * 2 - 1
 
 trajectoire_destination_parser.set_defaults(vw=1)

@@ -11,7 +11,7 @@ from .vmq import VMQ, vmq_parser
 class Subscriber(VMQ):
     def __init__(self, main, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.main = main
         self.subscriber = self.context.socket(SUB)
         url = "tcp://%s:%i" % (main, PORT_PUB)
         self.printe(url)

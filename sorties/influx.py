@@ -13,7 +13,7 @@ def float_if_num(val):
 class Influx(Diff):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.client = InfluxDBClient(database='venise')
+        self.client = InfluxDBClient(database='venise' if self.main == 'cerf' else 'venise_dev')
 
     def diff(self, hote, key, data):
         self.client.write_points([{

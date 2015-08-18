@@ -93,36 +93,38 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
         <table class="table table-striped">
             <tr>
                 <th>Arbre</th>
-                {% if expert %}<th>x</th><th>y</th><th>v</th><th>ω</th><th colspan="3">Tours</th>{% endif %}
+                {% if expert or partout %}<th>x</th><th>y</th><th>v</th><th>ω</th>{% if expert %}<th colspan="3">Tours</th>{% endif %}{% endif %}
                 <th>Stop</th><th>Boost</th><th>Arrière</th>
-                {% if expert %}<th>Reverse</th><th>Rotation</th><th>Lissage</th><th>Lissage vitesse</th><th>Anomaly</th><th>État</th><th>Sens</th><th>Destination</th><th>Chemin</th><th>Chemin</th>{% endif %}
+                {% if expert or partout %}<th>Reverse</th><th>Rotation</th><th>Lissage</th><th>Lissage vitesse</th>{% if expert %}<th>Anomaly</th><th>État</th><th>Sens</th><th>Destination</th><th>Chemin</th><th>Chemin</th>{% endif %}{% endif %}
                 <th>Status</th>
             </tr>
             {% for arbre in range(2, 5) %}
             <tr id='a{{ arbre }}'>
                 <th>{{ arbre - 1}}</th>
-                {% if expert %}
+                {% if expert or partout %}
                 <td class="x"></td>
                 <td class="y"></td>
                 <td class="v"></td>
                 <td class="w"></td>
+                {% if expert %}
                 <td class="nt0"></td>
                 <td class="nt1"></td>
                 <td class="nt2"></td>
-                {% endif %}
+                {% endif %}{% endif %}
                 {% for var in ['stop', 'boost', 'arriere'] %}
                     <td>
                         <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ko']})" type="button" class="btn btn-lg btn-warning {{ var }}-ok hidden">✔</button>
                         <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ok']})" type="button" class="btn btn-lg btn-success {{ var }}-ko hidden">✘</button>
                     </td>
                 {% endfor %}
-                {% if expert %}
+                {% if expert or partout %}
                 {% for var in ['reverse', 'rotation', 'smoothe', 'smoothe_speed'] %}
                     <td>
                         <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ko']})" type="button" class="btn btn-lg btn-success {{ var }}-ok hidden">✔</button>
                         <button onclick="$.post('/', {'cmd': [{{ arbre }}, '{{ var }}-ok']})" type="button" class="btn btn-lg btn-warning {{ var }}-ko hidden">✘</button>
                     </td>
                 {% endfor %}
+                {% if expert %}
                 <td class="anomaly"></td>
                 <td class="state"></td>
                 <td>
@@ -138,7 +140,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'path-']})" type="button" class="btn btn-lg">←</button>
                     <button onclick="$.post('/', {'cmd': [{{ arbre }}, 'path+']})" type="button" class="btn btn-lg">→</button>
                 </td>
-                {% endif %}
+                {% endif %}{% endif %}
                 <td class="status"></td>
             </tr>
             {% endfor %}
