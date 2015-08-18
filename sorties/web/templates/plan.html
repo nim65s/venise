@@ -18,6 +18,9 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
             #a2 th { color: white; background: red; }
             #a3 th { color: white; background: green; }
             #a4 th { color: white; background: blue; }
+            {% if partout %}
+            #path2, #path3, #path4 { stroke-width: 2; }
+            {% endif %}
         </style>
     </head>
     <body>
@@ -229,10 +232,9 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                             {% endif %}
                             {% if expert or partout %}
                             if (x != 0) {
-                                {% if expert %}
-                                    d = $('#path' + a).attr('d');
-                                    $('#path' + a).attr({d: (d ? d + " L " : "M ") + (x * {{ PX_PAR_M }}) + ' ' + (y * {{ PX_PAR_M }})});
-                                {% else %}
+                                d = $('#path' + a).attr('d');
+                                $('#path' + a).attr({d: (d ? d + " L " : "M ") + (x * {{ PX_PAR_M }}) + ' ' + (y * {{ PX_PAR_M }})});
+                                {% if partout %}
                                     d = $('#pt' + a + '1').attr('d');
                                     $('#pt' + a + '1').attr({d: (d ? d + " L " : "M ") + ((x + Math.cos(alpha + tpsq) * {{ RAYON_AGV }}) * {{ PX_PAR_M }}) + ' ' + ((y + Math.sin(alpha + tpsq) * {{ RAYON_AGV }}) * {{ PX_PAR_M }})});
                                     d = $('#pt' + a + '2').attr('d');
