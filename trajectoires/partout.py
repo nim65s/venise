@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from itertools import product
 from math import atan2, pi
 from os.path import expanduser, isfile
@@ -40,9 +41,11 @@ class TrajectoirePartout(TrajectoireDestination):
             with open(PICKLES % hote, 'wb') as f:
                 dump(self.grid[hote], f)
 
-    def process_speed(self, hote, destination, x, y, dest_next, dest_prev, **kwargs):
+    def process_speed(self, hote, destination, x, y, dest_next, dest_prev, deadlock, **kwargs):
         self.set_grid(**self.data[hote])
-        if self.distance(destination, x, y) < 1 or dest_prev or dest_next:
+        if deadlock:
+            return self.deadlock(hote, deadlock)
+        elif self.distance(destination, x, y) < 1 or dest_prev or dest_next:
             self.change_destination(**self.data[hote])
         return self.go_to_point(**self.data[hote])
 
@@ -63,7 +66,7 @@ class TrajectoirePartout(TrajectoireDestination):
         """ Retourne à une destination où on avait atteint un extremum """
         maxima = where(self.grid[hote] == (self.grid[hote].max() if state == 1 else abs(self.grid[hote]).min()))
         i = randrange(len(maxima[0]))
-        xd, yd = (int(z[i]) for z in maxima)
+        return (int(z[i]) for z in maxima)
 
     def change_destination(self, hote, x, y, state, dest_next, dest_prev, inside, **kwargs):
         xd = yd = -1
@@ -71,6 +74,7 @@ class TrajectoirePartout(TrajectoireDestination):
             state += 1
             state %= 3
         failcount = 0
+        df = 0
         while xd == yd == -1:
             xd, yd = self.find_dest_other(hote) if state == 0 else self.find_dest_extr(hote, state)
             xd, yd = xd / GRID_COEF * (-1 if hote == Hote.moro else 1), yd / GRID_COEF
@@ -80,9 +84,17 @@ class TrajectoirePartout(TrajectoireDestination):
                     state += 1
                     state %= 3
                     failcount = 0
+                    df += 1
+                    if df > 3:
+                        self.data[hote].update(**self.deadlock(hote, deadlock=datetime.now().timestamp()))
+                        return
                 xd = yd = -1
         self.data[hote].update(state=state, destination=(xd, yd), dest_next=False, dest_prev=False)
         self.invert_direction(**self.data[hote])
+
+    def deadlock(self, hote, deadlock, **kwargs):
+        fini = datetime.now() - datetime.fromtimestamp(deadlock) > timedelta(seconds=5)
+        return {'stop': False, 'deadlock': False} if fini else {'stop': True, 'deadlock': deadlock}
 
     def invert_direction(self, hote, t, x, y, a, destination, **kwargs):
         """ inverse la direction si la nouvelle destination est à plus de 2π/3 """
