@@ -38,7 +38,7 @@ def is_left(p0, p1, p2):
 # This code is patterned after [Franklin, 2000]
 
 
-def cn_pn_poly(p, v):
+def cn_pn_poly_cn(p, v):
     cn = 0    # the crossing number counter
 
     # repeat the first vertex at end
@@ -52,8 +52,11 @@ def cn_pn_poly(p, v):
             vt = (p[1] - v[i][1]) / float(v[i + 1][1] - v[i][1])
             if p[0] < v[i][0] + vt * (v[i + 1][0] - v[i][0]):  # P[0] < intersect
                 cn += 1  # a valid crossing of y=P[1] right of P[0]
+    return cn
 
-    return cn % 2   # 0 if even (out), and 1 if odd (in)
+
+def cn_pn_poly(p, v):
+    return cn_pn_poly_cn(p, v) % 2   # 0 if even (out), and 1 if odd (in)
 
 # ==================================================================
 

@@ -1,6 +1,6 @@
 from itertools import product
 from math import atan2, pi
-from os.path import isfile
+from os.path import expanduser, isfile
 from pickle import dump, load
 from random import randrange
 
@@ -10,7 +10,9 @@ from ..settings import BORDS, GRID_COEF, Hote
 from ..utils.dist_angles import dist_angle
 from ..utils.point_in_polygon import wn_pn_poly
 from ..utils.stay_in_poly import stay_in_poly
-from .destination import TrajectoireDestination, trajectoire_destination_parser
+from .destination import TrajectoireDestination
+
+PICKLES = expanduser('~/.grid_%i.pickle')
 
 
 class TrajectoirePartout(TrajectoireDestination):
@@ -21,8 +23,8 @@ class TrajectoirePartout(TrajectoireDestination):
         for h in self.hotes:
             self.data[h]['smoothe'] = False
             self.grid_size[h] = (abs(array(BORDS[h])) * GRID_COEF + 1).max(axis=0)
-            if isfile('/tmp/grid_%i.pickle' % h):
-                with open('/tmp/grid_%i.pickle' % h, 'rb') as f:
+            if isfile(PICKLES % h):
+                with open(PICKLES % h, 'rb') as f:
                     self.grid[h] = array(load(f))
             else:
                 g = zeros(self.grid_size[h])
@@ -35,7 +37,7 @@ class TrajectoirePartout(TrajectoireDestination):
     def set_grid(self, hote, x, y, granier, inside, **kwargs):
         if inside and self.grid[hote][abs(x) * GRID_COEF, abs(y) * GRID_COEF] >= 0:
             self.grid[hote][abs(x) * GRID_COEF, abs(y) * GRID_COEF] = array(granier).mean()
-            with open('/tmp/grid_%i.pickle' % hote, 'wb') as f:
+            with open(PICKLES % hote, 'wb') as f:
                 dump(self.grid[hote], f)
 
     def process_speed(self, hote, destination, x, y, dest_next, dest_prev, **kwargs):
@@ -52,17 +54,21 @@ class TrajectoirePartout(TrajectoireDestination):
         failcount = 0
         while xd == yd == -1:
             if state == 0:
-                while True:
-                    xd, yd = (randrange(z) for z in self.grid_size[hote])
-                    if self.grid[hote][xd, yd] >= 0:
-                        break
+                xl, yl = where(self.grid[hote])
+                if len(xl):
+                    i = randrange(len(xl))
+                    xd, yd = xl[i], yl[i]
+                else:
+                    while True:
+                        xd, yd = (randrange(z) for z in self.grid_size[hote])
+                        if self.grid[hote][xd, yd] >= 0:
+                            break
             else:
                 maxima = where(self.grid[hote] == (self.grid[hote].max() if state == 1 else abs(self.grid[hote]).min()))
                 i = randrange(len(maxima[0]))
                 xd, yd = (int(z[i]) for z in maxima)
             xd, yd = xd / GRID_COEF * (-1 if hote == Hote.moro else 1), yd / GRID_COEF
             if inside and not stay_in_poly((x, y), (xd, yd), BORDS[hote]):
-                print('dont stay', hote, x, y, xd, yd, state, failcount)
                 failcount += 1
                 if failcount > 5:
                     state += 1
@@ -84,5 +90,3 @@ class TrajectoirePartout(TrajectoireDestination):
 
     def get_w(self, gm, **kwargs):
         return gm[1] * 2 - 1
-
-trajectoire_destination_parser.set_defaults(vw=1)

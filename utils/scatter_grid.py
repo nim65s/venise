@@ -5,18 +5,12 @@ from pickle import load
 
 import matplotlib.pyplot as plt
 
-x = []
-y = []
-s = []
-c = []
 
-if __name__ == '__main__':
-    parser = ArgumentParser()
-    parser.add_argument('n', type=int, nargs='?', choices=[2, 3, 4], default=3)
-    host = parser.parse_args().n
-
-    with open('/tmp/grid_%i.pickle' % host, 'rb') as f:
-        t = load(f)
+def scatter_grid(t):
+    x = []
+    y = []
+    s = []
+    c = []
 
     mini = abs(t).min()
     maxi = t.max()
@@ -31,3 +25,13 @@ if __name__ == '__main__':
     plt.scatter(x, y, s=s, c=c, marker='s', edgecolor='none')
     plt.axis('equal')
     plt.show()
+
+if __name__ == '__main__':
+    parser = ArgumentParser()
+    parser.add_argument('n', type=int, nargs='?', choices=[2, 3, 4], default=3)
+    host = parser.parse_args().n
+
+    with open('/tmp/grid_%i.pickle' % host, 'rb') as f:
+        t = load(f)
+
+    scatter_grid(t)

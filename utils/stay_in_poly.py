@@ -5,7 +5,7 @@ from numpy import array, cross
 from .point_in_polygon import wn_pn_poly
 
 
-def inter(a, b, ap, bp):
+def inter(a, b, ap, bp, strict=True):
     """ [a b] ∩ [ap bp] ? """
     a, b, ap, bp = map(array, [a, b, ap, bp])
     if cross(b - a, bp - ap) == 0:  # segments parallèles
@@ -14,20 +14,24 @@ def inter(a, b, ap, bp):
         return False
     if cross(bp - ap, b - ap) * cross(bp - ap, a - ap) > 0:  # point d’intersection pas entre a et b
         return False
+    if not strict and ((b == ap).all() or (b == bp).all()):
+        return False
     return True
 
 
-def stay_in_poly(pos, dest, bord, marge=0.5):
+def stay_in_poly(pos, dest, bord, marge=0.5, strict=True):
     """ ne sort (*ou rentre*) pas dans le polygone """
-    if not all([not inter(pos, dest, bord[i], bord[(i + 1) % len(bord)]) for i in range(len(bord))]):
+    if not all([not inter(pos, dest, bord[i], bord[(i + 1) % len(bord)], strict=strict) for i in range(len(bord))]):
         return False
+    if marge == 0:
+        return all([wn_pn_poly(p, bord) for p in [pos, dest]]) if strict else True
     a = atan2(dest[1] - pos[1], dest[0] - pos[0])
     pos_p = pos[0] + marge * cos(a + pi / 2), pos[1] + marge * sin(a + pi / 2)
     dest_p = dest[0] + marge * cos(a + pi / 2), dest[1] + marge * sin(a + pi / 2)
-    if not all([not inter(pos_p, dest_p, bord[i], bord[(i + 1) % len(bord)]) for i in range(len(bord))]):
+    if not all([not inter(pos_p, dest_p, bord[i], bord[(i + 1) % len(bord)], strict=strict) for i in range(len(bord))]):
         return False
     pos_m = pos[0] + marge * cos(a - pi / 2), pos[1] + marge * sin(a - pi / 2)
     dest_m = dest[0] + marge * cos(a - pi / 2), dest[1] + marge * sin(a - pi / 2)
-    if not all([not inter(pos_m, dest_m, bord[i], bord[(i + 1) % len(bord)]) for i in range(len(bord))]):
+    if not all([not inter(pos_m, dest_m, bord[i], bord[(i + 1) % len(bord)], strict=strict) for i in range(len(bord))]):
         return False
     return all([wn_pn_poly(p, bord) for p in [pos, pos_p, pos_m, dest, dest_p, dest_m]])
