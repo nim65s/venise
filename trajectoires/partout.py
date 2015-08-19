@@ -46,6 +46,25 @@ class TrajectoirePartout(TrajectoireDestination):
             self.change_destination(**self.data[hote])
         return self.go_to_point(**self.data[hote])
 
+    def find_dest_other(self, hote):
+        """ Trouve une destination où on est jamais allé, sinon random """
+        xl, yl = where(self.grid[hote] == 0)
+        if len(xl):
+            i = randrange(len(xl))
+            xd, yd = xl[i], yl[i]
+        else:
+            while True:
+                xd, yd = (randrange(z) for z in self.grid_size[hote])
+                if self.grid[hote][xd, yd] >= 0:
+                    break
+        return xd, yd
+
+    def find_dest_extr(self, hote, state):
+        """ Retourne à une destination où on avait atteint un extremum """
+        maxima = where(self.grid[hote] == (self.grid[hote].max() if state == 1 else abs(self.grid[hote]).min()))
+        i = randrange(len(maxima[0]))
+        xd, yd = (int(z[i]) for z in maxima)
+
     def change_destination(self, hote, x, y, state, dest_next, dest_prev, inside, **kwargs):
         xd = yd = -1
         if not dest_next and not dest_prev:
@@ -53,20 +72,7 @@ class TrajectoirePartout(TrajectoireDestination):
             state %= 3
         failcount = 0
         while xd == yd == -1:
-            if state == 0:
-                xl, yl = where(self.grid[hote])
-                if len(xl):
-                    i = randrange(len(xl))
-                    xd, yd = xl[i], yl[i]
-                else:
-                    while True:
-                        xd, yd = (randrange(z) for z in self.grid_size[hote])
-                        if self.grid[hote][xd, yd] >= 0:
-                            break
-            else:
-                maxima = where(self.grid[hote] == (self.grid[hote].max() if state == 1 else abs(self.grid[hote]).min()))
-                i = randrange(len(maxima[0]))
-                xd, yd = (int(z[i]) for z in maxima)
+            xd, yd = self.find_dest_other(hote) if state == 0 else self.find_dest_extr(hote, state)
             xd, yd = xd / GRID_COEF * (-1 if hote == Hote.moro else 1), yd / GRID_COEF
             if inside and not stay_in_poly((x, y), (xd, yd), BORDS[hote]):
                 failcount += 1
@@ -79,6 +85,7 @@ class TrajectoirePartout(TrajectoireDestination):
         self.invert_direction(**self.data[hote])
 
     def invert_direction(self, hote, t, x, y, a, destination, **kwargs):
+        """ inverse la direction si la nouvelle destination est à plus de 2π/3 """
         xd, yd = destination
         tg = round((atan2(y - yd, x - xd) - a) % (2 * pi), 5)
         if abs(dist_angle(t, tg)) > 2 * pi / 3:
