@@ -27,7 +27,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
         <svg>
             <g transform="translate(0,{{ PX_PAR_M * HEIGHT }})">
                 <g transform="scale(1,-1)">
-                    <g transform="translate({{ PX_PAR_M * 15 }},0)">
+                    <g transform="translate({{ PX_PAR_M * LEFT_WIDTH }},0)">
                         {% for agv in [2, 3, 4] %}{% for t in [1, 2, 3] %}<path id="pt{{ agv }}{{ t }}" class="c{{ agv }}" />{% endfor %}{% endfor %}
                         <g id="g2" class="c2">
                             {% if not public and not partout %}{% for path in PATHS_SVG[2] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}

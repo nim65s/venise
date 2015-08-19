@@ -9,6 +9,7 @@ from numpy import array, where, zeros
 
 from ..settings import BORDS, GRID_COEF, Hote
 from ..utils.dist_angles import dist_angle
+from ..utils.no_overlap import no_overlap
 from ..utils.point_in_polygon import wn_pn_poly
 from ..utils.stay_in_poly import stay_in_poly
 from .destination import TrajectoireDestination
@@ -78,7 +79,7 @@ class TrajectoirePartout(TrajectoireDestination):
         while xd == yd == -1:
             xd, yd = self.find_dest_other(hote) if state == 0 else self.find_dest_extr(hote, state)
             xd, yd = xd / GRID_COEF * (-1 if hote == Hote.moro else 1), yd / GRID_COEF
-            if inside and not stay_in_poly((x, y), (xd, yd), BORDS[hote]):
+            if inside and (not stay_in_poly((x, y), (xd, yd), BORDS[hote]) or self.collision(hote, x, y, xd, yd)):
                 failcount += 1
                 if failcount > 5:
                     state += 1
@@ -92,10 +93,6 @@ class TrajectoirePartout(TrajectoireDestination):
         self.data[hote].update(state=state, destination=(xd, yd), dest_next=False, dest_prev=False)
         self.invert_direction(**self.data[hote])
 
-    def deadlock(self, hote, deadlock, **kwargs):
-        fini = datetime.now() - datetime.fromtimestamp(deadlock) > timedelta(seconds=5)
-        return {'stop': False, 'deadlock': False} if fini else {'stop': True, 'deadlock': deadlock}
-
     def invert_direction(self, hote, t, x, y, a, destination, **kwargs):
         """ inverse la direction si la nouvelle destination est à plus de 2π/3 """
         xd, yd = destination
@@ -103,6 +100,17 @@ class TrajectoirePartout(TrajectoireDestination):
         if abs(dist_angle(t, tg)) > 2 * pi / 3:
             t = (t + pi) % (2 * pi)
             self.data[hote].update(t=t)
+
+    def deadlock(self, hote, deadlock, **kwargs):
+        """ stope les moteurs 5s """
+        fini = datetime.now() - datetime.fromtimestamp(deadlock) > timedelta(seconds=5)
+        return {'stop': False, 'deadlock': False} if fini else {'stop': True, 'deadlock': deadlock}
+
+    def collision(self, hote, x, y, xd, yd):
+        if hote == Hote.moro:
+            return False
+        xo, yo, do, so = (self.data[Hote.ame if hote == Hote.yuki else Hote.yuki][var] for var in ['x', 'y', 'destination', 'stop'])
+        return not no_overlap((x, y), (xd, yd), (xo, yo), (xo, yo) if so else do)
 
     def get_v(self, gm, **kwargs):
         return gm[0]
