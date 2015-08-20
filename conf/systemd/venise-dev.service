@@ -13,7 +13,6 @@ Requires=venise-granier@moro.service
 Requires=venise-granier@ame.service
 Requires=venise-granier@yuki.service
 Requires=venise-web.service
-Requires=venise-is_up.service
 
 [Service]
 User=nim
