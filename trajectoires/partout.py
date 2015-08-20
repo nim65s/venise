@@ -93,13 +93,14 @@ class TrajectoirePartout(TrajectoireDestination):
         self.data[hote].update(state=state, destination=(xd, yd), dest_next=False, dest_prev=False)
         self.invert_direction(**self.data[hote])
 
-    def invert_direction(self, hote, t, x, y, a, destination, **kwargs):
-        """ inverse la direction si la nouvelle destination est à plus de 2π/3 """
+    def invert_direction(self, hote, t, x, y, a, w, destination, inverse_rot, **kwargs):
+        """ inverse la direction et la rotation si la nouvelle destination est à plus de 2π/3 """
         xd, yd = destination
         tg = round((atan2(y - yd, x - xd) - a) % (2 * pi), 5)
         if abs(dist_angle(t, tg)) > 2 * pi / 3:
             t = (t + pi) % (2 * pi)
-            self.data[hote].update(t=t)
+            inverse_rot = not inverse_rot
+            self.data[hote].update(t=t, inverse_rot=inverse_rot, w=-w)
 
     def deadlock(self, hote, deadlock, **kwargs):
         """ stope les moteurs 5s """
@@ -115,5 +116,5 @@ class TrajectoirePartout(TrajectoireDestination):
     def get_v(self, gm, **kwargs):
         return gm[0]
 
-    def get_w(self, gm, **kwargs):
-        return gm[1] * 2 - 1
+    def get_w(self, gm, inverse_rot, **kwargs):
+        return (-1 if inverse_rot else 1) * (gm[1] * 2 - 1)
