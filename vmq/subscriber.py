@@ -35,4 +35,4 @@ class Subscriber(VMQ):
                 break
 
 subscriber_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
-subscriber_parser.add_argument('--main', default=MAIN_HOST.name, choices=['nausicaa', 'cerf'])
+subscriber_parser.add_argument('--main', default=MAIN_HOST.name, choices=['nausicaa', 'cerf', 'jiro'])

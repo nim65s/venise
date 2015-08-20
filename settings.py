@@ -8,12 +8,12 @@ from numpy import array
 
 PROD = gethostname() in ['cerf', 'moro', 'ame', 'yuki']
 
-Hote = IntEnum('Hôte', 'cerf moro ame yuki nausicaa')
+Hote = IntEnum('Hôte', 'cerf moro ame yuki nausicaa jiro')
 try:
     CURRENT_HOST = Hote[gethostname().split('.')[0].lower()]
 except KeyError:
     CURRENT_HOST = Hote.cerf if PROD else Hote.nausicaa
-MAIN_HOST = Hote.cerf if PROD else Hote.nausicaa
+MAIN_HOST = Hote.cerf if PROD else CURRENT_HOST
 
 # Constantes AGV
 RAYON_AGV = 1.180
