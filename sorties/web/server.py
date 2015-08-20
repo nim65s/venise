@@ -147,7 +147,7 @@ if __name__ == '__main__':
     root.putChild('static', File('static'))
     root.putChild('logs', File(expanduser('~/logs'), defaultType='text/plain'))
     site = Site(root)
-    reactor.listenTCP(8000, site)
+    reactor.listenTCP(10000, site)
     log.startLogging(sys.stdout)
     LoopingCall(subscribe.update).start(0.1)
     reactor.run()
