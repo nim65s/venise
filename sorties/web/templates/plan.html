@@ -36,6 +36,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                             <path id="path2" />
                             <circle class="destination" r="{{ PX_PAR_M / 2 }}" />
                             <g id="agv2" class="c2">
+                                <polygon points="{% for p in OCTOGONE %}{{p|join(',')}} {% endfor %}" />
                                 <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
                                 <circle class="centre" cx="0" cy="0" r="2" />
                                 <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
@@ -55,6 +56,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                             <polygon points="{% for p in BORDS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path3" />
                             <g id="agv3">
+                                <polygon points="{% for p in OCTOGONE %}{{p|join(',')}} {% endfor %}" />
                                 <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
                                 <circle class="centre" cx="0" cy="0" r="2" />
                                 <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
@@ -74,6 +76,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                             <polygon points="{% for p in BORDS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path4" />
                             <g id="agv4">
+                                <polygon points="{% for p in OCTOGONE %}{{p|join(',')}} {% endfor %}" />
                                 <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
                                 <circle class="centre" cx="0" cy="0" r="2" />
                                 <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />

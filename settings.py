@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from enum import IntEnum
-from math import pi, sqrt
+from math import pi, sqrt, tan
 from socket import gethostname
 
 from numpy import array
@@ -103,6 +103,9 @@ PX_PAR_M = 35
 PATHS_SVG = {h: [array(p) * PX_PAR_M for p in _PATHS[h]] for h in [2, 3, 4]}
 ALLER_RETOURS_SVG = {h: array(ALLER_RETOURS[h]) * PX_PAR_M for h in [2, 3, 4]}
 BORDS_SVG = {h: array(BORDS[h]) * PX_PAR_M for h in [2, 3, 4]}
+_a = 1.15 * PX_PAR_M
+_b = _a * tan(pi / 8)
+OCTOGONE = [(_a, _b), (_b, _a), (-_b, _a), (-_a, _b), (-_a, -_b), (-_b, -_a), (_b, -_a), (_a, -_b)]
 
 BERCAIL = {
         Hote.moro: (-10, 9),
