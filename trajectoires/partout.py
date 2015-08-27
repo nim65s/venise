@@ -9,6 +9,7 @@ from numpy import array, where, zeros
 
 from ..settings import BORDS, GRID_COEF, Hote
 from ..utils.dist_angles import dist_angle
+from ..utils.dist_path import dist_path
 from ..utils.no_overlap import no_overlap
 from ..utils.point_in_polygon import wn_pn_poly
 from ..utils.stay_in_poly import stay_in_poly
@@ -79,7 +80,7 @@ class TrajectoirePartout(TrajectoireDestination):
         while xd == yd == -1:
             xd, yd = self.find_dest_other(hote) if state == 0 else self.find_dest_extr(hote, state)
             xd, yd = xd / GRID_COEF * (-1 if hote == Hote.moro else 1), yd / GRID_COEF
-            if inside and (not stay_in_poly((x, y), (xd, yd), BORDS[hote]) or self.collision(hote, x, y, xd, yd)):
+            if inside and self.unsafe_way(x, y, xd, yd, hote):
                 failcount += 1
                 if failcount > 5:
                     state += 1
@@ -92,6 +93,10 @@ class TrajectoirePartout(TrajectoireDestination):
                 xd = yd = -1
         self.data[hote].update(state=state, destination=(xd, yd), dest_next=False, dest_prev=False)
         self.invert_direction(**self.data[hote])
+
+    def unsafe_way(self, x, y, xd, yd, hote):
+        marge = 0 if dist_path(BORDS[hote], (x, y)) < 1 else 0.5
+        return not stay_in_poly((x, y), (xd, yd), BORDS[hote], marge=marge) or self.collision(hote, x, y, xd, yd)
 
     def invert_direction(self, hote, t, x, y, a, w, destination, inverse_rot, **kwargs):
         """ inverse la direction et la rotation si la nouvelle destination est à plus de 2π/3 """
