@@ -126,41 +126,43 @@ With this system, we can easily compute the output needed by the AGV, which cons
 \begin{figure}[thpb]
     \centering
     \begin{tikzpicture}
+        \draw [->] (-3, 0) -- (3, 0);
+        \draw [->] (0, -3) -- (0, 3);
         \coordinate (o) at (0,0);
         \coordinate (v) at (0.5, {sqrt(3) / 2});
-        \coordinate (x) at ({-sqrt(2) / 2}, {-sqrt(2) / 2});
-        \coordinate (y) at ({+sqrt(2) / 2}, {-sqrt(2) / 2});
-        \coordinate (z) at (0, 1);
+        \coordinate (x) at ({+sqrt(2) / 2}, {sqrt(2) / 2});
+        \coordinate (y) at ({-sqrt(2) / 2}, {sqrt(2) / 2});
+        \coordinate (z) at (0, -1);
         \draw (o) node [draw,thick,minimum size=4cm,name=O,regular polygon,regular polygon sides=8] {};
         \draw (O) node [fill=green,circle,draw,inner sep=1pt] {};
-        \coordinate (a) at (O.side 2);
-        \coordinate (b) at (O.side 4);
-        \coordinate (c) at (O.side 7);
-        \coordinate (d) at (O.side 6);
+        \coordinate (a) at (O.side 6);
+        \coordinate (b) at (O.side 8);
+        \coordinate (c) at (O.side 3);
+        \coordinate (d) at ($ (O.side 7) + (0, 0.5) $);
         \draw (a) node [fill=red,circle,draw,inner sep=1pt] {};
         \draw (b) node [fill=red,circle,draw,inner sep=1pt] {};
         \draw (c) node [fill=red,circle,draw,inner sep=1pt] {};
-        \draw [->, red] (o) -- (v) node [above] {$v$};
-        \draw [->, red] (a) -- ++(v) node [above] {$v$};
-        \draw [->, red] (b) -- ++(v) node [left] {$v$};
-        \draw [->, red] (c) -- ++(v) node [right] {$v$};
-        \draw [->, blue] (a) -- ++(x) node [left] {$\omega R_2$};
-        \draw [->, blue] (b) -- ++(y) node [pos=0.7, left] {$\omega R_3$};
-        \draw [->, blue] (c) -- ++(z) node [pos=0.5, left] {$\omega R_1$};
-        \draw [->] (a) -- ($ (a) + (v) + (x) $) node [left] {$v_2$};
-        \draw [->] (b) -- ($ (b) + (v) + (y) $) node [right] {$v_3$};
-        \draw [->] (c) -- ($ (c) + (v) + (z) $) node [above] {$v_1$};
-        \draw [dashed] ($ (a) + (v) $) -- ($ (a) + (v) + (x) $);
-        \draw [dashed] ($ (b) + (v) $) -- ($ (b) + (v) + (y) $);
-        \draw [dashed] ($ (c) + (v) $) -- ($ (c) + (v) + (z) $);
-        \draw [dashed] ($ (a) + (x) $) -- ($ (a) + (v) + (x) $);
-        \draw [dashed] ($ (b) + (y) $) -- ($ (b) + (v) + (y) $);
-        \draw [dashed] ($ (c) + (z) $) -- ($ (c) + (v) + (z) $);
-        \draw [blue] (o) -- (a) node [pos=0.5, above] {$R_2$};
-        \draw [blue] (o) -- (b) node [pos=0.5, below] {$R_3$};
-        \draw [blue] (o) -- (c) node [pos=0.5, below] {$R_1$};
-        \pic [black!60!green, draw, ->, "$\theta$", angle eccentricity=1.5] {angle = c--o--v};
-        \pic [blue, draw, ->, "$\omega$", angle eccentricity=1.1, angle radius=75] {angle = d--o--c};
+        \draw [->, red] (o) -- (v) node [left] {$v$};
+        \draw [->, red] (a) -- ++(v) node [left] {$v$};
+        \draw [->, red] (b) -- ++(v) node [right] {$v$};
+        \draw [->, red] (c) -- ++(v) node [left] {$v$};
+        \draw [->, blue] (a) -- ++(x) node [right] {$\omega R_1$};
+        \draw [->, blue] (b) -- ++(y) node [left] {$\omega R_2$};
+        \draw [->, blue] (c) -- ++(z) node [left] {$\omega R_3$};
+        \draw [->] (a) -- ($ (a) + (v) + (x) $) node [left] {$v_1$};
+        \draw [->] (b) -- ($ (b) + (v) + (y) $) node [left] {$v_2$};
+        \draw [->] (c) -- ($ (c) + (v) + (z) $) node [below] {$v_3$};
+        \draw [blue, dashed] ($ (a) + (v) $) -- ($ (a) + (v) + (x) $);
+        \draw [blue, dashed] ($ (b) + (v) $) -- ($ (b) + (v) + (y) $);
+        \draw [blue, dashed] ($ (c) + (v) $) -- ($ (c) + (v) + (z) $);
+        \draw [red, dashed] ($ (a) + (x) $) -- ($ (a) + (v) + (x) $);
+        \draw [red, dashed] ($ (b) + (y) $) -- ($ (b) + (v) + (y) $);
+        \draw [red, dashed] ($ (c) + (z) $) -- ($ (c) + (v) + (z) $);
+        \draw [blue] (o) -- (a) node [pos=0.5, above] {$R_1$};
+        \draw [blue] (o) -- (b) node [pos=0.7, below] {$R_2$};
+        \draw [blue] (o) -- (c) node [pos=0.5, above] {$R_3$};
+        \pic [black!60!green, draw, ->, "$\theta$", angle eccentricity=1.5] {angle = d--o--v};
+        \pic [blue, draw, ->, "$\omega$", angle eccentricity=1.1, angle radius=75] {angle = d--o--b};
     \end{tikzpicture}
     \caption{$(v_i, \theta_i)$ as a function of $(v, \theta, \omega)$}
     \label{octogon}
