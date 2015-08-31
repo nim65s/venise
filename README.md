@@ -1,8 +1,9 @@
-- Calcul des trajectoires
-- Gestion des entrées
-    * Sondes Granier
-    * LIDAR SICK
-    * luminosité
-- Gestion des sorties
-    * Interface web
-    * Conversion pour AGV tri-tourelle
+Venise Docs
+===========
+
+Documents autour de transHumUs
+
+`git filter-branch --prune-empty --subdirectory-filter docs master` depuis https://bitbucket.org/nim65s/venise pour les articles / présentations / etc.
+
+[Plan](plan.md)
+[Carnet](carnet.md)
