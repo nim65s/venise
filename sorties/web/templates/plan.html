@@ -157,8 +157,10 @@
             var sv = ['x', 'y', 'v', 'w'];
             var mv = ['nt'];
             var uv = ['stop', 'sens', 'boost', 'arriere', 'reverse', 'rotation', 'smoothe', 'smoothe_speed'];
+            var check_connection = true;
+            var source;
             $(document).ready(function() {
-                var source = new EventSource("/sub");
+                source = new EventSource("/sub");
                 source.onmessage = function(e) {
                     data = JSON.parse(e.data);
                     for (a = 2; a < 5; a++) {
@@ -220,15 +222,17 @@
                 };
             });
         setInterval(function(){
-            now = new Date();
-            diff = now - last_seen;
-            diff = new Date(diff);
-            if (diff.getSeconds() >= 1) {
-                $('svg').css("background-color", "orange");
-                $('button').addClass('disabled');
-            } else {
-                $('svg').css("background-color", "white");
-                $('button').removeClass('disabled');
+            if (check_connection) {
+                now = new Date();
+                diff = now - last_seen;
+                diff = new Date(diff);
+                if (diff.getSeconds() >= 1) {
+                    $('svg').css("background-color", "orange");
+                    $('button').addClass('disabled');
+                } else {
+                    $('svg').css("background-color", "white");
+                    $('button').removeClass('disabled');
+                }
             }
         }, 500);
         </script>
