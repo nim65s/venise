@@ -8,7 +8,7 @@
         <script src="/{% if public %}/maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js{% else %}static{% endif %}/bootstrap.min.js"></script>
         <style>
             svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; fill-opacity: 0.5; background-color: 'orange'; }
-            svg { background-image: url("static/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
+            /*svg { background-image: url("static/plan.png"); background-position: -16px -302px; background-size: 117.5%; }*/
             #g2 { stroke: red; }
             #g3 { stroke: green; }
             #g4 { stroke: blue; }
@@ -24,7 +24,7 @@
         <svg>
             <g transform="translate(0,{{ PX_PAR_M * HEIGHT }})">
                 <g transform="scale(1,-1)">
-                    <g transform="translate({{ PX_PAR_M * 15 }},0)">
+                <g transform="translate({{ PX_PAR_M * 1 }}, -{{ PX_PAR_M * 7 }})">
                         <g id="g2">
                             {% if not public %}{% for path in PATHS_SVG[2] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
                             {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[2] %}{{p|join(',')}} {% endfor %}" />{% endif %}
@@ -163,7 +163,8 @@
                 source = new EventSource("/sub");
                 source.onmessage = function(e) {
                     data = JSON.parse(e.data);
-                    for (a = 2; a < 5; a++) {
+                    //for (a = 2; a < 5; a++) {
+                    var a = 3;
                         if (data[a]) {
                             $('#agv' + a).attr({
                                 transform: 'translate(' + (data[a]['x'] * {{ PX_PAR_M }}) + ' ' + (data[a]['y'] * {{ PX_PAR_M }}) + ') rotate(' + (data[a]['a'] * 180 / Math.PI) +') scale(-1, -1)',
@@ -217,7 +218,7 @@
                             {% endif %}
                             $('#agv' + a).css('fill', data[a]['is_up'] ? data[a]['stop'] ? 'yellow' : 'none' : 'orange');
                         }
-                    }
+                    //}
                     last_seen = new Date();
                 };
             });
