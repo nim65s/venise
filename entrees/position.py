@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 # TODO from datetime import datetime
 from socket import socket  # , AF_INET, SOCK_STREAM
+from math import pi
 
 from ..settings import Hote, MAIN_HOST, PORT_UBISENS
 from .entree import Entree, entree_parser
@@ -15,7 +16,7 @@ class EntreePosition(Entree):
             } for h in Hote}
         self.socket = socket()
         self.connect()
-        self.correction = [0, 0, 0, 0, 0]
+        self.correction = [0, 0, pi, pi, pi]
 
     def connect(self):
         self.socket.close()
@@ -39,7 +40,7 @@ class EntreePosition(Entree):
                     arbre, x, y, a, jour, heure = data
                     arbre, x, y, a = int(arbre[-1]) + 1, float(x.replace(',', '.')), float(y.replace(',', '.')), float(a.replace(',', '.'))
                     # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
-                    self.data[arbre].update(x=x, y=y, a=round(a - self.correction[arbre], 3))
+                    self.data[arbre].update(x=x, y=y, a=round((a - self.correction[arbre]) % (2 * pi), 3))
                 except:
                     print('Pas prêt… %r' % data)
         except ConnectionResetError:
