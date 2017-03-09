@@ -25,7 +25,7 @@ class TrajectoirePartout(TrajectoireDestination):
         self.grid = {}
         for h in self.hotes:
             self.data[h]['smoothe'] = False
-            self.grid_size[h] = (abs(array(BORDS[h])) * GRID_COEF + 1).max(axis=0)
+            self.grid_size[h] = [int(i) for i in (abs(array(BORDS[h])) * GRID_COEF + 1).max(axis=0)]
             if isfile(PICKLES % h):
                 with open(PICKLES % h, 'rb') as f:
                     self.grid[h] = array(load(f))

@@ -5,11 +5,11 @@ from pylab import axis, plot, scatter, show
 from .get_data import get_data
 from .no_overlap import masque
 from .plotools import plot_bord
-from .settings import BORDS, Hote
+from .settings import BORDS, Host
 
 data = get_data(0)
-x, y, d, s = (data[str(Hote.yuki.value)][var] for var in ['x', 'y', 'destination', 'stop'])
-xo, yo, do, so = (data[str(Hote.ame.value)][var] for var in ['x', 'y', 'destination', 'stop'])
+x, y, d, s = (data[str(Host.yuki.value)][var] for var in ['x', 'y', 'destination', 'stop'])
+xo, yo, do, so = (data[str(Host.ame.value)][var] for var in ['x', 'y', 'destination', 'stop'])
 
 plot(*plot_bord(BORDS[3]))
 axis('equal')

@@ -10,5 +10,5 @@ def point_on_segment(A, B, P):
     return -EPSILON < dist(A, P) + dist(P, B) - dist(A, B) < EPSILON
 
 
-def point_on_bord(pos, bord):
-    return any([point_on_segment(bord[i], bord[(i + 1) % len(bord)], pos) for i in range(len(bord))])
+def point_on_boundary(pos, boundary):
+    return any([point_on_segment(boundary[i], boundary[(i + 1) % len(boundary)], pos) for i in range(len(boundary))])

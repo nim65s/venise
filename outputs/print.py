@@ -1,16 +1,16 @@
 from pprint import pprint
 from time import sleep
 
-from ..settings import PERIODE
+from ..settings import PERIOD
 from ..vmq import Subscriber, subscriber_parser
 
 
-class SortiePrint(Subscriber):
+class PrintOutput(Subscriber):
     def loop(self):
         self.sub()
         pprint(self.data)
-        sleep(PERIODE)
+        sleep(PERIOD)
 
 
 if __name__ == '__main__':
-    SortiePrint(**vars(subscriber_parser.parse_args())).run()
+    PrintOutput(**vars(subscriber_parser.parse_args())).run()

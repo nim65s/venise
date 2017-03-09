@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from math import copysign, pi
+from math import copysign, tau
 from random import random
 
 from .agv import entree_agv_parser, EntreeAGV
@@ -20,7 +20,7 @@ class EntreeAGVRandom(EntreeAGV):
         if self.cmpt == 333:
             wc = random() * 2 - 1
         if self.cmpt == 666:
-            tc = random() * 2 * pi
+            tc = random() * tau
         if abs(vc - v) > 0.003:
             v += copysign(0.003, vc - v)
         else:

@@ -1,7 +1,7 @@
 from ..vmq import Puller, Pusher
 
 
-class Sortie(Puller, Pusher):
+class Output(Puller, Pusher):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

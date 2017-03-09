@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from math import pi
+from math import tau
 
 from .entree import Entree, entree_parser
 
@@ -7,7 +7,7 @@ from .entree import Entree, entree_parser
 class EntreeAGV(Entree):
     def __init__(self, v, w, t, stop, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.data[self.hote].update(v=v, w=w, t=t % (2 * pi), stop=stop)
+        self.data[self.hote].update(v=v, w=w, t=t % tau, stop=stop)
 
     def process(self, v, w, t, stop, **kwargs):
         r = input('→ ')
@@ -22,7 +22,7 @@ class EntreeAGV(Entree):
         if 'e' in r: t = 0
         if 'c' in r: stop = False
         if ',' in r: stop = True
-        self.data[self.hote].update(v=round(v, 1), w=round(w, 1), t=round(t % (2 * pi), 2), stop=stop)
+        self.data[self.hote].update(v=round(v, 1), w=round(w, 1), t=round(t % tau, 2), stop=stop)
 
 entree_agv_parser = ArgumentParser(parents=[entree_parser], conflict_handler='resolve')
 entree_agv_parser.add_argument('-v', type=float, default=0, help="vitesse linéaire")

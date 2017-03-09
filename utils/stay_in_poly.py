@@ -20,7 +20,7 @@ def inter(a, b, ap, bp, strict=True):
 
 
 def stay_in_poly(pos, dest, bord, marge=0.5, strict=True):
-    """ ne sort (*ou rentre*) pas dans le polygone """
+    """ don't cross polygon """
     if not all([not inter(pos, dest, bord[i], bord[(i + 1) % len(bord)], strict=strict) for i in range(len(bord))]):
         return False
     if marge == 0:

@@ -1,5 +1,0 @@
-/home/gsaurel/logs/*.log {
-    su gsaurel
-    daily
-    compress
-}

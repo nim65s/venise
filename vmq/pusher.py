@@ -12,6 +12,6 @@ class Pusher(VMQ):
         self.push.connect("tcp://%s:%i" % (MAIN_HOST.name, PORT_PUSH))
 
     def send(self):
-        for h in self.hotes:
+        for h in self.hosts:
             self.push.send_json([h, self.data[h]])
             self.printe([h, self.data[h]])
