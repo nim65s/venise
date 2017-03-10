@@ -38,8 +38,9 @@ class MonaTrajectory(DestinationTrajectory):
             self.change_destination(**self.data[h])
 
     def set_grid(self, host, x, y, granier, inside, **kwargs):
-        if inside and self.grid[host][abs(x) * GRID_COEF, abs(y) * GRID_COEF] >= 0:
-            self.grid[host][abs(x) * GRID_COEF, abs(y) * GRID_COEF] = array(granier).mean()
+        xi, yi = int(round(abs(x) * GRID_COEF)), int(round(abs(y) * GRID_COEF))
+        if inside and self.grid[host][xi, yi] >= 0:
+            self.grid[host][xi, yi] = array(granier).mean()
             with open(PICKLES % host, 'wb') as f:
                 dump(self.grid[host], f)
 
