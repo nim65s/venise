@@ -14,7 +14,7 @@ class IsUp(Subscriber, Pusher):
 
     def check_up(self, hote, last_seen_agv, **kwargs):
         try:
-            return (datetime.now() - datetime.strptime(last_seen_agv, '%Y-%m-%d %H:%M:%S.%f')) < timedelta(seconds=2)
+            return (datetime.now() - datetime.strptime(last_seen_agv, '%Y-%m-%d %H:%M:%S.%f')) < timedelta(seconds=3)
         except:
             return False
 

@@ -58,7 +58,7 @@ ALLER_RETOURS = {
         Hote.yuki: [[11, 10], [19, 10]],
         Hote.ame: [[13, 14], [18, 14]],
         }
-_PATHS = {h: [[[3.5, 9], [3.5, 12], [1.5, 12], [1.5, 9]]] for h in [Hote.moro, Hote.ame, Hote.yuki]}
+_PATHS = {h: [[[1.5, 6.5], [4, 7], [1.5, 8], [3, 10],[1.5,12],[3.5,13]]] for h in [Hote.moro, Hote.ame, Hote.yuki]}
 
 
 def echelonne_path(dep, ari):
@@ -70,7 +70,7 @@ PATHS = {h: [sum([echelonne_path(p[i], p[(i + 1) % len(p)])
     for i in range(len(p))], []) for p in _PATHS[h]] for h in [Hote.moro, Hote.ame, Hote.yuki]}
 
 
-BORDS = {h: [[1, 8.5], [1, 12.5], [4, 12.5], [4, 8.5]] for h in [Hote.moro, Hote.ame, Hote.yuki]}
+BORDS = {h: [[1, 6], [.8, 12.5], [4.7, 14], [3.65, 11.8],[3,9.75],[3.8,7.4],[4.6,6.4]] for h in [Hote.moro, Hote.ame, Hote.yuki]}
 
 # SVG
 WIDTH = 7
