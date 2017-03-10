@@ -9,17 +9,11 @@
         <style>
 svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: none; fill-opacity: 0.5; {% if not replay %}background-color: 'orange'; {% endif %} }
             svg { background-image: url("static/plan.png"); background-position: -16px -302px; background-size: 117.5%; }
-            .c2 { stroke: red; }
             .c3 { stroke: green; }
-            .c4 { stroke: blue; }
-            #g2 .destination { fill: red; }
             #g3 .destination { fill: green; }
-            #g4 .destination { fill: blue; }
-            #a2 th { color: white; background: red; }
             #a3 th { color: white; background: green; }
-            #a4 th { color: white; background: blue; }
             {% if partout %}
-            #path2, #path3, #path4 { stroke-width: 2; }
+            #path3 { stroke-width: 2; }
             {% endif %}
         </style>
     </head>
@@ -28,30 +22,9 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
             <g transform="translate(0,{{ PX_PAR_M * HEIGHT }})">
                 <g transform="scale(1,-1)">
                     <g transform="translate({{ PX_PAR_M * LEFT_WIDTH }},0)">
-                        {% for agv in [2, 3, 4] %}{% for t in [1, 2, 3] %}<path id="pt{{ agv }}{{ t }}" class="c{{ agv }}" />{% endfor %}{% endfor %}
-                        <g id="g2" class="c2">
-                            {% if not public and not partout %}{% for path in PATHS_SVG[2] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
-                            {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[2] %}{{p|join(',')}} {% endfor %}" />{% endif %}
-                            <polygon points="{% for p in BORDS_SVG[2] %}{{p|join(',')}} {% endfor %}" />
-                            <path id="path2" />
-                            <circle class="destination" r="{{ PX_PAR_M / 2 }}" />
-                            <g id="agv2" class="c2">
-                                <polygon points="{% for p in OCTOGONE %}{{p|join(',')}} {% endfor %}" />
-                                <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
-                                <circle class="centre" cx="0" cy="0" r="2" />
-                                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0"      />
-                                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="v" x1="0" y1="0" />
-                                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
-                            </g>
-                        </g>
-
+                        {% for agv in [3] %}{% for t in [1, 2, 3] %}<path id="pt{{ agv }}{{ t }}" class="c{{ agv }}" />{% endfor %}{% endfor %}
                         <g id="g3" class="c3">
                             <circle class="destination" r="{{ PX_PAR_M / 2 }}" />
-                            {% if not public and not partout %}{% for path in PATHS_SVG[3] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
                             {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[3] %}{{p|join(',')}} {% endfor %}" />{% endif %}
                             <polygon points="{% for p in BORDS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
                             <path id="path3" />
@@ -59,35 +32,16 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                                 <polygon points="{% for p in OCTOGONE %}{{p|join(',')}} {% endfor %}" />
                                 <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
                                 <circle class="centre" cx="0" cy="0" r="2" />
-                                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
-                                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
+                                <circle class="r1" r="2" cx="-{{ AGV_RADIUS * PX_PAR_M }}" cy="0" />
+                                <circle class="r2" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
+                                <circle class="r3" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
                                 <line class="v" x1="0" y1="0" />
-                                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
+                                <line class="t1" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
+                                <line class="t2" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
+                                <line class="t3" x1="-{{ AGV_RADIUS * PX_PAR_M }}" y1="0" />
                             </g>
                         </g>
 
-                        <g id="g4" class="c4">
-                            <circle class="destination" r="{{ PX_PAR_M / 2 }}" />
-                            {% if not public and not partout %}{% for path in PATHS_SVG[4] %}<polygon points="{% for p in path %}{{p|join(',')}} {% endfor %}" />{% endfor %}{% endif %}
-                            {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[4] %}{{p|join(',')}} {% endfor %}" />{% endif %}
-                            <polygon points="{% for p in BORDS_SVG[4] %}{{p|join(',')}} {% endfor %}" />
-                            <path id="path4" />
-                            <g id="agv4">
-                                <polygon points="{% for p in OCTOGONE %}{{p|join(',')}} {% endfor %}" />
-                                <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
-                                <circle class="centre" cx="0" cy="0" r="2" />
-                                <circle class="r1" r="2" cx="-{{ RAYON_AGV * PX_PAR_M }}" cy="0" />
-                                <circle class="r2" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <circle class="r3" r="2" cx="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" cy="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="v" x1="0" y1="0" />
-                                <line class="t1" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="-{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="t2" x1="{{ RAYON_AGV * PX_PAR_M * 0.707 }}" y1="+{{ RAYON_AGV * PX_PAR_M * 0.707 }}" />
-                                <line class="t3" x1="-{{ RAYON_AGV * PX_PAR_M }}" y1="0" />
-                            </g>
-                        </g>
                     </g>
                 </g>
             </g>
@@ -101,7 +55,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                 {% if expert or partout %}<th>Reverse</th><th>Rotation</th><th>Lissage</th><th>Lissage vitesse</th>{% if expert %}<th>Anomaly</th><th>État</th><th>Sens</th><th>Destination</th><th>Chemin</th><th>Chemin</th>{% endif %}{% endif %}
                 <th>Status</th>
             </tr>
-            {% for arbre in range(2, 5) %}
+            {% for arbre in [3] %}
             <tr id='a{{ arbre }}'>
                 <th>{{ arbre - 1}}</th>
                 {% if expert or partout %}
@@ -152,9 +106,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
 
         {% if expert %}
         <ul>
-            <li><a href="/logs/erreurs_agv-1.log">logs</a> – <span class="2"></span></li>
             <li><a href="/logs/erreurs_agv-2.log">logs</a> – <span class="3"></span></li>
-            <li><a href="/logs/erreurs_agv-3.log">logs</a> – <span class="4"></span></li>
         </ul>
         {% endif %}
 
@@ -183,7 +135,7 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                 source = new EventSource("/sub");
                 source.onmessage = function(e) {
                     data = JSON.parse(e.data);
-                    for (a = 2; a < 5; a++) {
+                    for (a = 3; a < 4; a++) {
                         if (data[a]) {
                             x = data[a]['x'];
                             y = data[a]['y'];
@@ -212,15 +164,15 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                                 y2: data[a]['v'] * Math.sin(data[a]['t']) * {{ VIT_MOY_MAX }} * size_coef,
                             });
                             $('#agv' + a + ' .t1').attr({
-                                x2: data[a]['vm'][0] * Math.cos(data[a]['tm'][0]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                y2: data[a]['vm'][0] * Math.sin(data[a]['tm'][0]) * size_coef - {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                x2: data[a]['vm'][0] * Math.cos(data[a]['tm'][0]) * size_coef + {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
+                                y2: data[a]['vm'][0] * Math.sin(data[a]['tm'][0]) * size_coef - {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
                             });
                             $('#agv' + a + ' .t2').attr({
-                                x2: data[a]['vm'][1] * Math.cos(data[a]['tm'][1]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
-                                y2: data[a]['vm'][1] * Math.sin(data[a]['tm'][1]) * size_coef + {{ RAYON_AGV * PX_PAR_M * 0.707 }},
+                                x2: data[a]['vm'][1] * Math.cos(data[a]['tm'][1]) * size_coef + {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
+                                y2: data[a]['vm'][1] * Math.sin(data[a]['tm'][1]) * size_coef + {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
                             });
                             $('#agv' + a + ' .t3').attr({
-                                x2: data[a]['vm'][2] * Math.cos(data[a]['tm'][2]) * size_coef - {{ RAYON_AGV * PX_PAR_M }},
+                                x2: data[a]['vm'][2] * Math.cos(data[a]['tm'][2]) * size_coef - {{ AGV_RADIUS * PX_PAR_M }},
                                 y2: data[a]['vm'][2] * Math.sin(data[a]['tm'][2]) * size_coef,
                             });
                             $('#g' + a + ' .destination').attr({
@@ -241,11 +193,16 @@ svg { width: {{ PX_PAR_M * WIDTH }}px; height: {{ PX_PAR_M * HEIGHT }}px; fill: 
                                 $('#path' + a).attr({d: (d ? d + " L " : "M ") + (x * {{ PX_PAR_M }}) + ' ' + (y * {{ PX_PAR_M }})});
                                 {% if partout %}
                                     d = $('#pt' + a + '1').attr('d');
-                                    $('#pt' + a + '1').attr({d: (d ? d + " L " : "M ") + ((x + Math.cos(alpha + tpsq) * {{ RAYON_AGV }}) * {{ PX_PAR_M }}) + ' ' + ((y + Math.sin(alpha + tpsq) * {{ RAYON_AGV }}) * {{ PX_PAR_M }})});
+                                    $('#pt' + a + '1').attr({d: (d ? d + " L " : "M ") + ((x + Math.cos(alpha + tpsq) *
+                                      {{ AGV_RADIUS }}) * {{ PX_PAR_M }}) + ' ' + ((y + Math.sin(alpha + tpsq) * {{
+                                        AGV_RADIUS }}) * {{ PX_PAR_M }})});
                                     d = $('#pt' + a + '2').attr('d');
-                                    $('#pt' + a + '2').attr({d: (d ? d + " L " : "M ") + ((x + Math.cos(alpha - tpsq) * {{ RAYON_AGV }}) * {{ PX_PAR_M }}) + ' ' + ((y + Math.sin(alpha - tpsq) * {{ RAYON_AGV }}) * {{ PX_PAR_M }})});
+                                    $('#pt' + a + '2').attr({d: (d ? d + " L " : "M ") + ((x + Math.cos(alpha - tpsq) *
+                                      {{ AGV_RADIUS }}) * {{ PX_PAR_M }}) + ' ' + ((y + Math.sin(alpha - tpsq) * {{
+                                        AGV_RADIUS }}) * {{ PX_PAR_M }})});
                                     d = $('#pt' + a + '3').attr('d');
-                                    $('#pt' + a + '3').attr({d: (d ? d + " L " : "M ") + ((x + Math.cos(alpha) * {{ RAYON_AGV }}) * {{ PX_PAR_M }}) + ' ' + ((y + Math.sin(alpha) * {{ RAYON_AGV }}) * {{ PX_PAR_M }})});
+                                    $('#pt' + a + '3').attr({d: (d ? d + " L " : "M ") + ((x + Math.cos(alpha) * {{
+                                      AGV_RADIUS }}) * {{ PX_PAR_M }}) + ' ' + ((y + Math.sin(alpha) * {{ AGV_RADIUS }}) * {{ PX_PAR_M }})});
                                 {% endif %}
                             }
                             {% endif %}
