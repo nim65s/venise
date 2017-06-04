@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from itertools import product
-from math import atan2, pi
+from math import atan2, pi, tau
 from os.path import expanduser, isfile
 from pickle import dump, load
 from random import randrange
@@ -16,6 +16,8 @@ from ..utils.stay_in_poly import stay_in_poly
 from .destination import DestinationTrajectory
 
 PICKLES = expanduser('~/.grid_%i.pickle')
+
+# TODO: clean this file
 
 
 class MonaTrajectory(DestinationTrajectory):
@@ -102,9 +104,9 @@ class MonaTrajectory(DestinationTrajectory):
     def invert_direction(self, host, t, x, y, a, w, destination, inverse_rot, **kwargs):
         """ inverse la direction et la rotation si la nouvelle destination est à plus de 2π/3 """
         xd, yd = destination
-        tg = round((atan2(y - yd, x - xd) - a) % (2 * pi), 5)
-        if abs(dist_angle(t, tg)) > 2 * pi / 3:
-            t = (t + pi) % (2 * pi)
+        tg = round((atan2(y - yd, x - xd) - a) % tau, 5)
+        if abs(dist_angle(t, tg)) > tau / 3:
+            t = (t + pi) % tau
             inverse_rot = not inverse_rot
             self.data[host].update(t=t, inverse_rot=inverse_rot, w=-w)
 

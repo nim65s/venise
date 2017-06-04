@@ -63,7 +63,7 @@ _b = _a * tan(pi / 8)
 OCTOGONE = [(_a, _b), (_b, _a), (-_b, _a), (-_a, _b), (-_a, -_b), (-_b, -_a), (_b, -_a), (_a, -_b)]
 
 DATA = {
-    'status': 'Not connected', 'erreurs': 'Not connected', 'anomaly': False, 'is_up': False, 'inside': False, 'deadlock': False, 'inverse_rot': False,
+    'status': 'Not connected', 'errors': 'Not connected', 'anomaly': False, 'is_up': False, 'inside': False, 'deadlock': False, 'inverse_rot': False,
     'x': 0, 'y': 0, 'a': 0,  # Position
     'v': 0, 'w': 0, 't': 0,  # Speed
     'vg': 0, 'wg': 0, 'tg': 0,  # Goal Speed

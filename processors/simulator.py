@@ -33,7 +33,11 @@ class Simulator(Processor):
         self.data[host].update(**self.recv_agv(**self.data[host]))
         self.data[host].update(**self.turrets_to_movement(**self.data[host]))
         self.data[host].update(**self.to_list(**self.data[host]))
+        self.data[host].update(**self.round(**self.data[host]))
         return {var: self.data[host][var] for var in self.to_send}
+
+    def round(self, **kwargs):
+        return {var: [round(i, 5) for i in kwargs[var]] for var in ['tc', 'tm']}
 
     def to_list(self, **kwargs):
         return {var: kwargs[var].tolist() for var in ['tc', 'vc', 'vm', 'tm', 'reversed']}

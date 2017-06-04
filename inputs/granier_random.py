@@ -5,7 +5,7 @@ from .probe import Probe, probe_parser
 
 
 class GranierRandom(Probe):
-    def process(self, value):
+    def process(self, value, **kwargs):
         return [round(min(self.maxi, max(self.mini, v + (random() - 0.5) / 10)), 4) for v in value]
 
 

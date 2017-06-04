@@ -10,7 +10,7 @@ class Granier(Processor):
         for i in range(N_PROBES):
             gmi[i] = min(granier[i], gmi[i])
             gma[i] = max(granier[i], gma[i])
-            gm[i] = round((granier[i] - gmi[i]) / (gma[i] - gmi[i] if gma[i] != gmi[i] else 1), 5)
+            gm[i] = round((granier[i] - gmi[i]) / (gma[i] - gmi[i]), 5) if gma[i] - gmi[i] > .1 else 1
         return {'gma': gma, 'gmi': gmi, 'gm': gm}
 
 

@@ -1,12 +1,12 @@
 from argparse import ArgumentParser
 # TODO from datetime import datetime
-from socket import socket  # , AF_INET, SOCK_STREAM
+from socket import socket
 
 from ..settings import Hote, MAIN_HOST, PORT_UBISENS
-from .entree import Entree, entree_parser
+from .input import Input, input_parser
 
 
-class EntreePosition(Entree):
+class PositionInput(Input):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.data = {h: {
@@ -22,32 +22,32 @@ class EntreePosition(Entree):
         self.socket = socket()
         self.socket.bind(('', PORT_UBISENS))
         self.socket.listen(1)
-        print('Attente d’une connexion…')
+        print('Waiting for a connection from ubisens…')
         self.conn, self.addr = self.socket.accept()
-        print('Connecté à %s:%i' % self.addr)
+        print('Connection with ubisens established at %s:%i' % self.addr)
 
     def process(self, **kwargs):
         try:
-            for data in self.conn.recv(4096).decode('UTF-16LE').split('C'):  # Merci VinDuv
+            for data in self.conn.recv(4096).decode('UTF-16LE').split('C'):
                 if not data or data.endswith('e'):
                     continue
                 try:
                     data = data.split()
                     if len(data) != 6:
-                        print('Pas prêt… %r' % data)
+                        print('Not ready … %r' % data)
                         continue
-                    arbre, x, y, a, jour, heure = data
-                    arbre, x, y, a = int(arbre[-1]) + 1, float(x.replace(',', '.')), float(y.replace(',', '.')), float(a.replace(',', '.'))
-                    # TODO last_seen = datetime.strptime('%s %s' % (jour, heure), '%d/%m/%Y %H:%M:%S')
-                    self.data[arbre].update(x=x, y=y, a=round(a - self.correction[arbre], 3))
+                    tree, x, y, a, day, hour = data
+                    tree, x, y, a = [int(tree[-1]) + 1] + [float(i.replace(',', '.')) for i in (x, y, a)]
+                    # TODO last_seen = datetime.strptime('%s %s' % (day, hour), '%d/%m/%Y %H:%M:%S')
+                    self.data[tree].update(x=x, y=y, a=round(a - self.correction[tree], 3))
                 except:
-                    print('Pas prêt… %r' % data)
+                    print('Not ready… %r' % data)
         except ConnectionResetError:
-            print('Déconnecté…')
+            print('Disconnected…')
             self.connect()
 
-position_parser = ArgumentParser(parents=[entree_parser], conflict_handler='resolve')
+position_parser = ArgumentParser(parents=[input_parser], conflict_handler='resolve')
 position_parser.set_defaults(hote=MAIN_HOST.name)
 
 if __name__ == '__main__':
-    EntreePosition(**vars(position_parser.parse_args())).run()
+    PositionInput(**vars(position_parser.parse_args())).run()

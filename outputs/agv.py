@@ -61,7 +61,7 @@ class SortieAGV(Sortie):
             except BrokenPipeError:
                 self.send('%s Broken pipe…' % now())
             except OSError:
-                self.send('%s L’AGV ne répond pas…' % now())
+                self.send("%s AGV doesn't respond…" % now())
 
     def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
         self.data[hote].update(**self.recv_agv())
@@ -77,8 +77,8 @@ class SortieAGV(Sortie):
         self.socket.sendall(self.send_agv(**self.data[hote]))
         self.check_ret(self.recv_rep())
         self.socket.sendall('getErrors()'.encode('ascii'))
-        erreurs = self.recv_rep()
-        self.push.send_json([hote, {'erreurs': 'ok' if erreurs.startswith('-') else erreurs}])
+        errors = self.recv_rep()
+        self.push.send_json([hote, {'errors': 'ok' if errors.startswith('-') else errors}])
 
     def recv_rep(self):
         return self.socket.recv(1024).decode('ascii').replace('\x00', '')
@@ -125,23 +125,23 @@ class SortieAGV(Sortie):
         return bytes((cmd + template).format(vc=vc, tc=tc).encode('ascii'))
 
     def check_ret(self, ret):
-        if not ret.startswith('+'):  # Les erreurs commencent par un +
+        if not ret.startswith('+'):  # Errors starts with a +
             self.send(ret.split(',')[1].strip())
             return
         code = int(ret[1:].split(',')[0])
         if code == 2:  # Wrong number or format of arguments
-            self.send('Mauvais format d’envoi à BA !')
+            self.send('Wrong format for sending orders to the AGV !')
             raise AttributeError
-        elif code == 3:  # Joystick connecté
-            self.send('Déconnecte le joystick !')
-        elif code == 4:  # Post-démarrage ou arrêt d’urgence
-            self.send('Désarme l’arrête d’urgence et Appuie sur le bouton vert !')
-        elif code == 5:  # Velocity ou angle too high
+        elif code == 3:
+            self.send('Disconnect the joystick!')
+        elif code == 4:
+            self.send('Disarm the kill switch and Push the green button !')
+        elif code == 5:  # Velocity or angle too high
             pass
-        elif code == 6:  # Initialisation ongoing
-            self.send('Initialisation en cours…')
-        elif code == 7:  # Trop de tours
-            self.send('Trop de tours !')
+        elif code == 6:
+            self.send('Initialisation ongoing…')
+        elif code == 7:
+            self.send('Too much tours for the turrets !')
         else:
             raise RuntimeError(ret)
 
