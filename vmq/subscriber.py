@@ -1,11 +1,10 @@
-from argparse import ArgumentParser
 from datetime import datetime
 
 from zmq import NOBLOCK, SUB, SUBSCRIBE
 from zmq.error import Again
 
-from ..settings import MAIN_HOST, PORT_PUB, AGV_HOST
-from .vmq import VMQ, vmq_parser
+from ..settings import PORT_PUB, AGV_HOST
+from .vmq import VMQ
 
 
 class Subscriber(VMQ):
@@ -33,7 +32,3 @@ class Subscriber(VMQ):
                 break
             if not block:
                 break
-
-
-subscriber_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
-subscriber_parser.add_argument('--main', default=MAIN_HOST.name, choices=['nausicaa', 'cerf', 'jiro'])

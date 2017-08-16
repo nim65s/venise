@@ -27,6 +27,7 @@ class GranierSerial(Granier):
     def end(self):
         self.serial.close()
 
+
 granier_serial_parser = ArgumentParser(parents=[granier_parser], conflict_handler='resolve')
 granier_serial_parser.add_argument('-p', '--port', type=int, default=0)
 granier_serial_parser.add_argument('-f', '--filename', default='~/logs/granier_%i.log', help="log filename")

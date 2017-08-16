@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-from datetime import datetime
 from math import atan2, copysign, cos, hypot, pi, sin
 from time import sleep
 
@@ -60,7 +59,8 @@ class Trajectory(Puller, Publisher):
     def process_turrets(self, **kwargs):
         tt, vt = zip(*[self.turret(WHEEL_POS[i], **kwargs) for i in range(3)])
         vt = array(vt)
-        return {'tt': tt, 'vt': (vt * 2 * SPEED_MEAN_MAX / abs(vt).max()).tolist() if abs(vt).max() != 0 else [0, 0, 0]}
+        return {'tt': tt, 'vt': (vt * 2 * SPEED_MEAN_MAX / abs(vt).max()).tolist()
+                if abs(vt).max() != 0 else [0, 0, 0]}
 
     def inside(self, host, x, y, **kwargs):
         return {'inside': wn_pn_poly((x, y), BOUNDARIES[host]) != 0}

@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from enum import IntEnum
-from math import pi, sqrt, tan
+from math import pi, tan
 from socket import gethostname
 
 from numpy import array
 
 
 # Computers
-Host = IntEnum('Host', 'cerf moro ame yuki nausicaa jiro hattori')
+Host = IntEnum('Host', 'cerf moro ame yuki nausicaa jiro hattori hagurosan')
 CURRENT_HOST = Host[gethostname().split('.')[0].lower()]
 
-MAIN_HOST = Host.hattori
+MAIN_HOSTS = [host.name for host in Host if not (1 < host < 5)]
+MAIN_HOST = Host.hagurosan
 
 # AGV are more ame and yuki
 AGV_HOST = 1 < CURRENT_HOST < 5
@@ -47,8 +47,11 @@ SMOOTH_SPEED = {
 }
 
 BOUNDARIES = {
-    Host.ame: [[8, 7], [8, 8], [11, 14], [13, 17], [14.5, 17.5], [16, 17], [17, 16], [20, 14], [27, 14], [30, 16], [31, 17],
-               [33, 17], [34, 16], [34, 15], [32, 13], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5], [9, 6.5]],
+    Host.ame: [
+        [8, 7], [8, 8], [11, 14], [13, 17], [14.5, 17.5], [16, 17], [17, 16], [20, 14], [27, 14], [30, 16], [31, 17],
+        [33, 17], [34, 16], [34, 15], [32, 13], [24, 9], [25, 7], [25, 4], [20, 4], [15, 7], [12, 7], [10, 6.5],
+        [9, 6.5],
+    ],
 }
 
 # SVG
@@ -63,7 +66,8 @@ _b = _a * tan(pi / 8)
 OCTOGONE = [(_a, _b), (_b, _a), (-_b, _a), (-_a, _b), (-_a, -_b), (-_b, -_a), (_b, -_a), (_a, -_b)]
 
 DATA = {
-    'status': 'Not connected', 'errors': 'Not connected', 'anomaly': False, 'is_up': False, 'inside': False, 'deadlock': False, 'inverse_rot': False,
+    'status': 'Not connected', 'errors': 'Not connected', 'anomaly': False, 'is_up': False, 'inside': False,
+    'deadlock': False, 'inverse_rot': False,
     'x': 0, 'y': 0, 'a': 0,  # Position
     'v': 0, 'w': 0, 't': 0,  # Speed
     'vg': 0, 'wg': 0, 'tg': 0,  # Goal Speed
@@ -73,8 +77,10 @@ DATA = {
     'nt': [0, 0, 0],  # number of turns by turret
     'granier': [0] * N_PROBES, 'gmi': [10] * N_PROBES, 'gma': [-10] * N_PROBES, 'gm': [0] * N_PROBES,  # Granier probes
     'stop': False, 'smoothe': True, 'smoothe_speed': True, 'boost': False, 'back': False, 'reverse': True,
-    'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False, 'path_next': False, 'path_prev': False, 'rotation': True,  # Boutons
-    'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)), 'destination': [0, 0], 'state': -1, 'choosen_path': -1,
+    'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False, 'path_next': False,
+    'path_prev': False, 'rotation': True,  # Boutons
+    'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)), 'destination': [0, 0], 'state': -1,
+    'choosen_path': -1,
 }
 
 GRID_COEF = 4

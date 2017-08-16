@@ -7,10 +7,9 @@ from random import randrange
 
 from numpy import array, where, zeros
 
-from ..settings import BOUNDARIES, GRID_COEF, Host
+from ..settings import BOUNDARIES, GRID_COEF
 from ..utils.dist_angles import dist_angle
 from ..utils.dist_path import dist_path
-from ..utils.no_overlap import no_overlap
 from ..utils.point_in_polygon import wn_pn_poly
 from ..utils.stay_in_poly import stay_in_poly
 from .destination import DestinationTrajectory
@@ -116,10 +115,7 @@ class MonaTrajectory(DestinationTrajectory):
         return {'stop': False, 'deadlock': False} if fini else {'stop': True, 'deadlock': deadlock}
 
     def collision(self, host, x, y, xd, yd):
-        if host == Host.moro:
-            return False
-        xo, yo, do, so = (self.data[Host.ame if host == Host.yuki else Host.yuki][var] for var in ['x', 'y', 'destination', 'stop'])
-        return not no_overlap((x, y), (xd, yd), (xo, yo), (xo, yo) if so else do)
+        return False
 
     def get_v(self, gm, **kwargs):
         return gm[0]

@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-from time import sleep
 
 from .input import Input, input_parser
 
@@ -18,8 +17,10 @@ class Probe(Input):
             raise ValueError('%s sur %s: len(%r) != %i' % (self.name, self.host.name, value, self.n_values))
         for i, v in enumerate(value):
             if not self.mini <= v <= self.maxi:
-                raise ValueError('%s.%i on %s: %f not beetwen %f and %f' % (self.name, i, self.host.name, v, self.mini, self.maxi))
+                raise ValueError('%s.%i on %s: %f not beetwen %f and %f' %
+                                 (self.name, i, self.host.name, v, self.mini, self.maxi))
         self.data[self.host][self.name] = value
+
 
 probe_parser = ArgumentParser(parents=[input_parser], conflict_handler='resolve')
 probe_parser.add_argument('-n', '--name', choices=['granier', 'sick', 'brightness'])

@@ -1,8 +1,7 @@
 from datetime import datetime
-from time import sleep
 from math import tau
 
-from numpy import array, cos, cross, dot, pi, sin, where, ndarray
+from numpy import array, cos, cross, dot, pi, sin, where
 
 from ..settings import WHEEL_POS, AGV_RADIUS, SMOOTH_FACTOR
 from ..utils.dist_angles import dist_angles
@@ -61,7 +60,8 @@ class Simulator(Processor):
 
     def smoothe(self, tm, tc, host, **kwargs):
         dst = dist_angles(tm, tc)
-        return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR[host] else (tm - SMOOTH_FACTOR[host] * dst / abs(dst).max()) % tau}
+        tc = tc if abs(dst).max() < SMOOTH_FACTOR[host] else (tm - SMOOTH_FACTOR[host] * dst / abs(dst).max()) % tau
+        return {'tc': tc}
 
     def boost(self, tg, **kwargs):
         return {'vc': array([80, 80, 80]), 'tc': array([tg, tg, tg])}

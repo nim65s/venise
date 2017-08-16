@@ -13,6 +13,8 @@ from .sortie import Sortie
 now = datetime.now
 per = timedelta(seconds=PERIODE * 2)
 
+tau = 2 * pi
+
 
 class SortieAGV(Sortie):
     def __init__(self, *args, **kwargs):
@@ -89,8 +91,8 @@ class SortieAGV(Sortie):
         v1, t1, v2, t2, v3, t3 = [float(i.strip()) for i in pos[1:]]
         return {
                 'vm': array([v1, v2, v3]),
-                'tm': array([a % (2 * pi) for a in [t1, t2, t3]]),
-                'nt': array([a // (2 * pi) for a in [t1, t2, t3]]).astype(int),
+                'tm': array([a % tau for a in [t1, t2, t3]]),
+                'nt': array([a // tau for a in [t1, t2, t3]]).astype(int),
                 }
 
     def copy_consignes(self, vt, tt, reversed, **kwargs):
@@ -99,17 +101,18 @@ class SortieAGV(Sortie):
     def reverse(self, vc, tc, tm, reversed, **kwargs):
         vc[where(reversed)] *= -1
         tc[where(reversed)] += pi
-        tc[where(reversed)] %= 2 * pi
-        rev = abs(dist_angles(tm, tc)) > 2 * pi / 3
+        tc[where(reversed)] %= tau
+        rev = abs(dist_angles(tm, tc)) > tau / 3
         vc[where(rev)] *= -1
         tc[where(rev)] += pi
-        tc[where(rev)] %= 2 * pi
+        tc[where(rev)] %= tau
         reversed ^= rev
         return {'vc': vc, 'reversed': reversed}
 
     def smoothe(self, tm, tc, hote, **kwargs):
         dst = dist_angles(tm, tc)
-        return {'tc': tc if abs(dst).max() < SMOOTH_FACTOR[hote] else (tm - SMOOTH_FACTOR[hote] * dst / abs(dst).max()) % (2 * pi)}
+        tc = tc if abs(dst).max() < SMOOTH_FACTOR[hote] else (tm - SMOOTH_FACTOR[hote] * dst / abs(dst).max()) % tau
+        return {'tc': tc}
 
     def boost(self, tg, **kwargs):
         return {'vc': array([80, 80, 80]), 'tc': array([tg, tg, tg])}
@@ -144,6 +147,7 @@ class SortieAGV(Sortie):
             self.send('Too much tours for the turrets !')
         else:
             raise RuntimeError(ret)
+
 
 if __name__ == '__main__':
     SortieAGV(**vars(vmq_parser.parse_args())).run()

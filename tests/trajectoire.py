@@ -32,8 +32,10 @@ class TestTrajectoire(Puller, Publisher):
         self.send()
         sleep(self.period)
 
+
 trajectoire_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
-trajectoire_parser.add_argument('-T', '--period', type=float, default=PERIODE, help="période d’envoie des données aux sorties")
+trajectoire_parser.add_argument('-T', '--period', type=float, default=PERIODE,
+                                help="période d’envoie des données aux sorties")
 
 if __name__ == '__main__':
     TestTrajectoire(**vars(trajectoire_parser.parse_args())).run()

@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from time import sleep
 
-from ..vmq import Pusher, Subscriber, subscriber_parser
+from ..vmq import Pusher, Subscriber, vmq_parser
 from ..settings import PERIOD
 
 
@@ -23,5 +23,6 @@ class Processor(Subscriber, Pusher):
         self.push.send_json([self.host, data])
 
 
-processor_parser = ArgumentParser(parents=[subscriber_parser], conflict_handler='resolve')
-processor_parser.add_argument('-T', '--period', type=float, default=PERIOD, help="period for processing data (0: one shot)")
+processor_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
+processor_parser.add_argument('-T', '--period', type=float, default=PERIOD,
+                              help="period for processing data (0: one shot)")

@@ -14,6 +14,5 @@ class IsUp(Processor):
         return {'is_up': is_up}
 
 
-
 if __name__ == '__main__':
     IsUp(**vars(processor_parser.parse_args())).run()

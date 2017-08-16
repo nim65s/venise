@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 
 from .processor import Processor, processor_parser
-from ..inputs.probe import probe_parser
 from ..settings import N_PROBES
 
 

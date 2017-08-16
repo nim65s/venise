@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from random import uniform
 
-from ..settings import Host
 from .destination import DestinationTrajectory, trajectory_destination_parser
 
 
@@ -13,7 +12,6 @@ class RandomDestination(DestinationTrajectory):
     def change_destination(self, host, **kwargs):
         self.data[host]['destination'] = (uniform(self.minx, self.maxx), uniform(self.miny, self.maxy))
         print('new destination:', self.data[host]['destination'])
-
 
 
 random_destination_parser = ArgumentParser(parents=[trajectory_destination_parser], conflict_handler='resolve')

@@ -46,6 +46,7 @@ class PositionInput(Input):
             print('Disconnected…')
             self.connect()
 
+
 position_parser = ArgumentParser(parents=[input_parser], conflict_handler='resolve')
 position_parser.set_defaults(hote=MAIN_HOST.name)
 

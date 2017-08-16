@@ -21,7 +21,8 @@ class TestGranier(Pusher):
 
 
 entree_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
-entree_parser.add_argument('-T', '--period', type=float, default=PERIODE, help="période d’envoie des données à l’hôte principal (0 pour un seul envoi)")
+entree_parser.add_argument('-T', '--period', type=float, default=PERIODE,
+                           help="période d’envoie des données à l’hôte principal (0 pour un seul envoi)")
 
 if __name__ == '__main__':
     TestGranier(**vars(entree_parser.parse_args())).run()

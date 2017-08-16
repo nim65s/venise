@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-from math import tau
 
 from .input import Input, input_parser
 
