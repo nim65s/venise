@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-# TODO from datetime import datetime
 from socket import socket
 
 from ..settings import Hote, MAIN_HOST, PORT_UBISENS
@@ -11,7 +10,6 @@ class PositionInput(Input):
         super().__init__(*args, **kwargs)
         self.data = {h: {
             'x': 0, 'y': 0, 'a': 0,  # Position
-            # TODO 'last_seen': None,
             } for h in Hote}
         self.socket = socket()
         self.connect()
@@ -38,7 +36,6 @@ class PositionInput(Input):
                         continue
                     tree, x, y, a, day, hour = data
                     tree, x, y, a = [int(tree[-1]) + 1] + [float(i.replace(',', '.')) for i in (x, y, a)]
-                    # TODO last_seen = datetime.strptime('%s %s' % (day, hour), '%d/%m/%Y %H:%M:%S')
                     self.data[tree].update(x=x, y=y, a=round(a - self.correction[tree], 3))
                 except:
                     print('Not ready… %r' % data)

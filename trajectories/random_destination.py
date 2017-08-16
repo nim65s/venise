@@ -5,6 +5,7 @@ from .destination import DestinationTrajectory, trajectory_destination_parser
 
 
 class RandomDestination(DestinationTrajectory):
+    """ in a square """
     def __init__(self, minx, miny, maxx, maxy, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.minx, self.miny, self.maxx, self.maxy = minx, miny, maxx, maxy
