@@ -11,7 +11,7 @@ from ..utils.dist_angles import dist_angle
 from ..utils.dist_path import dist_path
 from ..utils.point_in_polygon import wn_pn_poly
 from ..utils.stay_in_poly import stay_in_poly
-from .destination import DestinationTrajectory
+from .destination import DestinationTrajectory, trajectory_destination_parser
 
 
 class MonaTrajectory(DestinationTrajectory):
@@ -81,3 +81,7 @@ class MonaTrajectory(DestinationTrajectory):
     def safe_way(self, x, y, xd, yd, host):
         margin = 0 if dist_path(BOUNDARIES[host], (x, y)) < 1 else 0.5
         return stay_in_poly((x, y), (xd, yd), BOUNDARIES[host], margin=margin)
+
+
+if __name__ == '__main__':
+    MonaTrajectory(**vars(trajectory_destination_parser.parse_args())).run()
