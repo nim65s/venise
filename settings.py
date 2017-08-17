@@ -76,7 +76,7 @@ DATA = {
     'vm': [0, 0, 0], 'tm': [0, 0, 0],  # real speed and position of turrets read on AGV
     'nt': [0, 0, 0],  # number of turns by turret
     'granier': [0] * N_PROBES, 'gmi': [10] * N_PROBES, 'gma': [-10] * N_PROBES, 'gm': [0] * N_PROBES,  # Granier probes
-    'stop': False, 'smoothe': True, 'smoothe_speed': True, 'boost': False, 'back': False, 'reverse': True,
+    'stop': False, 'smoothe': False, 'smoothe_speed': True, 'boost': False, 'back': False, 'reverse': True,
     'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False, 'path_next': False,
     'path_prev': False, 'rotation': True,  # Boutons
     'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)), 'destination': [0, 0], 'state': -1,

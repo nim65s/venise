@@ -30,7 +30,7 @@ def save_star(b, g=None):
             g[i, j] = abs(wn_pn_poly((i, j), b)) - 1
 
     for i, j in product(*[range(int(x)) for x in g_s]):
-        g[i, j] = sum([stay_in_poly((i, j), dest, b, marge=0, strict=False) for dest in b]) if g[i, j] != -1 else -1
+        g[i, j] = sum([stay_in_poly((i, j), dest, b, margin=0, strict=False) for dest in b]) if g[i, j] != -1 else -1
 
     return g
 

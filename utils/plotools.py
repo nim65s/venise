@@ -1,6 +1,3 @@
-from pylab import *  # isort:skip
-
-
 def plot_boundary(boundary):
     data = [[boundary[i], boundary[(i + 1) % len(boundary)]] for i in range(len(boundary))]
     path = []

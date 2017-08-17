@@ -13,6 +13,7 @@ def nprint(g):
             print('O' if i == -1 else 'X' if i == -2 else '█' if i else ' ', end='')
         print()
 
+
 for h in [2, 3, 4]:
     g = grid[h]
     b = abs(array(BORDS[h])) * GRID_COEF

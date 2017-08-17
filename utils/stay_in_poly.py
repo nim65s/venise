@@ -19,19 +19,19 @@ def inter(a, b, ap, bp, strict=True):
     return True
 
 
-def stay_in_poly(pos, dest, bord, marge=0.5, strict=True):
+def stay_in_poly(pos, dest, bord, margin=0.5, strict=True):
     """ don't cross polygon """
     if not all([not inter(pos, dest, bord[i], bord[(i + 1) % len(bord)], strict=strict) for i in range(len(bord))]):
         return False
-    if marge == 0:
+    if margin == 0:
         return all([wn_pn_poly(p, bord) for p in [pos, dest]]) if strict else True
     a = atan2(dest[1] - pos[1], dest[0] - pos[0])
-    pos_p = pos[0] + marge * cos(a + pi / 2), pos[1] + marge * sin(a + pi / 2)
-    dest_p = dest[0] + marge * cos(a + pi / 2), dest[1] + marge * sin(a + pi / 2)
+    pos_p = pos[0] + margin * cos(a + pi / 2), pos[1] + margin * sin(a + pi / 2)
+    dest_p = dest[0] + margin * cos(a + pi / 2), dest[1] + margin * sin(a + pi / 2)
     if not all([not inter(pos_p, dest_p, bord[i], bord[(i + 1) % len(bord)], strict=strict) for i in range(len(bord))]):
         return False
-    pos_m = pos[0] + marge * cos(a - pi / 2), pos[1] + marge * sin(a - pi / 2)
-    dest_m = dest[0] + marge * cos(a - pi / 2), dest[1] + marge * sin(a - pi / 2)
+    pos_m = pos[0] + margin * cos(a - pi / 2), pos[1] + margin * sin(a - pi / 2)
+    dest_m = dest[0] + margin * cos(a - pi / 2), dest[1] + margin * sin(a - pi / 2)
     if not all([not inter(pos_m, dest_m, bord[i], bord[(i + 1) % len(bord)], strict=strict) for i in range(len(bord))]):
         return False
     return all([wn_pn_poly(p, bord) for p in [pos, pos_p, pos_m, dest, dest_p, dest_m]])
