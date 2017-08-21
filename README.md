@@ -12,6 +12,7 @@ To be run in different shells or proccesses:
 
 ```
 python -m transhumus.trajectories.mona
+python -m transhumus.outputs.websockets
 python -m transhumus.processors.granier -H ame
 ```
 
