@@ -11,7 +11,7 @@ Host = IntEnum('Host', 'cerf moro ame yuki nausicaa jiro hattori hagurosan')
 CURRENT_HOST = Host[gethostname().split('.')[0].lower()]
 
 MAIN_HOSTS = [host.name for host in Host if not (1 < host < 5)]
-MAIN_HOST = Host.hattori
+MAIN_HOST = CURRENT_HOST if CURRENT_HOST.name in MAIN_HOSTS else Host.cerf
 
 # AGV are more ame and yuki
 AGV_HOST = 1 < CURRENT_HOST < 5

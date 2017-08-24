@@ -4,6 +4,7 @@
 
 ```
 pip install -U -r requirements.txt
+cd web; npm install
 ```
 
 ## Start
@@ -16,15 +17,21 @@ python -m transhumus.outputs.websockets
 python -m transhumus.processors.granier -H ame
 ```
 
+## Simulation
+
+```
+python -m transhumus.inputs.granier_random -H ame
+python -m transhumus.processors.simulator -H ame
+```
+
 ## Observe
 
 ```
 python -m transhumus.outputs.print
 ```
 
-## Simulation
+## Web
 
 ```
-python -m transhumus.inputs.granier_random -H ame
-python -m transhumus.processors.simulator -H ame
+cd web; npm start
 ```
