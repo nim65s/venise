@@ -119,26 +119,29 @@ setInterval(function(){
 {% endif %}
 */
 
-class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      x: 0,
-      y: 0,
-      a: 0,
-      v: 0,
-      w: 0,
-      t: 0,
-    }
-  }
-  handleWS(data) {
-    let d = JSON.parse(data)[3];
-    this.setState({x: d.x, y: d.y, a: d.a, v: d.v, w: d.w, t: d.t});
-  }
-
+class MapSVG extends Component {
   render() {
-    return (
-      <div>
+    if (this.props.consts.bords) {
+      return (
+          <svg height={20 * this.props.consts.px_par_m} width={50 * this.props.consts.px_par_m } >
+            <g>
+            <circle className="destination" r={this.props.consts.px_par_m / 2} />
+            <polygon points={this.props.consts.bords} />
+            <path id="path3" />
+            <g id="agv3">
+            <polygon points={this.props.consts.octogone} />
+            </g>
+            </g>
+          </svg>
+      );
+    } else return <div />;
+  }
+}
+
+class MapTable extends Component {
+  render() {
+    if (this.props.agv.x) {
+      return (
         <Table striped >
           <thead>
             <tr>
@@ -152,15 +155,39 @@ class Map extends Component {
           </thead>
           <tbody>
             <tr>
-              <td>{this.state.x.toFixed(2)}</td>
-              <td>{this.state.y.toFixed(2)}</td>
-              <td>{this.state.a.toFixed(2)}</td>
-              <td>{this.state.v.toFixed(2)}</td>
-              <td>{this.state.w.toFixed(2)}</td>
-              <td>{this.state.t.toFixed(2)}</td>
+              <td>{this.props.agv.x.toFixed(2)}</td>
+              <td>{this.props.agv.y.toFixed(2)}</td>
+              <td>{this.props.agv.a.toFixed(2)}</td>
+              <td>{this.props.agv.v.toFixed(2)}</td>
+              <td>{this.props.agv.w.toFixed(2)}</td>
+              <td>{this.props.agv.t.toFixed(2)}</td>
             </tr>
           </tbody>
         </Table>
+      );
+    } else return <div />;
+  }
+}
+
+class Map extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      consts: '',
+      agv: '',
+    }
+  }
+  handleWS(data) {
+    let d = JSON.parse(data);
+    if (d.agv) this.setState({agv: d.agv});
+    if (d.consts) this.setState({consts: d.consts});
+  }
+
+  render() {
+    return (
+      <div>
+        <MapSVG consts={this.state.consts} />
+        <MapTable agv={this.state.agv} />
         <Websocket url="ws://localhost:9000" onMessage={this.handleWS.bind(this)} />
       </div>
     );
@@ -171,34 +198,16 @@ export default Map;
 
 
 /*
-      <svg>
-      <g transform="translate(0,{{ PX_PAR_M * HEIGHT }})">
-      <g transform="scale(1,-1)">
-      <g transform="translate({{ PX_PAR_M * LEFT_WIDTH }},0)">
-      {% for agv in [3] %}{% for t in [1, 2, 3] %}<path id="pt{{ agv }}{{ t }}" class="c{{ agv }}" />{% endfor %}{% endfor %}
-      <g id="g3" class="c3">
-      <circle class="destination" r="{{ PX_PAR_M / 2 }}" />
-      {% if expert %}<polygon points="{% for p in ALLER_RETOURS_SVG[3] %}{{p|join(',')}} {% endfor %}" />{% endif %}
-      <polygon points="{% for p in BORDS_SVG[3] %}{{p|join(',')}} {% endfor %}" />
-      <path id="path3" />
-      <g id="agv3">
-      <polygon points="{% for p in OCTOGONE %}{{p|join(',')}} {% endfor %}" />
-      <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
-      <circle class="centre" cx="0" cy="0" r="2" />
-      <circle class="r1" r="2" cx="-{{ AGV_RADIUS * PX_PAR_M }}" cy="0" />
-      <circle class="r2" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-      <circle class="r3" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-      <line class="v" x1="0" y1="0" />
-      <line class="t1" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-      <line class="t2" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-      <line class="t3" x1="-{{ AGV_RADIUS * PX_PAR_M }}" y1="0" />
-      </g>
-      </g>
 
-      </g>
-      </g>
-      </g>
-      </svg>
+          <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
+          <circle class="centre" cx="0" cy="0" r="2" />
+          <circle class="r1" r="2" cx="-{{ AGV_RADIUS * PX_PAR_M }}" cy="0" />
+          <circle class="r2" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
+          <circle class="r3" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
+          <line class="v" x1="0" y1="0" />
+          <line class="t1" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
+          <line class="t2" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
+          <line class="t3" x1="-{{ AGV_RADIUS * PX_PAR_M }}" y1="0" />
 
 
 */

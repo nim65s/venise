@@ -5,46 +5,47 @@ from json import dumps
 
 from autobahn.asyncio.websocket import WebSocketServerProtocol, WebSocketServerFactory
 
-from ..settings import PERIOD
+from ..settings import PERIOD, PX_PAR_M, OCTOGONE, BORDS_SVG
 from ..vmq import Subscriber, vmq_parser
 
+CONSTS = {
+    'px_par_m': PX_PAR_M,
+    'octogone': ' '.join([','.join(str(n) for n in p) for p in OCTOGONE]),
+    'bords': ' '.join([','.join(str(n) for n in p) for p in BORDS_SVG[3]]),
+}
 
 class MyServerProtocol(WebSocketServerProtocol):
     connections = []
 
     def onConnect(self, request):
         self.connections.append(self)
-        print("Client connecting: {0}".format(request.peer))
-
-    def onOpen(self):
-        print("WebSocket connection open.")
-
-    def onMessage(self, payload, isBinary):
-        if isBinary:
-            print("Binary message received: {0} bytes".format(len(payload)))
-        else:
-            print("Text message received: {0}".format(payload.decode('utf8')))
-        self.sendMessage(payload, isBinary)
-        self.broadcast_message('plop')
 
     def onClose(self, wasClean, code, reason):
-        print("WebSocket connection closed: {0}".format(reason))
         self.connections.remove(self)
 
-    def broadcast_message(self, data):
-        data = dumps(data).encode('utf-8')
-        for server in self.connections:
-            server.sendMessage(data, False)
+    # def onMessage(self, payload, isBinary):
+        # if isBinary:
+            # print("Binary message received: {0} bytes".format(len(payload)))
+        # else:
+            # print("Text message received: {0}".format(payload.decode('utf8')))
 
 
 @asyncio.coroutine
-def update():
+def agv():
     subscriber = Subscriber(**vars(vmq_parser.parse_args()))
     while True:
         subscriber.sub()
         for server in MyServerProtocol.connections:
-            server.sendMessage(dumps(subscriber.data).encode('utf-8'))
-        yield from asyncio.sleep(PERIOD)
+            server.sendMessage(dumps({'agv': subscriber.data[3]}).encode('utf-8'))
+        yield from asyncio.sleep(.5)
+
+
+@asyncio.coroutine
+def consts():
+    while True:
+        for server in MyServerProtocol.connections:
+            server.sendMessage(dumps({'consts': CONSTS}).encode('utf-8'))
+        yield from asyncio.sleep(.5)
 
 
 if __name__ == '__main__':
@@ -55,8 +56,9 @@ if __name__ == '__main__':
 
     loop = asyncio.get_event_loop()
     coro = loop.create_server(factory, '0.0.0.0', 9000)
-    task = asyncio.Task(update())
-    server = loop.run_until_complete(asyncio.gather(coro, task))
+    task_agv = asyncio.Task(agv())
+    task_consts = asyncio.Task(consts())
+    server = loop.run_until_complete(asyncio.gather(coro, task_agv, task_consts))
 
     try:
         loop.run_forever()
