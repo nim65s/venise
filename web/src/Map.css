@@ -1,10 +1,9 @@
 svg {
     fill: none;
     fill-opacity: 0.5;
-    background-color: 'orange';
     background-image: url("static/plan.png");
     background-position: -16px -302px;
     background-size: 117.5%;
+    stroke: green;
 }
-#agv3, .c3 { stroke: green; }
 #g3 .destination { fill: green; }

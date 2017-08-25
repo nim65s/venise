@@ -5,13 +5,15 @@ from json import dumps
 
 from autobahn.asyncio.websocket import WebSocketServerProtocol, WebSocketServerFactory
 
-from ..settings import PERIOD, PX_PAR_M, OCTOGONE, BORDS_SVG, HEIGHT, WIDTH, AGV_RADIUS
+from ..settings import PERIOD, PX_PAR_M, OCTOGONE, BORDS_SVG, HEIGHT, WIDTH, AGV_RADIUS, SPEED_MEAN_MAX
 from ..vmq import Subscriber, vmq_parser
 
+def svg_poly(points):
+    return ' '.join([','.join(str(n) for n in p) for p in points]),
+
 CONSTS = {
-    'px_par_m': PX_PAR_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS,
-    'octogone': ' '.join([','.join(str(n) for n in p) for p in OCTOGONE]),
-    'bords': ' '.join([','.join(str(n) for n in p) for p in BORDS_SVG[3]]),
+    'px_par_m': PX_PAR_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS, 'speed_mean_max': SPEED_MEAN_MAX,
+    'octogone': svg_poly(OCTOGONE), 'bords': svg_poly(BORDS_SVG[3]),
 }
 
 class MyServerProtocol(WebSocketServerProtocol):
