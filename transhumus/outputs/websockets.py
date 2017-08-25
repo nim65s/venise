@@ -5,11 +5,11 @@ from json import dumps
 
 from autobahn.asyncio.websocket import WebSocketServerProtocol, WebSocketServerFactory
 
-from ..settings import PERIOD, PX_PAR_M, OCTOGONE, BORDS_SVG
+from ..settings import PERIOD, PX_PAR_M, OCTOGONE, BORDS_SVG, HEIGHT, WIDTH, AGV_RADIUS
 from ..vmq import Subscriber, vmq_parser
 
 CONSTS = {
-    'px_par_m': PX_PAR_M,
+    'px_par_m': PX_PAR_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS,
     'octogone': ' '.join([','.join(str(n) for n in p) for p in OCTOGONE]),
     'bords': ' '.join([','.join(str(n) for n in p) for p in BORDS_SVG[3]]),
 }

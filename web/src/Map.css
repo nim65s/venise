@@ -1,16 +1,10 @@
 svg {
-    width: {{ PX_PAR_M * WIDTH }}px;
-    height: {{ PX_PAR_M * HEIGHT }}px;
     fill: none;
     fill-opacity: 0.5;
-    {% if not replay %}background-color: 'orange'; {% endif %}
+    background-color: 'orange';
     background-image: url("static/plan.png");
     background-position: -16px -302px;
     background-size: 117.5%;
 }
-.c3 { stroke: green; }
+#agv3, .c3 { stroke: green; }
 #g3 .destination { fill: green; }
-#a3 th { color: white; background: green; }
-{% if partout %}
-#path3 { stroke-width: 2; }
-{% endif %}

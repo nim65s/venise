@@ -1,67 +1,14 @@
 import React, { Component } from 'react';
 import Websocket from  'react-websocket';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
+import './Map.css';
 
 /*
 var last_seen = new Date();
-var size_coef = 2;
-var data;
 var roues = [0, -Math.PI / 4, Math.PI / 4, Math.PI];
-var tpsq = 3 * Math.PI / 4;  // 3π/4
-var x, y, alpha;
-{% if replay %}
-var sv = ['x', 'y'];
-var mv = [];
-var uv = [];
-{% else %}
-var sv = ['x', 'y', 'v', 'w'];
-var mv = ['nt'];
-var uv = ['stop', 'sens', 'boost', 'arriere', 'reverse', 'rotation', 'smoothe', 'smoothe_speed'];
-{% endif %}
-var source;
-$(document).ready(function() {
-  source = new EventSource("/sub");
-  source.onmessage = function(e) {
-    data = JSON.parse(e.data);
-    for (a = 3; a < 4; a++) {
-      if (data[a]) {
-        x = data[a]['x'];
-        y = data[a]['y'];
-        alpha = data[a]['a'];
-        $('#agv' + a).attr({
-          transform: 'translate(' + (x * {{ PX_PAR_M }}) + ' ' + (y * {{ PX_PAR_M }}) + ') rotate(' + (alpha * 180 / Math.PI) +') scale(-1, -1)',
-        });
-        for (v in sv) $('#a' + a + ' .' + sv[v]).html(data[a][sv[v]].toFixed(1));
-        for (v in mv) {
-          for (i = 0; i < data[a][mv[v]].length; i++) {
-            $('#a' + a + ' .' + mv[v] + [i]).html(data[a][mv[v]][i]);
-          }
-        }
-        for (v in uv) {
-          if (data[a][uv[v]]){
-            $('#a' + a + ' .' + uv[v] + '-ok').removeClass('hidden');
-            $('#a' + a + ' .' + uv[v] + '-ko').addClass('hidden');
-          } else {
-            $('#a' + a + ' .' + uv[v] + '-ko').removeClass('hidden');
-            $('#a' + a + ' .' + uv[v] + '-ok').addClass('hidden');
-          }
-        }
-        {% if not replay %}
         $('#agv' + a + ' .v').attr({
           x2: data[a]['v'] * Math.cos(data[a]['t']) * {{ SPEED_MEAN_MAX }} * size_coef,
           y2: data[a]['v'] * Math.sin(data[a]['t']) * {{ SPEED_MEAN_MAX }} * size_coef,
-        });
-        $('#agv' + a + ' .t1').attr({
-          x2: data[a]['vm'][0] * Math.cos(data[a]['tm'][0]) * size_coef + {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
-          y2: data[a]['vm'][0] * Math.sin(data[a]['tm'][0]) * size_coef - {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
-        });
-        $('#agv' + a + ' .t2').attr({
-          x2: data[a]['vm'][1] * Math.cos(data[a]['tm'][1]) * size_coef + {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
-          y2: data[a]['vm'][1] * Math.sin(data[a]['tm'][1]) * size_coef + {{ AGV_RADIUS * PX_PAR_M * 0.707 }},
-        });
-        $('#agv' + a + ' .t3').attr({
-          x2: data[a]['vm'][2] * Math.cos(data[a]['tm'][2]) * size_coef - {{ AGV_RADIUS * PX_PAR_M }},
-          y2: data[a]['vm'][2] * Math.sin(data[a]['tm'][2]) * size_coef,
         });
         $('#g' + a + ' .destination').attr({
           cx: data[a]['destination'][0] * {{ PX_PAR_M }},
@@ -123,14 +70,33 @@ class MapSVG extends Component {
   render() {
     if (this.props.consts.bords) {
       return (
-          <svg height={20 * this.props.consts.px_par_m} width={50 * this.props.consts.px_par_m } >
-            <g>
-            <circle className="destination" r={this.props.consts.px_par_m / 2} />
-            <polygon points={this.props.consts.bords} />
-            <path id="path3" />
-            <g id="agv3">
-            <polygon points={this.props.consts.octogone} />
-            </g>
+          <svg
+          height={this.props.consts.height * this.props.consts.px_par_m}
+          width={this.props.consts.width * this.props.consts.px_par_m } >
+            <g id="g3" transform={"scale(1, -1) translate(0, -" + (this.props.consts.height * this.props.consts.px_par_m) + ")"} >
+              <circle className="destination" r={this.props.consts.px_par_m / 2} cx={this.props.agv.destination[0] * this.props.consts.px_par_m} cy={this.props.agv.destination[1] * this.props.consts.px_par_m} />
+              <polygon className="c3" points={this.props.consts.bords} />
+              <path id="path3" />
+              <g id="agv3" transform={ "translate(" + (this.props.agv.x * this.props.consts.px_par_m) + ", " + (this.props.agv.y * this.props.consts.px_par_m) + ") rotate(" + this.props.agv.a + ")" } >
+                <polygon points={this.props.consts.octogone} />
+                <circle className="centre" cx="0" cy="0" r="2" />
+                <circle className="r1" r="2" cx={-this.props.consts.agv_radius * this.props.consts.px_par_m * 1.000} cy="0" />
+                <circle className="r2" r="2" cx={+this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707} cy={+this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707} />
+                <circle className="r3" r="2" cx={+this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707} cy={-this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707} />
+                <line className="v" x1="0" y1="0" />
+                <line className="t1" x1={+this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707} y1={-this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707}
+                                     x2={+this.props.agv.vm[0] * Math.cos(this.props.agv.tm[0]) * 2 + this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707}
+                                     y2={+this.props.agv.vm[0] * Math.sin(this.props.agv.tm[0]) * 2 - this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707}
+                />
+                <line className="t2" x1={+this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707} y1={+this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707}
+                                     x2={+this.props.agv.vm[1] * Math.cos(this.props.agv.tm[1]) * 2 + this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707}
+                                     y2={+this.props.agv.vm[1] * Math.sin(this.props.agv.tm[1]) * 2 + this.props.consts.agv_radius * this.props.consts.px_par_m * 0.707}
+                />
+                <line className="t3" x1={-this.props.consts.agv_radius * this.props.consts.px_par_m * 1.000} y1="0"
+                                     x2={+this.props.agv.vm[2] * Math.cos(this.props.agv.tm[2]) * 2 - this.props.consts.agv_radius * this.props.consts.px_par_m * 1.000}
+                                     y2={+this.props.agv.vm[2] * Math.sin(this.props.agv.tm[2]) * 2}
+                />
+              </g>
             </g>
           </svg>
       );
@@ -139,6 +105,7 @@ class MapSVG extends Component {
 }
 
 class MapTable extends Component {
+  boost() { this.props.send("boost"); }
   render() {
     if (this.props.agv.x) {
       return (
@@ -162,6 +129,10 @@ class MapTable extends Component {
               <td>{this.props.agv.w.toFixed(2)}</td>
               <td>{this.props.agv.t.toFixed(2)}</td>
             </tr>
+            <tr>
+              <td>{this.props.agv.errors}</td>
+              <td><Button onClick={this.boost.bind(this)} bsStyle={this.props.agv.boost ? "warning" : "success"} >Boost</Button></td>
+            </tr>
           </tbody>
         </Table>
       );
@@ -182,12 +153,15 @@ class Map extends Component {
     if (d.agv) this.setState({agv: d.agv});
     if (d.consts) this.setState({consts: d.consts});
   }
+  send(cmd) {
+    console.log(cmd);
+  }
 
   render() {
     return (
       <div>
-        <MapSVG consts={this.state.consts} />
-        <MapTable agv={this.state.agv} />
+        <MapSVG consts={this.state.consts} agv={this.state.agv} />
+        <MapTable agv={this.state.agv} send={this.send.bind(this)} />
         <Websocket url="ws://localhost:9000" onMessage={this.handleWS.bind(this)} />
       </div>
     );
@@ -195,19 +169,3 @@ class Map extends Component {
 }
 
 export default Map;
-
-
-/*
-
-          <circle cx="0" cy="0" r="{{ DIST_MIN_AGV * PX_PAR_M / 2}}" />
-          <circle class="centre" cx="0" cy="0" r="2" />
-          <circle class="r1" r="2" cx="-{{ AGV_RADIUS * PX_PAR_M }}" cy="0" />
-          <circle class="r2" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-          <circle class="r3" r="2" cx="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" cy="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-          <line class="v" x1="0" y1="0" />
-          <line class="t1" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="-{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-          <line class="t2" x1="{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" y1="+{{ AGV_RADIUS * PX_PAR_M * 0.707 }}" />
-          <line class="t3" x1="-{{ AGV_RADIUS * PX_PAR_M }}" y1="0" />
-
-
-*/
