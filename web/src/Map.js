@@ -5,7 +5,7 @@ import './Map.css';
 
 class MapSVG extends Component {
   render() {
-    if (this.props.consts.bords) {
+    if (this.props.consts.bords && this.props.agv) {
       return (
           <svg style={{backgroundColor: this.props.connected ? 'white': 'orange'}}
                width={this.props.consts.width * this.props.ppm }

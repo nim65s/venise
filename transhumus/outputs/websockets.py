@@ -22,6 +22,9 @@ class MyServerProtocol(WebSocketServerProtocol):
     def onConnect(self, request):
         self.connections.append(self)
 
+    def onOpen(self):
+        self.sendMessage(dumps({'consts': CONSTS}).encode('utf-8'))
+
     def onClose(self, wasClean, code, reason):
         self.connections.remove(self)
 
@@ -39,15 +42,7 @@ def agv():
         subscriber.sub()
         for server in MyServerProtocol.connections:
             server.sendMessage(dumps({'agv': subscriber.data[3]}).encode('utf-8'))
-        yield from asyncio.sleep(.5)
-
-
-@asyncio.coroutine
-def consts():
-    while True:
-        for server in MyServerProtocol.connections:
-            server.sendMessage(dumps({'consts': CONSTS}).encode('utf-8'))
-        yield from asyncio.sleep(.5)
+        yield from asyncio.sleep(PERIOD)
 
 
 if __name__ == '__main__':
@@ -59,8 +54,7 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     coro = loop.create_server(factory, '0.0.0.0', 9000)
     task_agv = asyncio.Task(agv())
-    task_consts = asyncio.Task(consts())
-    server = loop.run_until_complete(asyncio.gather(coro, task_agv, task_consts))
+    server = loop.run_until_complete(asyncio.gather(coro, task_agv))
 
     try:
         loop.run_forever()
