@@ -58,9 +58,9 @@ BOUNDARIES = {
 # SVG
 WIDTH = 50
 HEIGHT = 20
-PX_PAR_M = 35
-BORDS_SVG = {Host.ame: array(BOUNDARIES[Host.ame]) * PX_PAR_M}
-_a = 1.15 * PX_PAR_M
+PX_PER_M = 35
+BORDS_SVG = {Host.ame: array(BOUNDARIES[Host.ame]) * PX_PER_M}
+_a = 1.15 * PX_PER_M
 _b = _a * tan(pi / 8)
 OCTOGONE = [(_a, _b), (_b, _a), (-_b, _a), (-_a, _b), (-_a, -_b), (-_b, -_a), (_b, -_a), (_a, -_b)]
 

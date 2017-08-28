@@ -5,7 +5,7 @@ from json import dumps, loads
 
 from autobahn.asyncio.websocket import WebSocketServerProtocol, WebSocketServerFactory
 
-from ..settings import PERIOD, PX_PAR_M, OCTOGONE, BORDS_SVG, HEIGHT, WIDTH, AGV_RADIUS, SPEED_MEAN_MAX, PORT_WS
+from ..settings import PERIOD, PX_PER_M, OCTOGONE, BORDS_SVG, HEIGHT, WIDTH, AGV_RADIUS, SPEED_MEAN_MAX, PORT_WS
 from .processor import Processor, processor_parser
 
 
@@ -14,7 +14,7 @@ def svg_poly(points):
 
 
 CONSTS = {
-    'px_par_m': PX_PAR_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS, 'speed_mean_max': SPEED_MEAN_MAX,
+    'px_per_m': PX_PER_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS, 'speed_mean_max': SPEED_MEAN_MAX,
     'octogone': svg_poly(OCTOGONE), 'bords': svg_poly(BORDS_SVG[3]),
 }
 

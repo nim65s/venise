@@ -3,7 +3,7 @@ import './Map.css';
 
 class Map extends React.Component {
   handleClick(evt) {
-    var ppm = this.props.consts.px_par_m;
+    var ppm = this.props.consts.px_per_m;
     this.props.send({destination: [evt.pageX / ppm, this.props.consts.height - evt.pageY / ppm]});
   }
 
@@ -11,10 +11,10 @@ class Map extends React.Component {
     if (this.props.consts.bords && this.props.agv) {
       var consts = this.props.consts;
       var agv = this.props.agv;
-      var ppm = consts.px_par_m;
+      var ppm = consts.px_per_m;
       var ar = consts.agv_radius * ppm;
       return (
-          <svg style={{backgroundColor: this.props.connected ? 'white': 'orange'}}
+          <svg style={{backgroundColor: this.props.connected ? agv.inside ? 'white' : 'orange'  : 'red'}}
                width={consts.width * ppm }
                height={consts.height * ppm }
                onClick={this.handleClick.bind(this)}

@@ -1,5 +1,6 @@
 import React from 'react';
 import Map from './Map';
+import Data from './Data';
 import Controls from './Controls';
 
 class App extends React.Component {
@@ -62,6 +63,7 @@ class App extends React.Component {
       <div>
         <Map consts={this.state.consts} agv={this.state.agv} size_coef={3} connected={this.state.connected} send={this.send} />
         <Controls agv={this.state.agv} send={this.send} connected={this.state.connected} />
+        <Data agv={this.state.agv} />
       </div>
     );
   }
