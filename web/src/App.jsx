@@ -18,6 +18,7 @@ class App extends React.Component {
     setInterval(this.checkConnection.bind(this), 500);
     this.handleWS = this.handleWS.bind(this);
     this.setupWS = this.setupWS.bind(this);
+    this.send = this.send.bind(this);
   }
 
   componentDidMount() {
@@ -52,12 +53,15 @@ class App extends React.Component {
     this.setState({last: new Date(), connected: true});
   }
 
+  send(cmd) {
+    this.state.ws.send(JSON.stringify(cmd));
+  }
+
   render() {
     return (
       <div>
-        <Map consts={this.state.consts} agv={this.state.agv} size_coef={3} connected={this.state.connected}
-                ar={this.state.consts.agv_radius * this.state.consts.px_par_m} ppm={this.state.consts.px_par_m} />
-        <Controls agv={this.state.agv} ws={this.state.ws} connected={this.state.connected} />
+        <Map consts={this.state.consts} agv={this.state.agv} size_coef={3} connected={this.state.connected} send={this.send} />
+        <Controls agv={this.state.agv} send={this.send} connected={this.state.connected} />
       </div>
     );
   }

@@ -62,9 +62,8 @@ class MonaTrajectory(DestinationTrajectory):
             if self.grid[host][xd, yd] >= 0:
                 return xd, yd
 
-    def change_destination(self, host, x, y, state, dest_next, dest_prev, inside, **kwargs):
-        if not dest_next and not dest_prev:
-            state = (state + 1) % 3
+    def change_destination(self, host, x, y, state, inside, **kwargs):
+        state = (state + 1) % 3
         failcount = 0
         while True:
             xd, yd = self.find_dest_other(host) if state == 0 else self.find_dest_extr(host, state)

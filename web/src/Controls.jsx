@@ -2,11 +2,8 @@ import React from 'react';
 import { Button, Table } from 'react-bootstrap';
 
 class Controls extends React.Component {
-  send(cmd) {
-    this.props.ws.send(JSON.stringify(cmd));
-  }
 
-  boost() { this.send({boost: !this.props.agv.boost}); }
+  boost() { this.props.send({boost: !this.props.agv.boost}); }
 
   render() {
     if (this.props.agv.x) {

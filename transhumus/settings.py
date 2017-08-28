@@ -66,7 +66,6 @@ OCTOGONE = [(_a, _b), (_b, _a), (-_b, _a), (-_a, _b), (-_a, -_b), (-_b, -_a), (_
 
 DATA = {
     'status': 'Not connected', 'errors': 'Not connected', 'anomaly': False, 'is_up': False, 'inside': False,
-    'deadlock': False, 'inverse_rot': False,
     'x': 0, 'y': 0, 'a': 0,  # Position
     'v': 0, 'w': 0, 't': 0,  # Speed
     'vg': 0, 'wg': 0, 'tg': 0,  # Goal Speed
@@ -76,10 +75,7 @@ DATA = {
     'nt': [0, 0, 0],  # number of turns by turret
     'granier': [0] * N_PROBES, 'gmi': [10] * N_PROBES, 'gma': [-10] * N_PROBES, 'gm': [0] * N_PROBES,  # Granier probes
     'stop': False, 'smoothe': False, 'smoothe_speed': True, 'boost': False, 'back': False, 'reverse': True,
-    'sens': bool((datetime.now()).day % 2), 'dest_next': False, 'dest_prev': False, 'path_next': False,
-    'path_prev': False, 'rotation': True,  # Boutons
     'reversed': [False, False, False], 'last_seen_agv': str(datetime(1970, 1, 1)), 'destination': [0, 0], 'state': -1,
-    'choosen_path': -1,
 }
 
 GRID_COEF = 4
