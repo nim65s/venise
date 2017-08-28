@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
-import Websocket from  'react-websocket';
-import { Button, Table } from 'react-bootstrap';
+import React from 'react';
 import './Map.css';
 
-class MapSVG extends Component {
+class Map extends React.Component {
   render() {
     if (this.props.consts.bords && this.props.agv) {
       return (
@@ -39,81 +37,6 @@ class MapSVG extends Component {
           </svg>
       );
     } else return <div />;
-  }
-}
-
-class MapTable extends Component {
-  boost() { this.props.send("boost"); }
-  render() {
-    if (this.props.agv.x) {
-      return (
-        <Table striped >
-          <thead>
-            <tr>
-              <th>x</th>
-              <th>y</th>
-              <th>a</th>
-              <th>v</th>
-              <th>w</th>
-              <th>t</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.props.agv.x.toFixed(2)}</td>
-              <td>{this.props.agv.y.toFixed(2)}</td>
-              <td>{this.props.agv.a.toFixed(2)}</td>
-              <td>{this.props.agv.v.toFixed(2)}</td>
-              <td>{this.props.agv.w.toFixed(2)}</td>
-              <td>{this.props.agv.t.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>{this.props.agv.errors}</td>
-              <td><Button onClick={this.boost.bind(this)} disabled={!this.props.connected}
-                          bsStyle={this.props.agv.boost ? "warning" : "success"} >
-                          {this.props.agv.boost ? 'Stop' : 'Start'} Boost </Button></td>
-            </tr>
-          </tbody>
-        </Table>
-      );
-    } else return <div />;
-  }
-}
-
-class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      consts: '',
-      agv: '',
-      connected: false,
-      last: new Date(),
-    }
-    setInterval(this.checkConnection.bind(this), 500);
-  }
-  checkConnection() {
-      var last = new Date(new Date() - this.state.last).getSeconds();
-      this.setState({connected: last < 1});
-  }
-  handleWS(data) {
-    let d = JSON.parse(data);
-    if (d.agv) this.setState({agv: d.agv});
-    if (d.consts) this.setState({consts: d.consts});
-    this.setState({last: new Date(), connected: true});
-  }
-  send(cmd) {
-    console.log(cmd);
-  }
-
-  render() {
-    return (
-      <div>
-        <MapSVG consts={this.state.consts} agv={this.state.agv} size_coef={3} connected={this.state.connected}
-                ar={this.state.consts.agv_radius * this.state.consts.px_par_m} ppm={this.state.consts.px_par_m} />
-        <MapTable agv={this.state.agv} send={this.send.bind(this)} connected={this.state.connected} />
-        <Websocket url="ws://localhost:9000" onMessage={this.handleWS.bind(this)} />
-      </div>
-    );
   }
 }
 
