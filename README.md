@@ -13,15 +13,15 @@ To be run in different shells / proccesses:
 
 ```
 python -m transhumus.trajectories.mona
-python -m transhumus.processors.websockets -H ame
-python -m transhumus.processors.granier -H ame
+python -m transhumus.processors.websockets
+python -m transhumus.processors.granier
 ```
 
 ## Simulation
 
 ```
-python -m transhumus.inputs.granier_random -H ame
-python -m transhumus.processors.simulator -H ame
+python -m transhumus.inputs.granier_random
+python -m transhumus.processors.simulator
 ```
 
 ## Observe

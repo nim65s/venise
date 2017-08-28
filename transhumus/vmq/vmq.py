@@ -3,7 +3,7 @@ from pprint import pprint
 
 from zmq import Context
 
-from ..settings import CURRENT_HOST, MAIN_HOST, MAIN_HOSTS, Host
+from ..settings import MAIN_HOST, MAIN_HOSTS, Host
 
 
 class VMQ(object):
@@ -40,6 +40,6 @@ class VMQ(object):
 
 
 vmq_parser = ArgumentParser(conflict_handler='resolve')
-vmq_parser.add_argument('-H', '--host', help="source host", default=CURRENT_HOST.name, choices=[h.name for h in Host])
+vmq_parser.add_argument('-H', '--host', help="source host", default=Host.ame.name, choices=[h.name for h in Host])
 vmq_parser.add_argument('-V', '--verbosity', help="sets verbosity", action='count', default=0)
 vmq_parser.add_argument('--main', default=MAIN_HOST.name, choices=MAIN_HOSTS)
