@@ -31,7 +31,7 @@ class MonaTrajectory(DestinationTrajectory):
     def get_v(self, gm, **kwargs):
         return gm[0]
 
-    def get_w(self, gm, inverse_rot, **kwargs):
+    def get_w(self, gm, **kwargs):
         return gm[1]
 
     def set_grid(self, host, x, y, gm, inside, **kwargs):

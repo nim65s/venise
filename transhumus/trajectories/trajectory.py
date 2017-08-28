@@ -59,7 +59,7 @@ class Trajectory(Puller, Publisher):
     def process_turrets(self, **kwargs):
         tt, vt = zip(*[self.turret(WHEEL_POS[i], **kwargs) for i in range(3)])
         vt = array(vt)
-        return {'tt': tt, 'vt': (vt * 2 * SPEED_MEAN_MAX / abs(vt).max()).tolist()
+        return {'tt': tt, 'vt': [round(v, 5) for v in (vt * 2 * SPEED_MEAN_MAX / abs(vt).max()).tolist()]
                 if abs(vt).max() != 0 else [0, 0, 0]}
 
     def inside(self, host, x, y, **kwargs):
