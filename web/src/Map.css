@@ -1,7 +1,7 @@
 svg {
     fill: none;
     fill-opacity: 0.5;
-    background-image: url("static/plan.png");
+    background-image: url("plan.png");
     background-position: 50px -300px;
     background-size: 1400px 1045px;
     background-repeat: no-repeat;
