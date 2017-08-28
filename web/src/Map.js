@@ -14,7 +14,7 @@ class MapSVG extends Component {
               <circle className="destination" r={this.props.ppm / 2} cx={this.props.agv.destination[0] * this.props.ppm} cy={this.props.agv.destination[1] * this.props.ppm} />
               <polygon className="c3" points={this.props.consts.bords} />
               <path id="path3" />
-              <g id="agv3" transform={ "translate(" + (this.props.agv.x * this.props.ppm) + ", " + (this.props.agv.y * this.props.ppm) + ") rotate(" + this.props.agv.a + ")" }
+              <g id="agv3" transform={ "translate(" + (this.props.agv.x * this.props.ppm) + ", " + (this.props.agv.y * this.props.ppm) + ") rotate(" + (this.props.agv.a * 180 / Math.PI + 180) + ")" }
                  style={{fill: (this.props.agv.is_up ? this.props.agv.stop ? 'yellow' : 'none' : 'orange')}} >
                 <polygon points={this.props.consts.octogone} />
                 <circle className="centre" cx="0" cy="0" r="2" />
