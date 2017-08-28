@@ -2,8 +2,10 @@ svg {
     fill: none;
     fill-opacity: 0.5;
     background-image: url("static/plan.png");
-    background-position: -16px -302px;
-    background-size: 117.5%;
+    background-position: 50px -300px;
+    background-size: 1400px 1045px;
+    background-repeat: no-repeat;
     stroke: green;
 }
 #g3 .destination { fill: green; }
+
