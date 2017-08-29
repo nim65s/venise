@@ -11,22 +11,22 @@ pip install -U -r requirements.txt
 To be run in different shells / proccesses:
 
 ```
-python -m transhumus.trajectories.mona
-python -m transhumus.processors.websockets
-python -m transhumus.processors.granier
+python -m transhumus.trajectories.mona  # main process, chooses trajectories
+python -m transhumus.processors.websockets  # sends data from main process to webbrowsers
+python -m transhumus.processors.granier  # normalizes data from granier probes
 ```
 
 ## Simulation
 
 ```
-python -m transhumus.inputs.granier_random
-python -m transhumus.processors.simulator
+python -m transhumus.inputs.granier_random  # generates data in place of granier probes
+python -m transhumus.processors.simulator  # emulates motion of agv
 ```
 
 ## Observe
 
 ```
-python -m transhumus.outputs.print
+python -m transhumus.outputs.print  # prints data on the shell
 ```
 
 ## Web

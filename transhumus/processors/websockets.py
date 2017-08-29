@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import asyncio
 from json import dumps, loads
 
@@ -27,13 +25,13 @@ class MyServerProtocol(WebSocketServerProtocol):
         self.connections.append(self)
 
     def onOpen(self):
-        self.sendMessage(dumps({'consts': CONSTS}).encode('utf-8'))
+        self.sendMessage(dumps({'consts': CONSTS}).encode())
 
     def onClose(self, wasClean, code, reason):
         self.connections.remove(self)
 
     def onMessage(self, payload, isBinary):
-        self.processor.send(loads(payload.decode('utf8')))
+        self.processor.send(loads(payload.decode()))
 
     @classmethod
     @asyncio.coroutine
@@ -41,7 +39,7 @@ class MyServerProtocol(WebSocketServerProtocol):
         while True:
             cls.processor.sub()
             for connection in cls.connections:
-                connection.sendMessage(dumps({'agv': cls.processor.data[cls.processor.host]}).encode('utf-8'))
+                connection.sendMessage(dumps({'agv': cls.processor.data[cls.processor.host]}).encode())
             yield from asyncio.sleep(PERIOD)
 
 
