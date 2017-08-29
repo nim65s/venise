@@ -4,7 +4,6 @@
 
 ```
 pip install -U -r requirements.txt
-cd web; npm install
 ```
 
 ## Start
@@ -32,18 +31,18 @@ python -m transhumus.outputs.print
 
 ## Web
 
-### Dev
-
-```
-cd web; npm start
-```
-
-Go to http://localhost:3000/
-
 ### Prod
-
-for each new modification: `cd web; npm run build`
 
 serve the `web/build` folder (eg. `cd web/build; python2 -m SimpleHTTPServer`, org Apache / Nginx)
 
-Go to http://localhost:8000/
+Go to http://localhost:8000/ (or whatever port you want to use)
+
+for each new modification: `cd web; npm install; npm run build`
+
+### Dev
+
+```
+cd web; npm install; npm start
+```
+
+Go to http://localhost:3000/
