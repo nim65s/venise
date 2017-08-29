@@ -42,14 +42,8 @@ Go to http://localhost:3000/
 
 ### Prod
 
-```
-cd web; npm run build
-```
+for each new modification: `cd web; npm run build`
 
 serve the `web/build` folder (eg. `cd web/build; python2 -m SimpleHTTPServer`, org Apache / Nginx)
 
 Go to http://localhost:8000/
-
-### TODO
-
-last_seen probably broken because of other pushers / processors than agv
