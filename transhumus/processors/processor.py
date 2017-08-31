@@ -19,7 +19,7 @@ class Processor(Subscriber, Pusher):
             self.ended = True
 
     def send(self, data):
-        self.printe(data)
+        self.log(data)
         self.push.send_json([self.host, data])
 
 

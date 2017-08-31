@@ -13,7 +13,7 @@ class Subscriber(VMQ):
         self.main = main
         self.subscriber = self.context.socket(SUB)
         url = "tcp://%s:%i" % (main, PORT_PUB)
-        self.printe(url)
+        self.log(url)
         self.subscriber.connect(url)
         self.subscriber.setsockopt_string(SUBSCRIBE, '')
         self.last_seen = datetime(1970, 1, 1)
@@ -27,7 +27,7 @@ class Subscriber(VMQ):
                     if str(h.value) in data:
                         self.data[h].update(**data[str(h.value)])
                 self.last_seen = datetime.now()
-                self.printe([self.host, data[str(self.host.value)] if AGV_HOST else data])
+                self.log([self.host, data[str(self.host.value)] if AGV_HOST else data])
             except Again:
                 break
             if not block:

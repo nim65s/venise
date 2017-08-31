@@ -13,4 +13,4 @@ class Publisher(VMQ):
 
     def pub(self):
         self.publisher.send_json(self.data)
-        self.printe()
+        self.log()

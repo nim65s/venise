@@ -10,7 +10,7 @@ class VMQ(object):
     def __init__(self, host, verbosity, *args, **kwargs):
         self.host, self.verbosity = Host[host], verbosity
         self.hosts = [Host.ame]
-        self.printe(self.hosts)
+        self.log(self.hosts)
         self.context = Context()
         self.data = {h: {} for h in self.hosts}
         self.ended = False
@@ -19,7 +19,9 @@ class VMQ(object):
         try:
             while not self.ended:
                 self.loop()
-        except KeyboardInterrupt:
+        except:
+            pass
+        finally:
             self.end()
             print()
 
@@ -30,7 +32,7 @@ class VMQ(object):
     def end(self):
         print('terminating…')
 
-    def printe(self, data=None):
+    def log(self, data=None):
         if data is None:
             data = self.data
         if self.verbosity > 1:
