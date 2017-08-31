@@ -1,8 +1,8 @@
 from argparse import ArgumentParser
 from time import sleep
 
-from ..vmq import Pusher, Subscriber, vmq_parser
 from ..settings import PERIOD
+from ..vmq import Pusher, Subscriber, vmq_parser
 
 
 class Processor(Subscriber, Pusher):

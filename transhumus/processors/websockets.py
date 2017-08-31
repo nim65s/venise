@@ -1,9 +1,9 @@
 import asyncio
 from json import dumps, loads
 
-from autobahn.asyncio.websocket import WebSocketServerProtocol, WebSocketServerFactory
+from autobahn.asyncio.websocket import WebSocketServerFactory, WebSocketServerProtocol
 
-from ..settings import PERIOD, PX_PER_M, OCTOGONE, BORDS_SVG, HEIGHT, WIDTH, AGV_RADIUS, SPEED_MEAN_MAX, PORT_WS
+from ..settings import AGV_RADIUS, BORDS_SVG, HEIGHT, OCTOGONE, PERIOD, PORT_WS, PX_PER_M, SPEED_MEAN_MAX, WIDTH
 from .processor import Processor, processor_parser
 
 

@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from socket import socket
 
-from ..settings import Hote, MAIN_HOST, PORT_UBISENS
+from ..settings import MAIN_HOST, PORT_UBISENS, Hote
 from .input import Input, input_parser
 
 

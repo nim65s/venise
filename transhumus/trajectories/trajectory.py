@@ -4,7 +4,7 @@ from time import sleep
 
 from numpy import array
 
-from ..settings import BOUNDARIES, DATA, PERIOD, WHEEL_POS, SMOOTH_SPEED, SPEED_MEAN_MAX
+from ..settings import BOUNDARIES, DATA, PERIOD, SMOOTH_SPEED, SPEED_MEAN_MAX, WHEEL_POS
 from ..utils.dist_angles import dist_angle
 from ..utils.point_in_polygon import wn_pn_poly
 from ..vmq import Publisher, Puller, vmq_parser

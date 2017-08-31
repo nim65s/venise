@@ -3,7 +3,7 @@ from datetime import datetime
 from zmq import NOBLOCK, SUB, SUBSCRIBE
 from zmq.error import Again
 
-from ..settings import PORT_PUB, AGV_HOST
+from ..settings import AGV_HOST, PORT_PUB
 from .vmq import VMQ
 
 

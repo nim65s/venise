@@ -3,7 +3,7 @@ from math import tau
 
 from numpy import array, cos, cross, dot, pi, sin, where
 
-from ..settings import WHEEL_POS, AGV_RADIUS, SMOOTH_FACTOR
+from ..settings import AGV_RADIUS, SMOOTH_FACTOR, WHEEL_POS
 from ..utils.dist_angles import dist_angles
 from .processor import Processor, processor_parser
 

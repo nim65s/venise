@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
-from .processor import Processor, processor_parser
 from ..settings import N_PROBES
+from .processor import Processor, processor_parser
 
 
 class Granier(Processor):

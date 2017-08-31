@@ -5,7 +5,6 @@ from socket import gethostname
 
 from numpy import array
 
-
 # Computers
 Host = IntEnum('Host', 'cerf moro ame yuki nausicaa jiro hattori hagurosan')
 CURRENT_HOST = Host[gethostname().split('.')[0].lower()]

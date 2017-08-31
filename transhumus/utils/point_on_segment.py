@@ -3,11 +3,11 @@ from math import hypot
 EPSILON = 0.03
 
 
-def point_on_segment(A, B, P):
-    """ segment line AB, point P, where each one is a (x, y) """
-    def dist(a, b):
-        return hypot(a[0] - b[0], a[1] - b[1])
-    return -EPSILON < dist(A, P) + dist(P, B) - dist(A, B) < EPSILON
+def point_on_segment(a, b, p):
+    """ segment line ab, point p, where each one is a (x, y) """
+    def dist(m, n):
+        return hypot(m[0] - n[0], m[1] - n[1])
+    return -EPSILON < dist(a, p) + dist(p, b) - dist(a, b) < EPSILON
 
 
 def point_on_boundary(pos, boundary):
