@@ -14,16 +14,15 @@ class Probe(Input):
 
     def check_value(self, value):
         if len(value) != self.n_values:
-            raise ValueError('%s sur %s: len(%r) != %i' % (self.name, self.host.name, value, self.n_values))
+            raise ValueError(f'len({value}) != {self.n_values}')
         for i, v in enumerate(value):
             if not self.mini <= v <= self.maxi:
-                raise ValueError('%s.%i on %s: %f not beetwen %f and %f' %
-                                 (self.name, i, self.host.name, v, self.mini, self.maxi))
+                raise ValueError(f'{v} not beetwen {self.mini} and {self.maxi}')
         self.data[self.host][self.name] = value
 
 
-probe_parser = ArgumentParser(parents=[input_parser], conflict_handler='resolve')
-probe_parser.add_argument('-n', '--name', choices=['granier', 'sick', 'brightness'])
-probe_parser.add_argument('-m', '--mini', type=float, default=-1)
-probe_parser.add_argument('-M', '--maxi', type=float, default=1)
-probe_parser.add_argument('-N', '--n_values', type=int, default=1)
+p_parser = ArgumentParser(parents=[input_parser], conflict_handler='resolve')
+p_parser.add_argument('-n', '--name', choices=['granier', 'sick', 'brightness'])
+p_parser.add_argument('-m', '--mini', type=float, default=-1)
+p_parser.add_argument('-M', '--maxi', type=float, default=1)
+p_parser.add_argument('-N', '--n_values', type=int, default=1)

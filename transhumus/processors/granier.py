@@ -9,12 +9,13 @@ class Granier(Processor):
         for i in range(N_PROBES):
             gmi[i] = min(granier[i], gmi[i])
             gma[i] = max(granier[i], gma[i])
-            gm[i] = round((granier[i] - gmi[i]) / (gma[i] - gmi[i]), 5) if gma[i] - gmi[i] > .1 else 1
+            diff = gma[i] - gmi[i]
+            gm[i] = round((granier[i] - gmi[i]) / diff, 5) if diff > .1 else 1
         return {'gma': gma, 'gmi': gmi, 'gm': gm}
 
 
-granier_parser = ArgumentParser(parents=[processor_parser], conflict_handler='resolve')
-granier_parser.set_defaults(name='granier', period=25, n_values=3, maxi=5, mini=0)
+g_parser = ArgumentParser(parents=[processor_parser], conflict_handler='resolve')
+g_parser.set_defaults(name='granier', period=25, n_values=3, maxi=5, mini=0)
 
 if __name__ == '__main__':
-    Granier(**vars(granier_parser.parse_args())).run()
+    Granier(**vars(g_parser.parse_args())).run()

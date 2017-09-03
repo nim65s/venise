@@ -1,46 +1,14 @@
-from argparse import ArgumentParser
 from math import atan2, copysign, cos, hypot, pi, sin
-from time import sleep
 
 from numpy import array
 
-from ..settings import BOUNDARIES, DATA, PERIOD, SMOOTH_SPEED, SPEED_MEAN_MAX, WHEEL_POS
+from ..settings import BOUNDARIES, SMOOTH_SPEED, SPEED_MEAN_MAX, WHEEL_POS
 from ..utils.dist_angles import dist_angle
 from ..utils.point_in_polygon import wn_pn_poly
-from ..vmq import Publisher, Puller, vmq_parser
+from .base_trajectory import BaseTrajectory
 
 
-class Trajectory(Puller, Publisher):
-    def __init__(self, period, *args, **kwargs):
-        super().__init__(wait=False, *args, **kwargs)
-        self.period = period
-        self.data = {h: DATA.copy() for h in self.hosts}
-        for h in self.hosts:
-            self.data[h]['host'] = h
-        self.data['trajectory'] = self.__class__.__name__
-
-    def send(self):
-        self.pub()
-
-    def loop(self):
-        self.pull()
-        self.update()
-        self.send()
-        sleep(self.period)
-
-    def end(self):
-        return
-
-    def update(self):
-        for host in self.hosts:
-            self.data[host].update(**self.inside(**self.data[host]))
-            self.data[host].update(**self.process_speed(**self.data[host]))
-            self.data[host].update(**self.smooth_speed(**self.data[host]))
-            self.data[host].update(**self.process_turrets(**self.data[host]))
-
-    def process_speed(self, **kwargs):
-        raise NotImplementedError()
-
+class Trajectory(BaseTrajectory):
     def smooth_speed(self, smoothe_speed, v, w, t, vg, wg, tg, **kwargs):
         if smoothe_speed:
             dv, dw, dt = v - vg, w - wg, dist_angle(t, tg)
@@ -64,7 +32,3 @@ class Trajectory(Puller, Publisher):
 
     def inside(self, host, x, y, **kwargs):
         return {'inside': wn_pn_poly((x, y), BOUNDARIES[host]) != 0}
-
-
-trajectory_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
-trajectory_parser.add_argument('-T', '--period', type=float, default=PERIOD, help="main loop period")

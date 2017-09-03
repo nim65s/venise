@@ -1,23 +1,13 @@
 import asyncio
 from json import dumps, loads
 
-from autobahn.asyncio.websocket import WebSocketServerFactory, WebSocketServerProtocol
+from autobahn.asyncio import websocket
 
-from ..settings import AGV_RADIUS, BORDS_SVG, HEIGHT, OCTOGONE, PERIOD, PORT_WS, PX_PER_M, SPEED_MEAN_MAX, WIDTH
+from ..settings import PERIOD, PORT_WS, CONSTS
 from .processor import Processor, processor_parser
 
 
-def svg_poly(points):
-    return ' '.join([','.join(str(n) for n in p) for p in points]),
-
-
-CONSTS = {
-    'px_per_m': PX_PER_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS, 'speed_mean_max': SPEED_MEAN_MAX,
-    'octogone': svg_poly(OCTOGONE), 'bords': svg_poly(BORDS_SVG[3]),
-}
-
-
-class MyServerProtocol(WebSocketServerProtocol):
+class MyServerProtocol(websocket.WebSocketServerProtocol):
     connections = []
     processor = Processor(**vars(processor_parser.parse_args()))
 
@@ -39,12 +29,14 @@ class MyServerProtocol(WebSocketServerProtocol):
         while True:
             cls.processor.sub()
             for connection in cls.connections:
-                connection.sendMessage(dumps({'agv': cls.processor.data[cls.processor.host]}).encode())
+                connection.sendMessage(dumps({
+                    'agv': cls.processor.data[cls.processor.host]
+                }).encode())
             yield from asyncio.sleep(PERIOD)
 
 
 if __name__ == '__main__':
-    factory = WebSocketServerFactory("ws://0.0.0.0:%i" % PORT_WS)
+    factory = websocket.WebSocketServerFactory(f"ws://0.0.0.0:{PORT_WS}")
     factory.protocol = MyServerProtocol
 
     loop = asyncio.get_event_loop()

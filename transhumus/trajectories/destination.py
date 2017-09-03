@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from math import atan2, hypot, tau
 
 from ..settings import Host
-from .trajectory import Trajectory, trajectory_parser
+from .trajectory import Trajectory, t_parser
 
 
 class DestinationTrajectory(Trajectory):
@@ -35,9 +35,9 @@ class DestinationTrajectory(Trajectory):
         return self.wi[host]
 
     def change_destination(self, **kwargs):
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
-trajectory_destination_parser = ArgumentParser(parents=[trajectory_parser], conflict_handler='resolve')
-trajectory_destination_parser.add_argument('--w', type=float, default=0)
-trajectory_destination_parser.add_argument('--v', type=float, default=1)
+t_destination_parser = ArgumentParser(parents=[t_parser], conflict_handler='resolve')
+t_destination_parser.add_argument('--w', type=float, default=0)
+t_destination_parser.add_argument('--v', type=float, default=1)

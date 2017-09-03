@@ -27,7 +27,8 @@ class Subscriber(VMQ):
                     if str(h.value) in data:
                         self.data[h].update(**data[str(h.value)])
                 self.last_seen = datetime.now()
-                self.log([self.host, data[str(self.host.value)] if AGV_HOST else data])
+                self.log([self.host, data[str(self.host.value)]
+                          if AGV_HOST else data])
             except Again:
                 break
             if not block:

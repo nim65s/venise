@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from time import sleep
 
 from ..settings import PERIOD
-from ..vmq import Pusher, vmq_parser
+from ..vmq import Pusher, parser
 
 
 class Input(Pusher):
@@ -25,5 +25,6 @@ class Input(Pusher):
         pass
 
 
-input_parser = ArgumentParser(parents=[vmq_parser], conflict_handler='resolve')
-input_parser.add_argument('-T', '--period', type=float, default=PERIOD, help="period for sending data (0: one shot)")
+input_parser = ArgumentParser(parents=[parser], conflict_handler='resolve')
+input_parser.add_argument('-T', '--period', type=float, default=PERIOD,
+                          help="period for sending data (0: one shot)")

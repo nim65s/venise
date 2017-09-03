@@ -7,7 +7,7 @@ from numpy import array, where
 
 from ..settings import HOST_AGV, PERIODE, PORT_AGV, SMOOTH_FACTOR
 from ..utils.dist_angles import dist_angles
-from ..vmq import vmq_parser
+from ..vmq import parser
 from .sortie import Sortie
 
 now = datetime.now
@@ -22,7 +22,7 @@ class SortieAGV(Sortie):
         self.socket = socket()
         self.connect()
         self.to_send = ['vc', 'tc', 'vm', 'tm', 'nt', 'reversed']
-        self.data[self.hote]['reversed'] = [False, False, False]
+        self.data[self.host]['reversed'] = [False, False, False]
 
     def loop(self):
         start = now()
@@ -30,15 +30,15 @@ class SortieAGV(Sortie):
         if datetime.now() - self.last_seen > timedelta(seconds=3):
             self.send('déconnecté du serveur')
         if datetime.now() - self.last_seen > timedelta(seconds=5):
-            self.data[self.hote]['stop'] = True
+            self.data[self.host]['stop'] = True
         try:
-            self.process(**self.data[self.hote])
+            self.process(**self.data[self.host])
         except (ConnectionResetError, timeout, BrokenPipeError):
             self.send('%s Failed connection !' % now())
             self.connect()
         for var in self.to_send:
-            self.push.send_json([self.hote, {var: array(self.data[self.hote][var]).round(5).tolist()}])
-        self.push.send_json([self.hote, {'last_seen_agv': str(now())}])
+            self.push.send_json([self.host, {var: array(self.data[self.host][var]).round(5).tolist()}])
+        self.push.send_json([self.host, {'last_seen_agv': str(now())}])
         duree = now() - start
         reste = per - duree
         if reste < timedelta(0):
@@ -52,7 +52,7 @@ class SortieAGV(Sortie):
                 self.socket.close()
                 self.socket = socket()
                 self.socket.settimeout(2)
-                self.send('%s connecting... %s:%i' % (now(), self.hote.name, PORT_AGV))
+                self.send('%s connecting... %s:%i' % (now(), self.host.name, PORT_AGV))
                 self.socket.connect((HOST_AGV, PORT_AGV))
                 self.send('%s connected' % now())
                 break
@@ -65,22 +65,22 @@ class SortieAGV(Sortie):
             except OSError:
                 self.send("%s AGV doesn't respond…" % now())
 
-    def process(self, reverse, smoothe, hote, boost, arriere, **kwargs):
-        self.data[hote].update(**self.recv_agv())
-        self.data[hote].update(**self.copy_consignes(**self.data[hote]))
+    def process(self, reverse, smoothe, host, boost, arriere, **kwargs):
+        self.data[host].update(**self.recv_agv())
+        self.data[host].update(**self.copy_consignes(**self.data[host]))
         if reverse:
-            self.data[hote].update(**self.reverse(**self.data[hote]))
+            self.data[host].update(**self.reverse(**self.data[host]))
         if smoothe:
-            self.data[hote].update(**self.smoothe(**self.data[hote]))
+            self.data[host].update(**self.smoothe(**self.data[host]))
         if boost:
-            self.data[hote].update(**self.boost(**self.data[hote]))
+            self.data[host].update(**self.boost(**self.data[host]))
         if arriere:
-            self.data[hote].update(**self.arriere(**self.data[hote]))
-        self.socket.sendall(self.send_agv(**self.data[hote]))
+            self.data[host].update(**self.arriere(**self.data[host]))
+        self.socket.sendall(self.send_agv(**self.data[host]))
         self.check_ret(self.recv_rep())
         self.socket.sendall('getErrors()'.encode('ascii'))
         errors = self.recv_rep()
-        self.push.send_json([hote, {'errors': 'ok' if errors.startswith('-') else errors}])
+        self.push.send_json([host, {'errors': 'ok' if errors.startswith('-') else errors}])
 
     def recv_rep(self):
         return self.socket.recv(1024).decode('ascii').replace('\x00', '')
@@ -109,9 +109,9 @@ class SortieAGV(Sortie):
         reversed ^= rev
         return {'vc': vc, 'reversed': reversed}
 
-    def smoothe(self, tm, tc, hote, **kwargs):
+    def smoothe(self, tm, tc, host, **kwargs):
         dst = dist_angles(tm, tc)
-        tc = tc if abs(dst).max() < SMOOTH_FACTOR[hote] else (tm - SMOOTH_FACTOR[hote] * dst / abs(dst).max()) % tau
+        tc = tc if abs(dst).max() < SMOOTH_FACTOR[host] else (tm - SMOOTH_FACTOR[host] * dst / abs(dst).max()) % tau
         return {'tc': tc}
 
     def boost(self, tg, **kwargs):
@@ -150,4 +150,4 @@ class SortieAGV(Sortie):
 
 
 if __name__ == '__main__':
-    SortieAGV(**vars(vmq_parser.parse_args())).run()
+    SortieAGV(**vars(parser.parse_args())).run()

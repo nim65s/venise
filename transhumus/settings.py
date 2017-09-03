@@ -78,3 +78,14 @@ DATA = {
 }
 
 GRID_COEF = 4
+
+
+def svg_poly(points):
+    return ' '.join([','.join(str(n) for n in p) for p in points]),
+
+CONSTS = {
+    'px_per_m': PX_PER_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS, 'speed_mean_max': SPEED_MEAN_MAX,
+    'octogone': svg_poly(OCTOGONE), 'bords': svg_poly(BORDS_SVG[3]),
+}
+
+

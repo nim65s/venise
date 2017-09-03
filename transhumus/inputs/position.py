@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from socket import socket
 
-from ..settings import MAIN_HOST, PORT_UBISENS, Hote
+from ..settings import MAIN_HOST, PORT_UBISENS, Host
 from .input import Input, input_parser
 
 
@@ -10,7 +10,7 @@ class PositionInput(Input):
         super().__init__(*args, **kwargs)
         self.data = {h: {
             'x': 0, 'y': 0, 'a': 0,  # Position
-            } for h in Hote}
+            } for h in Host}
         self.socket = socket()
         self.connect()
         self.correction = [0, 0, 2.52, 0.781, 0.828]
@@ -45,7 +45,7 @@ class PositionInput(Input):
 
 
 position_parser = ArgumentParser(parents=[input_parser], conflict_handler='resolve')
-position_parser.set_defaults(hote=MAIN_HOST.name)
+position_parser.set_defaults(host=MAIN_HOST.name)
 
 if __name__ == '__main__':
     PositionInput(**vars(position_parser.parse_args())).run()

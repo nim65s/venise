@@ -7,7 +7,7 @@ from ..settings import BOUNDARIES, GRID_COEF
 from ..utils.dist_path import dist_path
 from ..utils.point_in_polygon import wn_pn_poly
 from ..utils.stay_in_poly import stay_in_poly
-from .destination import DestinationTrajectory, trajectory_destination_parser
+from .destination import DestinationTrajectory, t_destination_parser
 
 
 class MonaTrajectory(DestinationTrajectory):
@@ -79,4 +79,4 @@ class MonaTrajectory(DestinationTrajectory):
 
 
 if __name__ == '__main__':
-    MonaTrajectory(**vars(trajectory_destination_parser.parse_args())).run()
+    MonaTrajectory(**vars(t_destination_parser.parse_args())).run()

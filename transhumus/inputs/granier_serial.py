@@ -4,17 +4,18 @@ from os.path import expanduser
 
 from serial import Serial
 
-from .probe import Probe, probe_parser
+from .probe import Probe, p_parser
 
 
 class GranierSerial(Probe):
     def __init__(self, port, filename, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.serial = Serial('/dev/ttyUSB%i' % port, 38400)
-        self.filename = expanduser(filename % self.hote)
+        self.filename = expanduser(filename % self.host)
 
     def process(self, value):
-        l = self.serial.readline().decode('ascii').replace('\x00', '').replace('\x04', '').split()
+        l = self.serial.readline().decode('ascii')
+        l = l.replace('\x00', '').replace('\x04', '').split()
         try:
             datetime.strptime(' '.join(l[:2]), '%d-%m-%y %H:%M:%S')
         except:
@@ -28,10 +29,11 @@ class GranierSerial(Probe):
         self.serial.close()
 
 
-granier_serial_parser = ArgumentParser(parents=[probe_parser], conflict_handler='resolve')
-granier_serial_parser.add_argument('-p', '--port', type=int, default=0)
-granier_serial_parser.add_argument('-f', '--filename', default='~/granier_%i.log', help="log filename")
-granier_serial_parser.set_defaults(period=30)
+gs_parser = ArgumentParser(parents=[p_parser], conflict_handler='resolve')
+gs_parser.add_argument('-p', '--port', type=int, default=0)
+gs_parser.add_argument('-f', '--filename', default='~/granier_%i.log',
+                       help="log filename")
+gs_parser.set_defaults(period=30)
 
 if __name__ == '__main__':
-    GranierSerial(**vars(granier_serial_parser.parse_args())).run()
+    GranierSerial(**vars(gs_parser.parse_args())).run()

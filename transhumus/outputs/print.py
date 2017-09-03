@@ -2,7 +2,7 @@ from pprint import pprint
 from time import sleep
 
 from ..settings import PERIOD
-from ..vmq import Subscriber, vmq_parser
+from ..vmq import Subscriber, parser
 
 
 class PrintOutput(Subscriber):
@@ -13,4 +13,4 @@ class PrintOutput(Subscriber):
 
 
 if __name__ == '__main__':
-    PrintOutput(**vars(vmq_parser.parse_args())).run()
+    PrintOutput(**vars(parser.parse_args())).run()
