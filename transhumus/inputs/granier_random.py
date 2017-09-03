@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from random import random
 
-from .probe import Probe, probe_parser
+from .probe import Probe, p_parser
 
 
 class GranierRandom(Probe):
@@ -10,7 +10,7 @@ class GranierRandom(Probe):
                 for v in value]
 
 
-gr_parser = ArgumentParser(parents=[probe_parser], conflict_handler='resolve')
+gr_parser = ArgumentParser(parents=[p_parser], conflict_handler='resolve')
 gr_parser.set_defaults(name='granier', period=25, n_values=3, maxi=5, mini=0)
 
 if __name__ == '__main__':

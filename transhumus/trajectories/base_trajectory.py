@@ -37,7 +37,6 @@ class BaseTrajectory(Puller, Publisher):
         raise NotImplementedError
 
 
-
 t_parser = ArgumentParser(parents=[parser], conflict_handler='resolve')
 t_parser.add_argument('-T', '--period', type=float, default=PERIOD,
-                               help="main loop period")
+                      help="main loop period")

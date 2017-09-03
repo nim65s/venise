@@ -6,8 +6,11 @@ from socket import gethostname
 from numpy import array
 
 # Computers
-Host = IntEnum('Host', 'cerf moro ame yuki nausicaa jiro hattori hagurosan')
-CURRENT_HOST = Host[gethostname().split('.')[0].lower()]
+Host = IntEnum('Host', 'cerf moro ame yuki nausicaa jiro hattori hagurosan trajectory docker')
+try:
+    CURRENT_HOST = Host[gethostname().split('.')[0].lower()]
+except:
+    CURRENT_HOST = Host.docker
 
 MAIN_HOSTS = [host.name for host in Host if not (1 < host < 5)]
 MAIN_HOST = CURRENT_HOST if CURRENT_HOST.name in MAIN_HOSTS else Host.cerf
@@ -83,9 +86,8 @@ GRID_COEF = 4
 def svg_poly(points):
     return ' '.join([','.join(str(n) for n in p) for p in points]),
 
+
 CONSTS = {
     'px_per_m': PX_PER_M, 'height': HEIGHT, 'width': WIDTH, 'agv_radius': AGV_RADIUS, 'speed_mean_max': SPEED_MEAN_MAX,
     'octogone': svg_poly(OCTOGONE), 'bords': svg_poly(BORDS_SVG[3]),
 }
-
-

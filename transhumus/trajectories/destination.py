@@ -2,7 +2,8 @@ from argparse import ArgumentParser
 from math import atan2, hypot, tau
 
 from ..settings import Host
-from .trajectory import Trajectory, t_parser
+from .base_trajectory import t_parser
+from .trajectory import Trajectory
 
 
 class DestinationTrajectory(Trajectory):

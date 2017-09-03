@@ -7,8 +7,8 @@ from ..settings import MAIN_HOST, MAIN_HOSTS, Host
 
 
 class VMQ(object):
-    def __init__(self, host, verbosity, *args, **kwargs):
-        self.host, self.verbosity = Host[host], verbosity
+    def __init__(self, main, host, verbosity, *args, **kwargs):
+        self.main, self.host, self.verbosity = main, Host[host], verbosity
         self.hosts = [Host.ame]
         self.log(self.hosts)
         self.context = Context()
@@ -42,8 +42,8 @@ class VMQ(object):
 
 
 parser = ArgumentParser(conflict_handler='resolve')
-parser.add_argument('-H', '--host', help="source host", default=Host.ame.name,
-                        choices=[h.name for h in Host])
-parser.add_argument('-V', '--verbosity', help="set verbosity", action='count',
-                        default=0)
-parser.add_argument('--main', default=MAIN_HOST.name, choices=MAIN_HOSTS)
+parser.add_argument('-M', '--main', default=MAIN_HOST.name, choices=MAIN_HOSTS,
+                    help="main host")
+parser.add_argument('-H', '--host', default=Host.ame.name, choices=[h.name for h in Host],
+                    help="source host")
+parser.add_argument('-V', '--verbosity', action='count', default=0, help="set verbosity")

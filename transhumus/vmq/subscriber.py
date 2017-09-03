@@ -8,11 +8,10 @@ from .vmq import VMQ
 
 
 class Subscriber(VMQ):
-    def __init__(self, main, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.main = main
         self.subscriber = self.context.socket(SUB)
-        url = "tcp://%s:%i" % (main, PORT_PUB)
+        url = "tcp://%s:%i" % (self.main, PORT_PUB)
         self.log(url)
         self.subscriber.connect(url)
         self.subscriber.setsockopt_string(SUBSCRIBE, '')

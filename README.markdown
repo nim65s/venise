@@ -1,5 +1,10 @@
 # transHumUs
 
+## Launch simulation in a single command
+
+`docker-compose up`
+And go to http://localhost:8080
+
 ## Install requirements
 
 ```

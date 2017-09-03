@@ -1,0 +1,28 @@
+version: '3'
+services:
+  trajectory:
+    build: .
+    command: python -m transhumus.trajectories.mona
+    ports:
+      - "1337:1337"
+      - "1338:1338"
+  websockets:
+    build: .
+    command: python -m transhumus.processors.websockets -M trajectory
+    ports:
+      - "9000:9000"
+  granier:
+    build: .
+    command: python -m transhumus.processors.granier -M trajectory
+  granier_random:
+    build: .
+    command: python -m transhumus.inputs.granier_random -M trajectory
+  simulator:
+    build: .
+    command: python -m transhumus.processors.simulator -M trajectory
+  web:
+    image: nginx:latest
+    volumes:
+      - "./web/build:/usr/share/nginx/html:ro"
+    ports:
+      - "8080:80"

@@ -1,7 +1,6 @@
-from argparse import ArgumentParser
 from socket import socket
 
-from ..settings import MAIN_HOST, PORT_UBISENS, Host
+from ..settings import PORT_UBISENS, Host
 from .input import Input, input_parser
 
 
@@ -44,8 +43,5 @@ class PositionInput(Input):
             self.connect()
 
 
-position_parser = ArgumentParser(parents=[input_parser], conflict_handler='resolve')
-position_parser.set_defaults(host=MAIN_HOST.name)
-
 if __name__ == '__main__':
-    PositionInput(**vars(position_parser.parse_args())).run()
+    PositionInput(**vars(input_parser.parse_args())).run()
