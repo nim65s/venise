@@ -8,18 +8,18 @@ services:
       - "1338:1338"
   websockets:
     build: .
-    command: python -m transhumus.processors.websockets -M trajectory
+    command: python -m transhumus.processors.websockets --main trajectory
     ports:
       - "9000:9000"
   granier:
     build: .
-    command: python -m transhumus.processors.granier -M trajectory
+    command: python -m transhumus.processors.granier --main trajectory
   granier_random:
     build: .
-    command: python -m transhumus.inputs.granier_random -M trajectory
+    command: python -m transhumus.inputs.granier_random --main trajectory
   simulator:
     build: .
-    command: python -m transhumus.processors.simulator -M trajectory
+    command: python -m transhumus.processors.simulator --main trajectory
   web:
     image: nginx:latest
     volumes:
