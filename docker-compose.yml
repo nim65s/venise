@@ -21,8 +21,8 @@ services:
     build: .
     command: python -m transhumus.processors.simulator --main trajectory
   web:
-    image: nginx:latest
-    volumes:
-      - "./web/build:/usr/share/nginx/html:ro"
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     ports:
       - "8080:80"
