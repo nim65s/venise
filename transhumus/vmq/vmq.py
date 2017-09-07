@@ -44,6 +44,7 @@ class VMQ(object):
 parser = ArgumentParser(conflict_handler='resolve')
 parser.add_argument('-M', '--main', default=MAIN_HOST.name, choices=MAIN_HOSTS,
                     help="main host")
-parser.add_argument('-H', '--host', default=Host.ame.name, choices=[h.name for h in Host],
+parser.add_argument('-H', '--host', default='ame', choices=[h.name for h in Host],
                     help="source host")
-parser.add_argument('-V', '--verbosity', action='count', default=0, help="set verbosity")
+parser.add_argument('-V', '--verbosity', action='count', default=0,
+                    help="set verbosity")
