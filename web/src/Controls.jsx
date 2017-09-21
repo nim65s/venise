@@ -21,7 +21,7 @@ class Controls extends React.Component {
       var send = this.props.send;
       var agv = this.props.agv;
       return (
-          <div>
+          <div className="text-center">
             <Control disabled={disabled} send={send} agv={agv} var="stop" default={false} />
             <Control disabled={disabled} send={send} agv={agv} var="boost" default={false} />
             {/*<Control disabled={disabled} send={send} agv={agv} var="reverse" default={true} />*/}
