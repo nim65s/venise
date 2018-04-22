@@ -4,10 +4,12 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-autobahn[asyncio]==17.8.1
-jinja2==2.9.6
+autobahn[asyncio]==18.4.1
+cffi==1.11.5              # via pyzmq
+jinja2==2.10
 markupsafe==1.0           # via jinja2
-numpy==1.13.1
-pyzmq==16.0.2
-six==1.10.0               # via autobahn, txaio
-txaio==2.8.1              # via autobahn
+numpy==1.14.2
+py==1.5.3                 # via pyzmq
+pyzmq==17.0.0
+six==1.11.0               # via autobahn, txaio
+txaio==2.10.0             # via autobahn
