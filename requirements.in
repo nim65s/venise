@@ -1,4 +1,0 @@
-pyzmq
-jinja2
-numpy
-autobahn[asyncio]
