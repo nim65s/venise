@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>ChanMQ</title>
+  </head>
+  <body>
+    <h2>Plugging ZMQ & Django Channels</h2>
+    <div id="app">
+      <dl>
+        <div v-for="(key, value) in ame">
+          <dt>{{ key }}<dt><dd>{{ value }}</dd>
+        </div>
+      </dl>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+
+    var loc = window.location;
+var socket = new WebSocket(((loc.protocol === "https:") ? "wss://" : "ws://") + loc.host + "/ws");
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello vue!',
+    ame: {
+      'status': 'Not connected', 'errors': 'Not connected', 'anomaly': false, 'is_up': false, 'inside': false,
+      'last_seen_agv' : 0,
+      'x': 0, 'y': 0, 'a': 0,
+      'v': 0, 'w': 0, 't': 0,
+      'vg': 0, 'wg': 0, 'tg': 0,
+      'vt': [0, 0, 0], 'tt': [0, 0, 0],
+      'vc': [0, 0, 0], 'tc': [0, 0, 0],
+      'vm': [0, 0, 0], 'tm': [0, 0, 0],
+      'nt': [0, 0, 0],
+      'granier': [0, 0, 0],
+      'gm': [10, 10, 10],
+      'gmi': [-10, -10, -10],
+      'gma': [0, 0, 0],
+      'stop': false, 'smoothe': false, 'smoothe_speed': true, 'boost': false,
+      'destination': [0, 0], 'state': -1,
+    }
+  }
+})
+
+
+
+function wsping() {
+  var ping = new Date().getTime();
+  socket.send(JSON.stringify({'ping': ping}));
+}
+
+socket.onmessage = function (e) {
+  var data = JSON.parse(e.data);
+  console.log(data);
+}
+
+  </script>
+</html>

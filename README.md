@@ -8,7 +8,7 @@ And go to http://localhost:8080
 ## Install requirements
 
 ```
-pip install -U -r requirements.txt
+pipenv install
 ```
 
 ## Start
@@ -38,7 +38,7 @@ python -m transhumus.outputs.print  # prints data on the shell
 
 ### Prod
 
-serve the `web/build` folder (eg. `cd web/build; python2 -m SimpleHTTPServer`, org Apache / Nginx)
+serve the `web/build` folder (eg. `cd web/build; python2 -m SimpleHTTPServer`, or use Apache / Nginx / traefik)
 
 Go to http://localhost:8000/ (or whatever port you want to use)
 

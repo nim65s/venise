@@ -1,42 +1,67 @@
 version: '3'
 
+volumes:
+  srv:
+  sql:
+
 services:
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+  postgres:
+    image: postgres:10-alpine
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - sql:/var/lib/postgresql/data
   trajectory:
     build: .
-    command: python -m transhumus.trajectories.mona
+    restart: unless-stopped
+    command: python3 -m transhumus.trajectories.mona
     ports:
       - "1337:1337"
       - "1338:1338"
-  websockets:
-    build: .
-    command: python -m transhumus.processors.websockets --main trajectory
-    labels:
-      traefik.enable: "true"
-      traefik.frontend.rule: "Host: ws.transhumus.${DOMAIN_NAME:-local}"
-      traefik.docker.network: "proxytanet"
-    networks:
-      - proxytanet
-      - default
   granier:
     build: .
-    command: python -m transhumus.processors.granier --main trajectory
+    restart: unless-stopped
+    command: python3 -m transhumus.processors.granier --main trajectory
   granier_random:
     build: .
-    command: python -m transhumus.inputs.granier_random --main trajectory
+    restart: unless-stopped
+    command: python3 -m transhumus.inputs.granier_random --main trajectory
   simulator:
     build: .
-    command: python -m transhumus.processors.simulator --main trajectory
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
-    labels:
-      traefik.enable: "true"
-      traefik.frontend.rule: "Host: transhumus.${DOMAIN_NAME:-local}, www.transhumus.${DOMAIN_NAME:-local}"
-      traefik.docker.network: "proxytanet"
+    restart: unless-stopped
+    command: python3 -m transhumus.processors.simulator --main trajectory
+  chanmq:
+    build: .
+    restart: unless-stopped
+    command: python3 -m transhumus.outputs.chanmq --main trajectory
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - REDIS=redis
     networks:
       - proxytanet
       - default
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: chanmq.${DOMAIN_NAME:-localhost}, www.chanmq.${DOMAIN_NAME:-localhost}"
+      traefik.docker.network: "proxytanet"
+    volumes:
+      - srv:/srv
+  nginx:
+    image: nim65s/ndh:nginx
+    restart: unless-stopped
+    volumes:
+      - srv:/srv
+    networks:
+      - proxytanet
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host: chanmq.${DOMAIN_NAME:-localhost}, www.chanmq.${DOMAIN_NAME:-localhost}; PathPrefix: /static, /media"
 
 networks:
   proxytanet:

@@ -8,6 +8,9 @@ pyzmq = "*"
 numpy = "*"
 autobahn = {extras = ["asyncio"], version = "*"}
 "Jinja2" = "*"
+channels-redis = "*"
+requests = "*"
+ndh = "*"
 
 [dev-packages]
 
