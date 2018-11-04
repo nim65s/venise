@@ -5,7 +5,7 @@ import sys
 from ndh.utils import get_env
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chanmq.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transhumus.settings')
     get_env()
     try:
         from django.core.management import execute_from_command_line

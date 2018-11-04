@@ -17,6 +17,7 @@ services:
   trajectory:
     build: .
     restart: unless-stopped
+    env_file: .env
     command: python3 -m transhumus.trajectories.mona
     ports:
       - "1337:1337"
@@ -24,18 +25,22 @@ services:
   granier:
     build: .
     restart: unless-stopped
+    env_file: .env
     command: python3 -m transhumus.processors.granier --main trajectory
   granier_random:
     build: .
     restart: unless-stopped
+    env_file: .env
     command: python3 -m transhumus.inputs.granier_random --main trajectory
   simulator:
     build: .
     restart: unless-stopped
+    env_file: .env
     command: python3 -m transhumus.processors.simulator --main trajectory
   chanmq:
     build: .
     restart: unless-stopped
+    env_file: .env
     command: python3 -m transhumus.outputs.chanmq --main trajectory --hostname app:8000
   app:
     build: .
@@ -48,7 +53,7 @@ services:
       - default
     labels:
       traefik.enable: "true"
-      traefik.frontend.rule: "Host: chanmq.${DOMAIN_NAME:-localhost}, www.chanmq.${DOMAIN_NAME:-localhost}"
+      traefik.frontend.rule: "Host: transhumus.${DOMAIN_NAME:-localhost}, www.transhumus.${DOMAIN_NAME:-localhost}"
       traefik.docker.network: "proxytanet"
     volumes:
       - srv:/srv
@@ -61,7 +66,7 @@ services:
       - proxytanet
     labels:
       traefik.enable: "true"
-      traefik.frontend.rule: "Host: chanmq.${DOMAIN_NAME:-localhost}, www.chanmq.${DOMAIN_NAME:-localhost}; PathPrefix: /static, /media"
+      traefik.frontend.rule: "Host: transhumus.${DOMAIN_NAME:-localhost}, www.transhumus.${DOMAIN_NAME:-localhost}; PathPrefix: /static, /media"
 
 networks:
   proxytanet:
