@@ -36,7 +36,7 @@ services:
   chanmq:
     build: .
     restart: unless-stopped
-    command: python3 -m transhumus.outputs.chanmq --main trajectory
+    command: python3 -m transhumus.outputs.chanmq --main trajectory --hostname app:8000
   app:
     build: .
     restart: unless-stopped
