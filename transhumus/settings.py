@@ -79,20 +79,16 @@ if DB == 'postgres':
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -104,10 +100,10 @@ USE_TZ = True
 
 SITE_ID = int(os.environ.get('SITE_ID', 1))
 
-MEDIA_ROOT = '/srv/media/'
+MEDIA_ROOT = f'/srv/{PROJECT}/media/'
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-STATIC_ROOT = '/srv/static/'
+STATIC_ROOT = f'/srv/{PROJECT}static/'
 LOGIN_REDIRECT_URL = '/'
 
 ASGI_APPLICATION = f"{PROJECT}.routing.application"
@@ -128,9 +124,7 @@ NDH_TEMPLATES_SETTINGS = [
 # End of Django configuration
 
 # Computers
-Host = IntEnum(
-    'Host',
-    'cerf moro ame yuki nausicaa jiro hattori hagurosan trajectory docker')
+Host = IntEnum('Host', 'cerf moro ame yuki nausicaa jiro hattori hagurosan trajectory docker')
 try:
     CURRENT_HOST = Host[gethostname().split('.')[0].lower()]
 except:
@@ -208,8 +202,7 @@ PX_PER_M = 35
 BORDS_SVG = {Host.ame: array(BOUNDARIES[Host.ame]) * PX_PER_M}
 _a = 1.15 * PX_PER_M
 _b = _a * tan(pi / 8)
-OCTOGONE = [(_a, _b), (_b, _a), (-_b, _a), (-_a, _b), (-_a, -_b), (-_b, -_a),
-            (_b, -_a), (_a, -_b)]
+OCTOGONE = [(_a, _b), (_b, _a), (-_b, _a), (-_a, _b), (-_a, -_b), (-_b, -_a), (_b, -_a), (_a, -_b)]
 
 DATA = {
     'status': 'Not connected',
@@ -227,8 +220,7 @@ DATA = {
     'wg': 0,
     'tg': 0,  # Goal Speed
     'vt': [0, 0, 0],
-    'tt': [0, 0,
-           0],  # target speed and position of turrets computed by trajectory
+    'tt': [0, 0, 0],  # target speed and position of turrets computed by trajectory
     'vc': [0, 0, 0],
     'tc': [0, 0, 0],  # orders given to the AGV
     'vm': [0, 0, 0],
